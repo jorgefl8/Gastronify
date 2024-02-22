@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
-import { FirebaseAuth } from "./firebase/firebaseconfig";
+import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 
-const LoginScreen = () => {
+const Login = () => {
     const auth = FirebaseAuth;
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -12,7 +12,6 @@ const LoginScreen = () => {
     const handleLogin = async () => {
         try {
             await signInWithEmailAndPassword(auth, email, password);
-
         } catch (error) {
             console.log(error);
             setError(error.message);
@@ -25,16 +24,13 @@ const LoginScreen = () => {
 
     const handleRegister = async () => {
         try {
-            // Intentar registrar al usuario
             console.log("Success")
             await createUserWithEmailAndPassword(auth, email, password);
-            // No llamar a onLogin(true) aquí, ya que el registro no significa que el usuario ha iniciado sesión
         } catch (error) {
             console.log(error);
             setError(error.message);
         }
     };
-
 
     return (
         <KeyboardAvoidingView
@@ -68,7 +64,6 @@ const LoginScreen = () => {
                         <Text style={styles.registerText}>Don't have an account? <Text style={styles.registerLink}>Sign Up</Text></Text>
                     </TouchableOpacity>
                 </Text>
-
             </View>
         </KeyboardAvoidingView>
     );
@@ -132,4 +127,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default LoginScreen;
+export default Login;
