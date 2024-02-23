@@ -42,9 +42,7 @@ const Main = () => {
   if (!isLoggedIn) {
     // Renderizar la pantalla de inicio de sesión si no está autenticado
     return (
-      <View >
-        <Login />
-      </View>
+      <Login/>
     );
   }
 
