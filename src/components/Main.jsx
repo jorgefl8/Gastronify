@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Button } from 'react-native';
-import { FirebaseAuth } from "../../firebase/firebaseconfig.js"; 
-import Login from './Login.jsx';
+import React, { useState, useEffect } from "react";
+import { View, Text, Button } from "react-native";
+import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
+import Login from "./Login.jsx";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = FirebaseAuth.onAuthStateChanged(user => {
+    const unsubscribe = FirebaseAuth.onAuthStateChanged((user) => {
       if (user) {
         setIsLoggedIn(true);
       } else {
@@ -27,13 +27,13 @@ const Main = () => {
       await FirebaseAuth.signOut();
       setIsLoggedIn(false);
     } catch (error) {
-      console.log('Error al cerrar sesión:', error);
+      console.log("Error al cerrar sesión:", error);
     }
   };
 
   if (loading) {
     return (
-      <View >
+      <View>
         <Text>Cargando...</Text>
       </View>
     );
@@ -42,13 +42,15 @@ const Main = () => {
   if (!isLoggedIn) {
     // Renderizar la pantalla de inicio de sesión si no está autenticado
     return (
-      <Login/>
+      <View style={{ flex: 1 }}>
+        <Login />
+      </View>
     );
   }
 
   // Renderizar el contenido principal si está autenticado
   return (
-    <View >
+    <View>
       <Text>A maria luisa le huele el ano a cloaca</Text>
       <Button title="Cerrar sesión" onPress={handleLogout} />
     </View>

@@ -42,7 +42,7 @@ const Login = () => {
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <Text style={styles.title}>Log In</Text>
       <TextInput
         style={styles.input}
@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#f0f0f0",
+    padding: 20,
   },
   title: {
     fontSize: 24,
