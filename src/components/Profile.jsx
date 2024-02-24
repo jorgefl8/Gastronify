@@ -33,10 +33,20 @@ const Profile = (props) => {
       {loading ? (
         <Loading />
       ) : (
-        <>
-          <Text>Name: {user ? user.Name : "User data not available"}</Text>
-          <Button title="Log Out" onPress={props.handleLogout} />
-        </>
+        <View style={styles.profileInfo}>
+          <Text style={styles.infoText}>Name: {user ? user.Name : "User data not available yet"}</Text>
+          <Text style={styles.infoText}>Last name: {user? user.LastName : "Not available yet"}</Text>
+          <Text style={styles.infoText}>Email:{user ? user.Email : "Email not available yet"}</Text>
+          <Text style={styles.infoText}>Telephone Number: {user ? user.TelephoneNumber : "Not available yet"}</Text>
+          <View style={styles.buttonsContainer}>
+            <View style={styles.buttonWrapper}>
+              <Button title="Modify Data" ></Button>
+            </View>
+            <View style={styles.buttonWrapper}>
+              <Button title="Log Out" onPress={props.handleLogout} />
+            </View>
+          </View>
+        </View>
       )}
     </View>
   );
@@ -50,11 +60,41 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f0f0",
     padding: 20,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
+  profileInfo: {
+    alignItems: "center",
+    backgroundColor: "#ffffff",
+    borderRadius: 10,
+    padding: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  infoText: {
+    marginBottom: 10,
+    fontSize: 16,
+  },
+  buttonsContainer: {
+    flexDirection: "row",
+    marginTop: 20,
+  },
+  buttonWrapper: {
+    flex: 1,
+    marginHorizontal: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });
+
 
 export default Profile;
