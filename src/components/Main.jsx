@@ -51,22 +51,22 @@ const Main = () => {
     return (
       <View style={{ flex: 1 }}>
         <StatusBar backgroundColor={theme.appBar.primary} />
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/menu' element={<Menu/>} />
-          <Route path='/profile' element={<Profile/>} />
-          <Route path='*' element={<Navigate to='/' />} />
-        </Routes>
-        <AppBar/>
-      </View>
+        <Login/>
+    </View>
     );
   }
 
   return (
     <View style={{ flex: 1 }}>
         <StatusBar backgroundColor={theme.appBar.primary} />
-        <Login/>
-    </View>
+        <Routes>
+          <Route path='/' element={<Home/>} />
+          <Route path='/menu' element={<Menu/>} />
+          <Route path='/profile' element={<Profile/>} />
+          <Route path='*' element={<Navigate to='/' />} />
+        </Routes>
+        <AppBar/>
+      </View>
   );
 };
 
