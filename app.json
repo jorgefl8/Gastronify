@@ -4,10 +4,10 @@
     "slug": "RestaurantApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/restaurant.jpg",
+    "icon": "./assets/appicon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/restaurant.jpg",
+      "image": "./assets/appicon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -24,7 +24,7 @@
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/appicon.png"
     }
   }
 }
