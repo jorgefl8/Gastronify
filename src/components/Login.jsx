@@ -11,13 +11,19 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
+import Register from "./Register.jsx";
 
 const Login = () => {
   const auth = FirebaseAuth;
+  const [showRegister, setShowRegister] = useState(false); // Estado para controlar si mostrar el formulario de registro o no
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  const handleCancelRegister = () => {
+    setShowRegister(false);
+  };
+  
   const handleLogin = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
@@ -27,9 +33,9 @@ const Login = () => {
     }
   };
 
-  const handleLoginFacebook = async () => {};
+  const handleLoginFacebook = async () => { };
 
-  const handleLoginGoogle = async () => {};
+  const handleLoginGoogle = async () => { };
 
   const handleRegister = async () => {
     try {
@@ -40,54 +46,54 @@ const Login = () => {
       setError(error.message);
     }
   };
+  const toggleShowRegister = () => {
+    setShowRegister(!showRegister);
+  };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Log In</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        keyboardType="email-address"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Log In</Text>
-      </TouchableOpacity>
-      <View style={styles.separator} />
+    <View>
+      {showRegister &&  <Register onCancel={handleCancelRegister} />}
+      {!showRegister && (
+        <View>
+          <Text style={styles.title}>Log In</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+            autoCapitalize="none"
+            keyboardType="email-address"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+          <TouchableOpacity style={styles.button} onPress={handleLogin}>
+            <Text style={styles.buttonText}>Log In</Text>
+          </TouchableOpacity>
+          <View style={styles.separator} />
 
-      <Text style={styles.registerText}>
-        <TouchableOpacity
-          onPress={handleRegister}
-          style={styles.registerContainer}
-        >
           <Text style={styles.registerText}>
-            Don't have an account?{" "}
-            <Text style={styles.registerLink}>Sign Up</Text>
+            <TouchableOpacity
+              onPress={toggleShowRegister}
+              style={styles.registerContainer}
+            >
+              <Text style={styles.registerText}>
+                Don't have an account?{" "}
+                <Text style={styles.registerLink}>Sign Up</Text>
+              </Text>
+            </TouchableOpacity>
           </Text>
-        </TouchableOpacity>
-      </Text>
-      
+        </View>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f0f0f0",
-    padding: 20,
-  },
   title: {
     fontSize: 24,
     fontWeight: "bold",
@@ -105,7 +111,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   button: {
-    width: "100%",
+    width: 300,
     height: 50,
     backgroundColor: "blue",
     justifyContent: "center",
@@ -119,14 +125,6 @@ const styles = StyleSheet.create({
   },
   separator: {
     height: 10,
-  },
-  buttonRegister: {
-    width: "100%",
-    height: 50,
-    backgroundColor: "#e1e1e1",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 8,
   },
   registerLink: {
     color: "blue",

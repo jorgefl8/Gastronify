@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StatusBar } from "react-native";
+import { View, Text, StatusBar, Button, StyleSheet } from "react-native";
+
 import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
 import Login from "./Login.jsx";
 import theme from "../theme.js";
@@ -53,6 +54,7 @@ const Main = () => {
         <StatusBar backgroundColor={theme.appBar.primary} />
         <Login/>
     </View>
+
     );
   }
 
@@ -67,7 +69,9 @@ const Main = () => {
         </Routes>
         <AppBar/>
       </View>
+
   );
 };
 
+  
 export default Main;
