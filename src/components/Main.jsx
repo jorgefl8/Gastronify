@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StatusBar, Button, StyleSheet } from "react-native";
+import { View,  StatusBar, StyleSheet } from "react-native";
 
 import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
 import Login from "./Login.jsx";
@@ -10,8 +10,7 @@ import Home from "./Home.jsx";
 import Menu from "./Menu.jsx";
 import Profile from "./Profile.jsx";
 import { Navigate, Route, Routes } from 'react-router-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import * as Animatable from 'react-native-animatable';
+import Loading from "./Loading.jsx";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -43,9 +42,7 @@ const Main = () => {
 
   if (loading) {
     return (
-      <View>
-        <Animatable.Text animation="rotate" iterationCount="infinite" ><Icon name="sync-circle" size={70}/></Animatable.Text>
-      </View>
+      <Loading/>
     );
   }
 

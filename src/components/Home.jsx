@@ -3,31 +3,29 @@ import { Text, View, StyleSheet, Image } from "react-native";
 import theme from "../theme";
 
 const Home = () => {
-
     return (
         <View style={styles.container}>
-            <View style={styles.separator} />
+            <View style={styles.title} >
                 <Image style={styles.image} source={require('../../assets/restaurant.jpg')} />
-            <View style={styles.separator} />
-            <View>
-                <Text style={styles.title}>RESTAURANT APP</Text>
+                <Text style={styles.textTitle}>RESTAURANT APP</Text>
             </View>
+            <View style={styles.separator} />
         </View>
     )
 };
 
-
-
 const styles = StyleSheet.create({
     container: {
-        flexDirection: "row",
-        marginTop: 15,
-        justifyContent: "center",
-        alignItems: "center",
+        flex: 1,
         backgroundColor: "#f0f0f0",
         padding: 20,
     },
     title: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    textTitle: {
         color: theme.colors.textPrimary,
         fontSize: theme.fontSizes.heading,
         fontWeight: theme.fontWeights.bold,
@@ -36,21 +34,6 @@ const styles = StyleSheet.create({
         color: theme.colors.textSecondary,
         fontSize: theme.fontSizes.body,
         fontWeight: theme.fontWeights.normal,
-    },
-    button: {
-        width: "100%",
-        height: 30,
-        backgroundColor: "grey",
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 8,
-        margin: 5,
-    },
-    buttonText: {
-        color: "#fff",
-        fontSize: 12,
-        fontWeight: "bold",
-        margin: 6,
     },
     separator: {
         height: 10,

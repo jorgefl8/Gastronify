@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
 import { FirebaseAuth, FirestoreDB } from "../../firebase/firebaseconfig.js";
 import { doc, getDoc } from "firebase/firestore";
-import * as Animatable from 'react-native-animatable';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Loading from "./Loading.jsx";
 
 const Profile = (props) => {
   const [user, setUser] = useState(null);
@@ -32,11 +31,7 @@ const Profile = (props) => {
   return (
     <View style={styles.container}>
       {loading ? (
-        <View>
-          <Animatable.Text animation="rotate" iterationCount="infinite">
-            <Icon name="sync-circle" size={70}/>
-          </Animatable.Text>
-        </View>
+        <Loading />
       ) : (
         <>
           <Text>Name: {user ? user.Name : "User data not available"}</Text>
