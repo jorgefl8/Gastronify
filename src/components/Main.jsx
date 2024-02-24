@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, Button } from "react-native";
 import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
 import Login from "./Login.jsx";
+import Home from "./Home.jsx";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -50,9 +51,8 @@ const Main = () => {
 
   // Renderizar el contenido principal si está autenticado
   return (
-    <View>
-      <Text>A maria luisa le huele el ano a cloaca</Text>
-      <Button title="Cerrar sesión" onPress={handleLogout} />
+    <View style={{marginTop: 10}}>
+      <Home />
     </View>
   );
 };
