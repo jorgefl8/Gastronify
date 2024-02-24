@@ -11,7 +11,7 @@
 
 - **STEPS FOR USING**:
     1. Run the command `npm install`.
-    2. Run the command `npm start` or `npm run andoird` for automatically open on android simulator.
+    2. Run the command `npm start` or `npm run android` for automatically open on android simulator.
 
 - **CONTRIBUTORS**:
     - Jorge Florentino Serra
