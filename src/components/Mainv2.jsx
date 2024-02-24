@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, Text, Button } from "react-native";
 import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
 import Login from "./Login.jsx";
 
@@ -42,7 +42,7 @@ const Main = () => {
   if (!isLoggedIn) {
     // Renderizar la pantalla de inicio de sesión si no está autenticado
     return (
-      <View style={styles.container}>
+      <View style={{ flex: 1 }}>
         <Login />
       </View>
     );
@@ -50,19 +50,11 @@ const Main = () => {
 
   // Renderizar el contenido principal si está autenticado
   return (
-    <View style={styles.container}>
+    <View>
       <Text> Testing Home</Text>
       <Button title="Log Out" onPress={handleLogout} />
     </View>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f0f0f0",
-    padding: 20
-  }});
-  
+
 export default Main;
