@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Button } from "react-native";
+import { View, Text, StatusBar } from "react-native";
 import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
 import Login from "./Login.jsx";
+import theme from "../theme.js";
+import AppBar from "./AppBar.jsx";
+import Home from "./Home.jsx";
+import Menu from "./Menu.jsx";
+import Profile from "./Profile.jsx";
+import { Navigate, Route, Routes } from 'react-router-native';
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -43,17 +49,24 @@ const Main = () => {
     // Renderizar la pantalla de inicio de sesión si no está autenticado
     return (
       <View style={{ flex: 1 }}>
-        <Login />
+        <StatusBar backgroundColor={theme.appBar.primary} />
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/menu' element={<Menu/>} />
+          <Route path='/profile' element={<Profile/>} />
+          <Route path='*' element={<Navigate to='/' />} />
+        </Routes>
+        <AppBar/>
       </View>
     );
   }
 
   // Renderizar el contenido principal si está autenticado
   return (
-    <View>
-      <Text>A maria luisa le huele el ano a cloaca</Text>
-      <Button title="Cerrar sesión" onPress={handleLogout} />
-    </View>
+    <View style={{ flex: 1 }}>
+        <StatusBar backgroundColor={theme.appBar.primary} />
+        <Login/>
+      </View>
   );
 };
 
