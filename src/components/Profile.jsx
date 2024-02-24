@@ -8,8 +8,8 @@ import {
 const Profile = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>prooo</Text>
-
+      <Text> Testing Home</Text>
+      <Button title="Log Out" onPress={handleLogout} />
     </View>
   );
 };
