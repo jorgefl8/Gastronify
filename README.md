@@ -7,6 +7,7 @@
     - Navigation with [react-router-native](https://reactrouter.com/en/main)
     - See [react-native doc](https://reactnative.dev/docs/getting-started) for usable components.
     - See [expo doc](https://docs.expo.dev/) for usable components.
+    - For animations see [react-native-animatable](https://www.npmjs.com/package/react-native-animatable)
 
 - **STEPS FOR USING**:
     1. Run the command `npm install`.

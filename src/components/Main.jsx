@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Button } from "react-native";
+import { View, Text, StatusBar, Button, StyleSheet } from "react-native";
+
 import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
 import Login from "./Login.jsx";
+import theme from "../theme.js";
+import AppBar from "./AppBar.jsx";
 import Home from "./Home.jsx";
+import Menu from "./Menu.jsx";
+import Profile from "./Profile.jsx";
+import { Navigate, Route, Routes } from 'react-router-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import * as Animatable from 'react-native-animatable';
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -35,26 +43,35 @@ const Main = () => {
   if (loading) {
     return (
       <View>
-        <Text>Cargando...</Text>
+        <Animatable.Text animation="rotate" iterationCount="infinite" ><Icon name="sync-circle" size={70}/></Animatable.Text>
       </View>
     );
   }
 
   if (!isLoggedIn) {
-    // Renderizar la pantalla de inicio de sesión si no está autenticado
     return (
       <View style={{ flex: 1 }}>
-        <Login />
-      </View>
+        <StatusBar backgroundColor={theme.appBar.primary} />
+        <Login/>
+    </View>
+
     );
   }
 
-  // Renderizar el contenido principal si está autenticado
   return (
-    <View style={{marginTop: 10}}>
-      <Home />
-    </View>
+    <View style={{ flex: 1 }}>
+        <StatusBar backgroundColor={theme.appBar.primary} />
+        <Routes>
+          <Route path='/' element={<Home/>} />
+          <Route path='/menu' element={<Menu/>} />
+          <Route path='/profile' element={<Profile/>} />
+          <Route path='*' element={<Navigate to='/' />} />
+        </Routes>
+        <AppBar/>
+      </View>
+
   );
 };
 
+  
 export default Main;

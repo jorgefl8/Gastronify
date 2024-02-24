@@ -2,7 +2,15 @@ const theme = {
     appBar: {
       primary: '#252525',
       textSecondary: '#999',
-      textPrimary: '#fff'
+      textPrimary: '#fff',
+      icon: {
+        color: '#fff',
+        size: 24
+      },
+      border: {
+        width: 1,
+        color: '#fff'
+      }
     },
     colors: {
       textPrimary: '#24292e',
