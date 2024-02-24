@@ -5,14 +5,14 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Button
 } from "react-native";
 import { FirebaseAuth, FirestoreDB } from "../../firebase/firebaseconfig.js";
 import { doc, setDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import DatePicker from 'react-native-date-picker'
+import DatePicker from 'react-native-date-picker';
+import { Link } from "react-router-native";
 
-const Register = ({ onCancel }) => {
+const Register = () => {
   const auth = FirebaseAuth;
   const db = FirestoreDB;
   const [email, setEmail] = useState("");
@@ -45,7 +45,7 @@ const Register = ({ onCancel }) => {
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <Text style={styles.title}>Register</Text>
       <TextInput
         style={styles.input}
@@ -91,16 +91,22 @@ const Register = ({ onCancel }) => {
       <TouchableOpacity style={styles.button} onPress={handleRegister}>
         <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.buttonCancel} onPress={onCancel}>
+      <Link to="/login" style={styles.buttonCancel}>
         <Text style={styles.buttonText}>Cancel</Text>
-      </TouchableOpacity>
+      </Link>
       <View style={styles.separator} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f0f0f0",
+    padding: 20,
+  },
   title: {
     fontSize: 24,
     fontWeight: "bold",

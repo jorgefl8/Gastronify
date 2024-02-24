@@ -3,6 +3,7 @@ import { View, Text, StatusBar, Button, StyleSheet } from "react-native";
 
 import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
 import Login from "./Login.jsx";
+import Register from "./Register.jsx";
 import theme from "../theme.js";
 import AppBar from "./AppBar.jsx";
 import Home from "./Home.jsx";
@@ -52,8 +53,12 @@ const Main = () => {
     return (
       <View style={{ flex: 1 }}>
         <StatusBar backgroundColor={theme.appBar.primary} />
-        <Login/>
-    </View>
+        <Routes>
+          <Route path='/login' element={<Login/>} />
+          <Route path='/register' element={<Register/>} />
+          <Route path='*' element={<Navigate to='/login' />} />
+        </Routes>
+      </View>
 
     );
   }
@@ -64,7 +69,7 @@ const Main = () => {
         <Routes>
           <Route path='/' element={<Home/>} />
           <Route path='/menu' element={<Menu/>} />
-          <Route path='/profile' element={<Profile/>} />
+          <Route path='/profile' element={<Profile handleLogout={handleLogout}/>} />
           <Route path='*' element={<Navigate to='/' />} />
         </Routes>
         <AppBar/>
@@ -73,5 +78,4 @@ const Main = () => {
   );
 };
 
-  
 export default Main;

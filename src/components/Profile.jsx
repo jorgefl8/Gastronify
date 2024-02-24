@@ -1,15 +1,11 @@
 import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-} from "react-native";
+import { View, Text, StyleSheet, Button } from "react-native";
 
-const Profile = () => {
+const Profile = (props) => {
   return (
     <View style={styles.container}>
       <Text> Testing Home</Text>
-      <Button title="Log Out" onPress={handleLogout} />
+      <Button title="Log Out" onPress={props.handleLogout} />
     </View>
   );
 };
@@ -26,7 +22,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
-  }
+  },
 });
 
 export default Profile;

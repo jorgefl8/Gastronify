@@ -7,23 +7,15 @@ import {
   StyleSheet,
 } from "react-native";
 import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
-import {
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-} from "firebase/auth";
-import Register from "./Register.jsx";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { Link } from "react-router-native";
+
 
 const Login = () => {
   const auth = FirebaseAuth;
-  const [showRegister, setShowRegister] = useState(false); // Estado para controlar si mostrar el formulario de registro o no
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
-  const handleCancelRegister = () => {
-    setShowRegister(false);
-  };
-  
   const handleLogin = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
@@ -33,67 +25,52 @@ const Login = () => {
     }
   };
 
-  const handleLoginFacebook = async () => { };
+  const handleLoginFacebook = async () => {};
 
-  const handleLoginGoogle = async () => { };
-
-  const handleRegister = async () => {
-    try {
-      console.log("Success");
-      await createUserWithEmailAndPassword(auth, email, password);
-    } catch (error) {
-      console.log(error);
-      setError(error.message);
-    }
-  };
-  const toggleShowRegister = () => {
-    setShowRegister(!showRegister);
-  };
+  const handleLoginGoogle = async () => {};
 
   return (
-    <View>
-      {showRegister &&  <Register onCancel={handleCancelRegister} />}
-      {!showRegister && (
-        <View>
-          <Text style={styles.title}>Log In</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            value={email}
-            onChangeText={setEmail}
-            autoCapitalize="none"
-            keyboardType="email-address"
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
-          <TouchableOpacity style={styles.button} onPress={handleLogin}>
-            <Text style={styles.buttonText}>Log In</Text>
-          </TouchableOpacity>
-          <View style={styles.separator} />
-
+    <View style={styles.container}>
+      <Text style={styles.title}>Log In</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize="none"
+        keyboardType="email-address"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Log In</Text>
+      </TouchableOpacity>
+      <View style={styles.separator} />
+      <Text style={styles.registerText}>
+        <Link to="/register" style={styles.registerContainer}>
           <Text style={styles.registerText}>
-            <TouchableOpacity
-              onPress={toggleShowRegister}
-              style={styles.registerContainer}
-            >
-              <Text style={styles.registerText}>
-                Don't have an account?{" "}
-                <Text style={styles.registerLink}>Sign Up</Text>
-              </Text>
-            </TouchableOpacity>
+            Don't have an account?{" "}
+            <Text style={styles.registerLink}>Sign Up</Text>
           </Text>
-        </View>
-      )}
+        </Link>
+      </Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f0f0f0",
+    padding: 20,
+  },
   title: {
     fontSize: 24,
     fontWeight: "bold",
