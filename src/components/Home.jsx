@@ -8,8 +8,7 @@ import {
 const Home = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>home</Text>
-
+      <Text style={styles.title}>Home</Text>   
     </View>
   );
 };

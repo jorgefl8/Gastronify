@@ -8,6 +8,8 @@ import Home from "./Home.jsx";
 import Menu from "./Menu.jsx";
 import Profile from "./Profile.jsx";
 import { Navigate, Route, Routes } from 'react-router-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import * as Animatable from 'react-native-animatable';
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -40,13 +42,12 @@ const Main = () => {
   if (loading) {
     return (
       <View>
-        <Text>Cargando...</Text>
+        <Animatable.Text animation="rotate" iterationCount="infinite" ><Icon name="sync-circle" size={70}/></Animatable.Text>
       </View>
     );
   }
 
   if (!isLoggedIn) {
-    // Renderizar la pantalla de inicio de sesión si no está autenticado
     return (
       <View style={{ flex: 1 }}>
         <StatusBar backgroundColor={theme.appBar.primary} />
@@ -61,12 +62,11 @@ const Main = () => {
     );
   }
 
-  // Renderizar el contenido principal si está autenticado
   return (
     <View style={{ flex: 1 }}>
         <StatusBar backgroundColor={theme.appBar.primary} />
         <Login/>
-      </View>
+    </View>
   );
 };
 
