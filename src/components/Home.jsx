@@ -6,7 +6,7 @@ const Home = () => {
     return (
         <View style={styles.container}>
             <View style={styles.title} >
-                <Image style={styles.image} source={require('../../assets/restaurant.jpg')} />
+                <Image style={styles.image} source={require('../../assets/appicon.png')} />
                 <Text style={styles.textTitle}>RESTAURANT APP</Text>
             </View>
             <View style={styles.separator} />

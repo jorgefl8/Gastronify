@@ -1,15 +1,13 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { initializeAuth, getAuth, getReactNativePersistence } from 'firebase/auth';
+import { Platform } from 'react-native';
+import { initializeAuth, getAuth } from 'firebase/auth';
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
-
 // Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = { 
   apiKey: process.env.EXPO_PUBLIC_firebase_apikey,
   authDomain: "restaurantapp-cm.firebaseapp.com",
@@ -21,10 +19,21 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const auth = initializeAuth(app, {
-  persistence: getReactNativePersistence(ReactNativeAsyncStorage)
-});
-export const FirebaseApp = initializeApp(firebaseConfig);
-export const FirebaseAuth = getAuth(FirebaseApp);
-export const FirestoreDB = getFirestore(FirebaseApp);
-export const FirestoreST = getStorage(FirebaseApp);
+let auth;
+
+// Utilizar React Native AsyncStorage para persistencia en React Native
+if (Platform.OS === 'web') {
+  // En web, utiliza la persistencia por defecto
+  auth = getAuth(app);
+} else {
+  // En React Native, utiliza React Native AsyncStorage para persistencia
+  const { getReactNativePersistence } = require('firebase/auth');
+  auth = initializeAuth(app, {
+    persistence: getReactNativePersistence(ReactNativeAsyncStorage),
+  });
+}
+export const FirebaseApp = app;
+export const FirebaseAuth = auth;
+export const FirestoreDB = getFirestore(app);
+export const FirestoreST = getStorage(app);
+
