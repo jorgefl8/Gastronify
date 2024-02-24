@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, handleLogout, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, Image } from "react-native";
 import theme from "../theme";
 
 const Home = () => {
@@ -11,11 +11,6 @@ const Home = () => {
             <View style={styles.separator} />
             <View>
                 <Text style={styles.title}>RESTAURANT APP</Text>
-            </View>
-            <View>
-                <TouchableOpacity style={styles.button} onPress={handleLogout}>
-                    <Text style={styles.buttonText}>Cerrar sesión</Text>
-                </TouchableOpacity>
             </View>
         </View>
     )
