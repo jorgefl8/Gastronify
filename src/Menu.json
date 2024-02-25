@@ -1,0 +1,98 @@
+[
+    {
+        "Image": "https://firebasestorage.googleapis.com/v0/b/restaurant-80efb.appspot.com/o/menu%2Flobster.jpg?alt=media&token=4f17c9f3-2d5b-45f5-b12c-e7fbb62752b5",
+        "Category": "fish",
+        "Name": "Lobster tails and sesame Bok Choy",
+        "Price": "300",
+        "Ingredients": "shiitake mushroom, sesame oil, 2 lobster tails, hot cooked brown basmati or jasmine rice, 2 heads baby bok choy, white miso",
+        "Description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    },
+    {
+        "Image": "https://firebasestorage.googleapis.com/v0/b/restaurant-80efb.appspot.com/o/menu%2Fsteak.jpg?alt=media&token=2344040d-1a11-411d-816d-3955c9b96edf",
+        "Category": "meat",
+        "Name": "Coffee-Rubbed Steak with brussels salad",
+        "Price": "300",
+        "Ingredients": "ground coffee beans, shredded Brussels sprouts, blue cheese, black pepper, 500g hanger steak, olive oil, honey, chopped toasted pecans",
+        "Description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    },
+    {
+        "Image": "https://firebasestorage.googleapis.com/v0/b/restaurant-80efb.appspot.com/o/menu%2Feggs.jpg?alt=media&token=a831b04b-155c-4b64-912c-3e3af6796f15",
+        "Category": "meat",
+        "Name": "Lightened-Up scotch eggs",
+        "Price": "300",
+        "Ingredients": "ground turkey, fresh sage, garlic clove, 4 hard-cooked large eggs, canola oil",
+        "Description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    },
+    {
+        "Image": "https://firebasestorage.googleapis.com/v0/b/restaurant-80efb.appspot.com/o/menu%2Fsauce.jpg?alt=media&token=6a7fef58-039f-40d5-95ec-4c2f4732e554",
+        "Category": "garnish",
+        "Name": "Romesco sauce",
+        "Price": "300",
+        "Ingredients": "4 garlic cloves, red bell peppers, jalapeño or fresno chile, olive oil, tomato, red wine",
+        "Description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    },
+    {
+        "Image": "https://firebasestorage.googleapis.com/v0/b/restaurant-80efb.appspot.com/o/menu%2Fpie.jpg?alt=media&token=93d427f4-f486-4c78-bd86-c5b3469dd796",
+        "Category": "desert",
+        "Name": "Cranberry and dark cherry clafoutis",
+        "Price": "300",
+        "Ingredients": "almond extract, cranberries, cinnamon, cherries, reduced-fat milk, sugar",
+        "Description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    },
+    {
+        "Image": "https://firebasestorage.googleapis.com/v0/b/restaurant-80efb.appspot.com/o/menu%2Fpoached%20pears.jpg?alt=media&token=791aed0d-eead-4a5f-a0bc-808573066734",
+        "Category": "desert",
+        "Name": "Pomegranate-poached pears",
+        "Price": "300",
+        "Ingredients": "pears, vanilla extract, Pinot Noir, maple syrup, pomegranate juice,reduced-fat Greek yogurt",
+        "Description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    },
+    {
+        "Image": "https://firebasestorage.googleapis.com/v0/b/restaurant-80efb.appspot.com/o/menu%2Foysters.jpg?alt=media&token=4429f8fe-de63-4f46-9489-b42cd5ce3ed0",
+        "Category": "fish",
+        "Name": "Barbecued oysters with garlic",
+        "Price": "300",
+        "Ingredients": "onion, lemon juice, parsley leaves, garlic, 12 rock oysters",
+        "Description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    },
+    {
+        "Image": "https://firebasestorage.googleapis.com/v0/b/restaurant-80efb.appspot.com/o/menu%2Fsalad.jpg?alt=media&token=4646a685-af37-482c-b141-7fc918b688b3",
+        "Category": "meat",
+        "Name": "Minted melon, tomato & prosciutto salad",
+        "Price": "300",
+        "Ingredients": "heirloom tomatoes, Charentais melon, prosciutto, red wine,  mint, crusty bread",
+        "Description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    },
+    {
+        "Image": "https://firebasestorage.googleapis.com/v0/b/restaurant-80efb.appspot.com/o/menu%2Fshrimp.jpg?alt=media&token=cb2f67b9-820d-4800-9596-73e57f7cb6a4",
+        "Category": "meat",
+        "Name": "John's jambalaya",
+        "Price": "300",
+        "Ingredients": "chicken thighs fillets, sesame oil, garlic, cherry tomatoes, fresh thyme leaves, oregano",
+        "Description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    },
+    {
+        "Image": "https://firebasestorage.googleapis.com/v0/b/restaurant-80efb.appspot.com/o/menu%2Fsteakpotato.jpg?alt=media&token=112f6ca5-4d74-47cb-bd95-f7d5031bfa9f",
+        "Category": "meat",
+        "Name": "Peppered fillet steak with parsley potatoes",
+        "Price": "300",
+        "Ingredients": "3 large red-skinned potatoes, sesame oil, garlic, parsley, watercress salad, 2 beef fillet steaks",
+        "Description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    },
+    {
+        "Image": "https://firebasestorage.googleapis.com/v0/b/restaurant-80efb.appspot.com/o/menu%2Ffish.jpg?alt=media&token=45a37c05-90ea-4eef-b5f9-eff1a3c0356d",
+        "Category": "fish",
+        "Name": "Baked sea bass with fennel",
+        "Price": "300",
+        "Ingredients": "2 sea bass, olive oil, basil leaves, black olives, lemon slices, fennel",
+        "Description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    },
+    {
+        "Image": "https://firebasestorage.googleapis.com/v0/b/restaurant-80efb.appspot.com/o/menu%2Fsalmon.jpg?alt=media&token=cc7bbe8a-a615-46d4-9c7e-bff212b997ea",
+        "Category": "fish",
+        "Name": "Smoked salmon with prawns",
+        "Price": "300",
+        "Ingredients": "4 slices smoked salmon, olive oil, 10 large prawns, lime juice, salad leaf, root ginger",
+        "Description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    }
+]

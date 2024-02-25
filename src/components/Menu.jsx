@@ -20,7 +20,7 @@ const Menu = () => {
     <View style={styles.menuItemContainer}>
       <View style={styles.imageContainer}>
         <Image
-          source={{ uri: item.ImageUrl }}
+          source={{ uri: item.Image }}
           style={styles.image}
         />
       </View>
@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
     width: 65, 
     height: 65, 
     resizeMode: "cover",
+    borderRadius: 5
   },
   detailsContainer: {
     flexDirection: "column",

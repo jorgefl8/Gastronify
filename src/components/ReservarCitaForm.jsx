@@ -5,8 +5,10 @@ import { TextInput } from 'react-native';
 import { View } from 'react-native-animatable';
 import theme from '../theme';
 import { Picker } from '@react-native-picker/picker';
-
+import functions from "../../firebase/firebaseUtils.js";
+import {FirestoreDB} from "../../firebase/firebaseconfig.js";
 const ReservarCitaForm = () => {
+    const db = FirestoreDB;
     const [selectedDate, setSelectedDate] = useState(null);
     const [nombre, setNombre] = useState('');
     const [telefono, setTelefono] = useState('');
@@ -23,6 +25,8 @@ const ReservarCitaForm = () => {
         console.log('Teléfono:', telefono);
         console.log('Número de personas:', numPersonas);
         console.log('Hora:', hora);
+        const DataBooking = {"Date":selectedDate, "Name": nombre,"TelephoneNumber":numPersonas, "Hour":hora};
+        functions.uploadDoc(db, "Bookings", DataBooking);
     };
     return (
         <ScrollView style={styles.container}>

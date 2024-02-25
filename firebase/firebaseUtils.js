@@ -1,5 +1,7 @@
-import {  getDocs, collection } from "firebase/firestore";
+import {  getDocs, collection, addDoc } from "firebase/firestore";
 
+
+// Devuelve un array con todos los documentos de la coleccion
 const getCollection = async (db, collection_) => {
     const querySnapshot = await getDocs(collection(db, collection_));
     var dataCollection = []
@@ -8,4 +10,12 @@ const getCollection = async (db, collection_) => {
     });
     return dataCollection;
 };
-export default {getCollection};
+// Suebe el documento como json a la coleccion dada
+const uploadDoc = async (db, collection_, data) => {
+    try{
+    const docRef = await addDoc(collection(db, collection_), data);
+    }catch(error){
+        console.log(error);
+    }
+}
+export default {getCollection, uploadDoc};
