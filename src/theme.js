@@ -16,7 +16,9 @@ const theme = {
       textPrimary: '#24292e',
       textSecondary: '#586069',
       primary: '#0366d6',
-      white: '#fefefe'
+      white: '#fefefe',
+      red: '#B22222',
+      backgroundColor: "#f0f0f0",
     },
     fontSizes: {
       body: 14,
@@ -24,7 +26,7 @@ const theme = {
       heading: 24
     },
     fonts: {
-      main: 'System'
+      main: 'System',
     },
     fontWeights: {
       normal: '400',

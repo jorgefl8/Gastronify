@@ -11,6 +11,7 @@ import Menu from "./Menu.jsx";
 import Profile from "./Profile.jsx";
 import { Navigate, Route, Routes } from 'react-router-native';
 import Loading from "./Loading.jsx";
+import ReservarCitaForm from "./ReservarCitaForm.jsx";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -67,6 +68,7 @@ const Main = () => {
           <Route path='/' element={<Home/>} />
           <Route path='/menu' element={<Menu/>} />
           <Route path='/profile' element={<Profile handleLogout={handleLogout}/>} />
+          <Route path='/reservarcita' element={<ReservarCitaForm />} /> 
           <Route path='*' element={<Navigate to='/' />} />
         </Routes>
         <AppBar/>
