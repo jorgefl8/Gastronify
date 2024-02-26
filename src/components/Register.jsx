@@ -4,13 +4,13 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
+  StyleSheet
 } from "react-native";
 import { FirebaseAuth, FirestoreDB } from "../../firebase/firebaseconfig.js";
 import { doc, setDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import DatePicker from 'react-native-date-picker';
 import { Link } from "react-router-native";
+import { Timestamp } from "firebase/firestore";
 
 const Register = () => {
   const auth = FirebaseAuth;
@@ -19,8 +19,10 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [date, setDate] = useState("");
-  const [open, setOpen] = useState(false);
+  const [day, setDay] = useState("");
+  const [month, setMonth] = useState("");
+  const [year, setYear] = useState("");
+  const [prefix, setPrefix] = useState("");
   const [telephoneNumber, setTelephoneNumber] = useState("");
   const [error, setError] = useState("");
 
@@ -29,12 +31,15 @@ const Register = () => {
       await createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           var user = userCredential.user;
+          const dateOfBirth = new Date(year, month - 1, day);
+          const timestamp = Timestamp.fromDate(dateOfBirth); // Convertir a Timestamp
           //console.log("Usuario registrado: ", user.uid);
           setDoc(doc(db, "Users", user.uid), {
             LastName: lastName,
             Name: name,
             Email: email,
-            Date: date,
+            Date: timestamp,
+            Prefix: prefix,
             TelephoneNumber: telephoneNumber,
           });
         })
@@ -59,20 +64,46 @@ const Register = () => {
         value={lastName}
         onChangeText={setLastName}
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Date of Birth"
-        value={date}
-        onChangeText={setDate}
-      />
+      <View style={styles.dateContainer}>
+        <TextInput
+          style={[styles.input, styles.dateInput]}
+          placeholder="Day"
+          value={day}
+          onChangeText={setDay}
+          keyboardType="numeric"
+        />
+        <TextInput
+          style={[styles.input, styles.dateInput]}
+          placeholder="Month"
+          value={month}
+          onChangeText={setMonth}
+          keyboardType="numeric"
+        />
+        <TextInput
+          style={[styles.input, styles.phoneInput]}
+          placeholder="Year"
+          value={year}
+          onChangeText={setYear}
+          keyboardType="numeric"
+        />
+      </View>
 
+      <View style={styles.phoneContainer}>
       <TextInput
-        style={styles.input}
-        placeholder="Telephone Number"
-        value={telephoneNumber}
-        onChangeText={setTelephoneNumber}
-        keyboardType="phone-pad"
-      />
+          style={[styles.input, styles.prefixPicker]}
+          placeholder="+34"
+          value={prefix}
+          onChangeText={setPrefix}
+          keyboardType="phone-pad"
+        />
+        <TextInput
+          style={[styles.input, styles.phoneInput]}
+          placeholder="123456789"
+          value={telephoneNumber}
+          onChangeText={setTelephoneNumber}
+          keyboardType="phone-pad"
+        />
+      </View>
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -150,6 +181,25 @@ const styles = StyleSheet.create({
   },
   registerLink: {
     color: "blue",
+  },
+  dateContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  dateInput: {
+    flex: 1,
+    marginRight: 10,
+  }, 
+  phoneInput: {
+    flex: 1,
+  }, 
+  prefixPicker: {
+    width: 70,
+    marginRight: 10,
+  },
+  phoneContainer: {
+    flexDirection: "row",
+    width: "100%"
   }
 });
 

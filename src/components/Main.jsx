@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View,  StatusBar, StyleSheet } from "react-native";
-
+import Carrito from "./shopping_cart.jsx"
 import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
 import Login from "./Login.jsx";
 import Register from "./Register.jsx";
@@ -71,6 +71,7 @@ const Main = () => {
           <Route path='/reservarcita' element={<ReservarCitaForm />} /> 
           <Route path='*' element={<Navigate to='/' />} />
         </Routes>
+        <Carrito/>
         <AppBar/>
       </View>
 
