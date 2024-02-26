@@ -2,8 +2,8 @@ import React from "react";
 import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import theme from "../theme";
 import { useNavigate } from 'react-router-native';
-import NovedadesSection from "./NovedadesSection";
-import Information from "./Information";
+import NovedadesSection from "../components/NovedadesSection";
+import Information from "../components/Information";
 
 
 const Home = () => {

@@ -12,7 +12,7 @@ const Carrito = () => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={handleAgregarProducto}>
-        <Image source={require('../../shopping.png')} style={styles.image} />
+        <Image source={require('../../assets/shopping.png')} style={styles.image} />
         {numProductos > 0 && (
           <View style={styles.badge}>
             <Text style={styles.badgeText}>{numProductos}</Text>

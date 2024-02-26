@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Modal } from "react-native";
 import { FirestoreDB } from "../../firebase/firebaseconfig.js";
 import functions from "../../firebase/firebaseUtils.js";
-import Loading from "./Loading.jsx";
+import Loading from "../components/Loading.jsx";
 
 const Menu = () => {
   const [menuItems, setMenuItems] = useState([]);

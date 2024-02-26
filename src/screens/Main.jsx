@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { View,  StatusBar, StyleSheet } from "react-native";
-import Carrito from "./shopping_cart.jsx"
+import Carrito from "../components/shopping_cart.jsx"
 import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
 import Login from "./Login.jsx";
 import Register from "./Register.jsx";
 import theme from "../theme.js";
-import AppBar from "./AppBar.jsx";
+import AppBar from "../components/AppBar.jsx";
 import Home from "./Home.jsx";
 import Menu from "./Menu.jsx";
 import Profile from "./Profile.jsx";
 import { Navigate, Route, Routes } from 'react-router-native';
-import Loading from "./Loading.jsx";
-import ReservarCitaForm from "./ReservarCitaForm.jsx";
+import Loading from "../components/Loading.jsx";
+import ReservarCitaForm from "../components/ReservarCitaForm.jsx";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);

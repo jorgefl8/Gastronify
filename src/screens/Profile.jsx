@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
 import { FirebaseAuth, FirestoreDB } from "../../firebase/firebaseconfig.js";
 import { doc, getDoc } from "firebase/firestore";
-import Loading from "./Loading.jsx";
+import Loading from "../components/Loading.jsx";
 
 const Profile = (props) => {
   const [user, setUser] = useState(null);
