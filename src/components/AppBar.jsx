@@ -4,6 +4,7 @@ import {
   Text,
   StyleSheet,
   TouchableWithoutFeedback,
+  Platform,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 
@@ -46,6 +47,7 @@ const AppBar = () => {
 
 const styles = StyleSheet.create({
   container: {
+    zIndex: 0,
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
@@ -53,7 +55,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: 50, // altura barra
+    height: Platform.OS === "ios" ? 70 : 50,
+    paddingBottom: Platform.OS === 'ios' ? 10 : 0,
     backgroundColor: theme.appBar.primary,
     borderTopWidth: theme.appBar.border.width,
     borderTopColor: theme.appBar.border.color,

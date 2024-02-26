@@ -25,13 +25,19 @@ const Carrito = () => {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
-    margin: 20,
+    zIndex: 1,
+    backgroundColor: 'green',
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
   image: {
     width: 40,
-    height: 40,
+    height: 20,
+    justifyContent: 'center',
     marginBottom: 40,
   },
   badge: {
