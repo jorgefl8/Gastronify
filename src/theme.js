@@ -13,17 +13,16 @@ const theme = {
       }
     },
     colors: {
-      textPrimary: '#24292e',
-      textSecondary: '#586069',
-      primary: '#0366d6',
-      white: '#fefefe',
-      red: '#B22222',
-      backgroundColor: "#f0f0f0",
+      textPrimary: '#252525',
+      textSecondary: '#252525',
+      primary: '#FFD438',
+      secondary: '#FF5252',
+      backgroundColor: "#F5EBDC",
     },
     fontSizes: {
       body: 14,
       subheading: 16,
-      heading: 24
+      heading: 30
     },
     fonts: {
       main: 'System',

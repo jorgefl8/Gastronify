@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import theme from "../theme";
 
 
-const NovedadesSection = () => {
+const NewsSection = () => {
     return (
         <View style={styles.novedadesContainer}>
             <Text style={styles.sectionTitle}>¡ NOVEDADES !</Text>
@@ -49,4 +49,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default NovedadesSection;  
+export default NewsSection;  
