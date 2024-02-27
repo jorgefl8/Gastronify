@@ -11,22 +11,22 @@ import {FirestoreDB} from "../../firebase/firebaseconfig.js";
 const BooksForm = () => {
     const db = FirestoreDB;
     const [selectedDate, setSelectedDate] = useState(null);
-    const [nombre, setNombre] = useState('');
-    const [telefono, setTelefono] = useState('');
-    const [numPersonas, setNumPersonas] = useState(1);
-    const [hora, setHora] = useState('12:00');
+    const [name, setName] = useState('');
+    const [phone, setPhone] = useState('');
+    const [people, setPeople] = useState(1);
+    const [time, setTime] = useState('12:00');
 
     const handleDateSelect = (date) => {
         setSelectedDate(date.dateString);
     };
 
     const handleSubmit = () => {
-        console.log('Fecha seleccionada:', selectedDate);
-        console.log('Nombre:', nombre);
-        console.log('Teléfono:', telefono);
-        console.log('Número de personas:', numPersonas);
-        console.log('Hora:', hora);
-        const DataBooking = {"Date":selectedDate, "Name": nombre,"TelephoneNumber":numPersonas, "Hour":hora};
+        console.log('Selected Date:', selectedDate);
+        console.log('Name:', name);
+        console.log('Phone:', phone);
+        console.log('People:', people);
+        console.log('Time:', time);
+        const DataBooking = {"Date":selectedDate, "Name": name,"PhoneNumber":phone, "Hour":time, "People":people};
         functions.uploadDoc(db, "Bookings", DataBooking);
     };
     return (
@@ -34,14 +34,14 @@ const BooksForm = () => {
 
             <Calendar onDayPress={handleDateSelect} />
             <View style={styles.separator} />
-            <Text style={styles.text}>Fecha seleccionada: {selectedDate}</Text>
+            <Text style={styles.text}>Selected Date: {selectedDate}</Text>
             <View style={styles.separator} />
             <View style={styles.campos}>
-                <Text style={styles.text}>Nombre: </Text>
+                <Text style={styles.text}>Name: </Text>
                 <TextInput
                     placeholder="Ingrese su nombre"
                     value={nombre}
-                    onChangeText={(text) => setNombre(text)}
+                    onChangeText={(text) => setName(text)}
                     style={styles.input}
                 />
             </View>
@@ -51,14 +51,14 @@ const BooksForm = () => {
                 <TextInput
                     placeholder="Ingrese su número de teléfono"
                     value={telefono}
-                    onChangeText={(text) => setTelefono(text)}
+                    onChangeText={(text) => setPhone(text)}
                     style={styles.input}
                 />
             </View>
             <View style={styles.separator} />
             <View style={styles.campos}>
                 <Text style={styles.text}>Número de Personas: </Text>
-                <Picker selectedValue={numPersonas} onValueChange={(itemValue) => setNumPersonas(itemValue)}
+                <Picker selectedValue={numPersonas} onValueChange={(itemValue) => setPeople(itemValue)}
                     style={styles.picker}>
                     <Picker.Item label="1" value="1" />
                     <Picker.Item label="2" value="2" />
@@ -75,7 +75,7 @@ const BooksForm = () => {
             <View style={styles.separator} />
             <View style={styles.campos}>
                 <Text style={styles.text}>Hora: </Text>
-                <Picker selectedValue={hora} onValueChange={(itemValue) => setHora(itemValue)}
+                <Picker selectedValue={hora} onValueChange={(itemValue) => setTime(itemValue)}
                     style={styles.picker} itemStyle={styles.itemStyle}>
                     <Picker.Item label="13:00" value="13:00" />
                     <Picker.Item label="13:30" value="13:30" />
