@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from "react-native-vector-icons/Ionicons";
 
 
-const Carrito = () => {
+const ShopCart = () => {
   const [numProductos, setNumProductos] = useState(0);
 
   const handleAgregarProducto = () => {
@@ -53,4 +53,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Carrito;
+export default ShopCart;

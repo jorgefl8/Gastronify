@@ -1,53 +1,34 @@
 import React from "react";
-import { Text, View, StyleSheet, Image, TouchableOpacity, ScrollView } from "react-native";
+import { Text, View, StyleSheet, Image, ScrollView , TouchableWithoutFeedback} from "react-native";
 import theme from "../theme";
-import { useNavigate } from 'react-router-native';
-import NovedadesSection from "../components/NovedadesSection";
+import NewsSection from "../components/NewsSection";
 import Information from "../components/Information";
+import { Link } from "react-router-native";
 
 
 const Home = () => {
-    const navigate = useNavigate();
-
-    const handleReservarCita = () => {
-        // Navegar a la pantalla de calendario
-        navigate('/reservarcita');
-    };
-
-    const handleHacerPedido = () => {
-        // Navegar a la pantalla de calendario
-        navigate('/Menu');
-    };
-
     return (
         <View style={styles.container}>
-            <View style={styles.title} >
+            <View style={styles.header} >
                 <Image style={styles.image} source={require('../../assets/appicon.png')} />
-                <Text style={styles.textTitle}>RESTAURANT APP</Text>
+                <Text style={styles.textHeader}>RESTAURANT APP</Text>
             </View>
             <ScrollView>
-                <View>
-                    <Text style={styles.text}>Welcome to our App!</Text>
-                </View>
+                <Text style={styles.textSubheader}>Welcome to our App!</Text>
                 <View style={styles.separator} />
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.button} onPress={handleHacerPedido}>
+                    <Link to="/menu" style={styles.button} component={TouchableWithoutFeedback}>
                         <Text style={styles.buttonText}>¡Pide ya!</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={handleReservarCita}>
+                    </Link>
+                    <Link to="/books" style={styles.button} component={TouchableWithoutFeedback}>
                         <Text style={styles.buttonText}>Haz tu reserva</Text>
-                    </TouchableOpacity>
+                    </Link>
                 </View>
                 <View style={styles.separator} />
-                <View>
-                    <NovedadesSection />
-                </View>
+                <NewsSection />
                 <View style={styles.separator} />
-                <View>
-                    <Information />
-                </View>
+                <Information />
             </ScrollView>
-
         </View>
     )
 };
@@ -56,22 +37,22 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: theme.colors.backgroundColor,
         paddingHorizontal: 20,
-        paddingTop: 5,
+        paddingTop: 5
     },
-    title: {
+    header: {
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
         marginBottom: 5,
     },
-    textTitle: {
+    textHeader: {
         color: theme.colors.textPrimary,
         fontSize: theme.fontSizes.heading,
         fontWeight: theme.fontWeights.bold,
     },
-    text: {
+    textSubheader: {
         color: theme.colors.textSecondary,
-        fontSize: theme.fontSizes.body,
+        fontSize: theme.fontSizes.subheading,
         fontWeight: theme.fontWeights.normal,
         textAlign: "center",
     },
@@ -81,17 +62,15 @@ const styles = StyleSheet.create({
     image: {
         width: 40,
         height: 40,
-        borderRadius: 5,
-        marginRight: 10,
+        marginRight: 5,
     },
     buttonContainer: {
         flexDirection: 'row',
-        width: '100%',
-        maxWidth: 400,
+        width: '100%'
     },
     button: {
         flex: 1,
-        backgroundColor: theme.colors.red,
+        backgroundColor: theme.colors.secondary,
         padding: 8,
         borderRadius: 5,
         margin: 6,

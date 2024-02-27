@@ -19,8 +19,8 @@ const AppBarTab = ({ children, to, icon }) => {
   return (
     <Link to={to} component={TouchableWithoutFeedback}>
       <View style={styles.tab}>
-        <Icon name={icon} size={24} color="#fff" />
-        <Text fontWeight="bold" style={textStyles}>
+        <Icon name={icon} size={theme.appBar.icon.size} color={theme.appBar.icon.color} />
+        <Text fontWeight={theme.fontWeights.bold} style={textStyles}>
           {children}
         </Text>
       </View>
@@ -55,14 +55,12 @@ const styles = StyleSheet.create({
     height: Platform.OS === "ios" ? 70 : 50,
     paddingBottom: Platform.OS === 'ios' ? 10 : 0,
     backgroundColor: theme.appBar.primary,
-    borderTopWidth: theme.appBar.border.width,
-    borderTopColor: theme.appBar.border.color,
   },
   tab: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    flexDirection: "row", // Alinea ícono y texto en la misma fila
+    flexDirection: "row", 
   },
   text: {
     color: theme.appBar.textSecondary,

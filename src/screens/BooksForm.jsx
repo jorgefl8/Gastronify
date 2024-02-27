@@ -3,11 +3,12 @@ import { ScrollView, Button, StyleSheet, Text } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { TextInput } from 'react-native';
 import { View } from 'react-native-animatable';
-import theme from '../theme';
+import theme from '../theme.js';
 import { Picker } from '@react-native-picker/picker';
 import functions from "../../firebase/firebaseUtils.js";
 import {FirestoreDB} from "../../firebase/firebaseconfig.js";
-const ReservarCitaForm = () => {
+
+const BooksForm = () => {
     const db = FirestoreDB;
     const [selectedDate, setSelectedDate] = useState(null);
     const [nombre, setNombre] = useState('');
@@ -133,4 +134,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ReservarCitaForm;
+export default BooksForm;
