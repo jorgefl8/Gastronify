@@ -31,7 +31,6 @@ const BooksForm = () => {
     };
     return (
         <ScrollView style={styles.container}>
-
             <Calendar onDayPress={handleDateSelect} />
             <View style={styles.separator} />
             <Text style={styles.text}>Selected Date: {selectedDate}</Text>

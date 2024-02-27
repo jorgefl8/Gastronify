@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  Platform,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableWithoutFeedback, Platform } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 
 import theme from "../theme.js";
@@ -14,15 +8,14 @@ import { Link, useLocation } from "react-router-native";
 const AppBarTab = ({ children, to, icon }) => {
   const { pathname } = useLocation();
   const active = pathname === to;
-  const textStyles = [styles.text, active && styles.active];
+  const containerStyles = [styles.tab, active && styles.activeTab];
+  const textStyles = [styles.text, active && styles.textActive];
 
   return (
     <Link to={to} component={TouchableWithoutFeedback}>
-      <View style={styles.tab}>
-        <Icon name={icon} size={theme.appBar.icon.size} color={theme.appBar.icon.color} />
-        <Text fontWeight={theme.fontWeights.bold} style={textStyles}>
-          {children}
-        </Text>
+      <View style={containerStyles}>
+            <Icon name={icon} size={theme.appBar.icon.size} color={active ? "black" : theme.appBar.icon.color} />
+            <Text style={textStyles}>{children}</Text>
       </View>
     </Link>
   );
@@ -60,14 +53,21 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    flexDirection: "row", 
+    flexDirection: "row",
+    paddingHorizontal: 8,
+  },
+  activeTab: {
+    backgroundColor: theme.colors.primary,
+    borderRadius: 5,
+    marginVertical: 8,
+    paddingHorizontal: 8,
+  },
+  textActive: {
+    color: "black",
   },
   text: {
     color: theme.appBar.textSecondary,
   },
-  active: {
-    color: theme.appBar.textPrimary,
-  }
 });
 
 export default AppBar;
