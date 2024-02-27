@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { View,  StatusBar, StyleSheet } from "react-native";
+import { View,  StatusBar, Platform } from "react-native";
+import Constants from 'expo-constants'
 import Carrito from "../components/shopping_cart.jsx"
 import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
 import Login from "./Login.jsx";
@@ -62,7 +63,7 @@ const Main = () => {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, paddingTop: Platform.OS === 'ios' ? Constants.statusBarHeight : 0, backgroundColor: Platform.OS === 'ios' ? theme.appBar.primary : 0 }}>
         <StatusBar backgroundColor={theme.appBar.primary} />
         <Routes>
           <Route path='/' element={<Home/>} />
@@ -71,8 +72,8 @@ const Main = () => {
           <Route path='/reservarcita' element={<ReservarCitaForm />} /> 
           <Route path='*' element={<Navigate to='/' />} />
         </Routes>
-        <Carrito/>
-        <AppBar/>
+        <Carrito />
+        <AppBar />
       </View>
 
   );

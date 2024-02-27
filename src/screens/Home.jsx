@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, Image, TouchableOpacity, ScrollView } from "react-native";
 import theme from "../theme";
 import { useNavigate } from 'react-router-native';
 import NovedadesSection from "../components/NovedadesSection";
@@ -25,42 +25,44 @@ const Home = () => {
                 <Image style={styles.image} source={require('../../assets/appicon.png')} />
                 <Text style={styles.textTitle}>RESTAURANT APP</Text>
             </View>
-            <View style={styles.separator} />
-            <View>
-                <Text style={styles.text}>Welcome to our App!</Text>
-            </View>
-            <View style={styles.separator} />
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button} onPress={handleHacerPedido}>
-                    <Text style={styles.buttonText}>¡Pide ya!</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={handleReservarCita}>
-                    <Text style={styles.buttonText}>Haz tu reserva</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.separator} />
-            <View>
-                <NovedadesSection/>
-            </View>
-            <View style={styles.separator} />
-            <View>
-                <Information/>
-            </View>
+            <ScrollView>
+                <View>
+                    <Text style={styles.text}>Welcome to our App!</Text>
+                </View>
+                <View style={styles.separator} />
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.button} onPress={handleHacerPedido}>
+                        <Text style={styles.buttonText}>¡Pide ya!</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button} onPress={handleReservarCita}>
+                        <Text style={styles.buttonText}>Haz tu reserva</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.separator} />
+                <View>
+                    <NovedadesSection />
+                </View>
+                <View style={styles.separator} />
+                <View>
+                    <Information />
+                </View>
+            </ScrollView>
 
         </View>
     )
 };
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: theme.colors.backgroundColor,
-        padding: 20,
+        paddingHorizontal: 20,
+        paddingTop: 5,
     },
     title: {
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
+        marginBottom: 5,
     },
     textTitle: {
         color: theme.colors.textPrimary,
@@ -86,19 +88,19 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         maxWidth: 400,
-      },
-      button: {
+    },
+    button: {
         flex: 1,
         backgroundColor: theme.colors.red,
         padding: 8,
         borderRadius: 5,
-        margin: 6, 
-      },
-      buttonText: {
+        margin: 6,
+    },
+    buttonText: {
         color: 'white',
         fontSize: 16,
         textAlign: 'center',
-      },
+    },
 });
 
 export default Home;

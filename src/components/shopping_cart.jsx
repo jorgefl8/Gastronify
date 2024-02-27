@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import Icon from "react-native-vector-icons/Ionicons";
+
 
 const Carrito = () => {
   const [numProductos, setNumProductos] = useState(0);
@@ -12,7 +14,7 @@ const Carrito = () => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={handleAgregarProducto}>
-        <Image source={require('../../assets/shopping.png')} style={styles.image} />
+        <Icon name="cart-outline" size={40} />
         {numProductos > 0 && (
           <View style={styles.badge}>
             <Text style={styles.badgeText}>{numProductos}</Text>
@@ -25,14 +27,14 @@ const Carrito = () => {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
-    margin: 20,
-  },
-  image: {
-    width: 40,
-    height: 40,
-    marginBottom: 40,
+    backgroundColor: 'grey',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: 60,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   badge: {
     backgroundColor: 'red',
@@ -42,12 +44,12 @@ const styles = StyleSheet.create({
     right: -5,
     justifyContent: 'center',
     alignItems: 'center',
-    width: 20,
-    height: 20,
+    width: 18,
+    height: 18,
   },
   badgeText: {
     color: 'white',
-    fontSize: 12,
+    fontSize: 13,
   },
 });
 

@@ -4,6 +4,7 @@ import {
   Text,
   StyleSheet,
   TouchableWithoutFeedback,
+  Platform,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 
@@ -31,7 +32,6 @@ const AppBar = () => {
   return (
     <View style={styles.container}>
       <AppBarTab to="/" icon="home-outline">
-        {" "}
         Home
       </AppBarTab>
       <AppBarTab to="/menu" icon="reader-outline">
@@ -49,11 +49,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    height: 50, // altura barra
+    height: Platform.OS === "ios" ? 70 : 50,
+    paddingBottom: Platform.OS === 'ios' ? 10 : 0,
     backgroundColor: theme.appBar.primary,
     borderTopWidth: theme.appBar.border.width,
     borderTopColor: theme.appBar.border.color,
@@ -69,12 +69,7 @@ const styles = StyleSheet.create({
   },
   active: {
     color: theme.appBar.textPrimary,
-  },
-  separator: {
-    width: 1,
-    height: "100%",
-    backgroundColor: "#fff",
-  },
+  }
 });
 
 export default AppBar;

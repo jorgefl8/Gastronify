@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Modal } from "react-native";
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Modal, ScrollView } from "react-native";
 import { FirestoreDB } from "../../firebase/firebaseconfig.js";
 import functions from "../../firebase/firebaseUtils.js";
 import Loading from "../components/Loading.jsx";
