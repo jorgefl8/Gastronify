@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Button } from "react-native";
 import { FirebaseAuth, FirestoreDB } from "../../firebase/firebaseconfig.js";
 import { doc, getDoc } from "firebase/firestore";
 import Loading from "../components/Loading.jsx";
+import theme from "../theme.js";
 
 const Profile = (props) => {
   const [user, setUser] = useState(null);
@@ -40,7 +41,7 @@ const Profile = (props) => {
           <Text style={styles.infoText}>Telephone Number: {user ? user.TelephoneNumber : "Not available yet"}</Text>
           <View style={styles.buttonsContainer}>
             <View style={styles.buttonWrapper}>
-              <Button title="Modify Data" ></Button>
+              <Button title="Modify Data" style={styles.button} ></Button>
             </View>
             <View style={styles.buttonWrapper}>
               <Button title="Log Out" onPress={props.handleLogout} />
@@ -54,6 +55,7 @@ const Profile = (props) => {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: theme.colors.backgroundColor,
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
@@ -61,7 +63,7 @@ const styles = StyleSheet.create({
   },
   profileInfo: {
     alignItems: "center",
-    backgroundColor: "#ffffff",
+    backgroundColor: theme.colors.backgroundColor,
     borderRadius: 10,
     padding: 20,
     shadowColor: "#000",
@@ -75,7 +77,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     marginBottom: 10,
-    fontSize: 16,
+    fontSize: theme.fontSizes.body,
   },
   buttonsContainer: {
     flexDirection: "row",
