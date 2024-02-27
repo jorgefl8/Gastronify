@@ -14,7 +14,6 @@ import { Timestamp } from "firebase/firestore";
 
 const Register = () => {
   const auth = FirebaseAuth;
-  const db = FirestoreDB;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");

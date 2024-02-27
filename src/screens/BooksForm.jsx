@@ -6,10 +6,8 @@ import { View } from 'react-native-animatable';
 import theme from '../theme.js';
 import { Picker } from '@react-native-picker/picker';
 import functions from "../../firebase/firebaseUtils.js";
-import {FirestoreDB} from "../../firebase/firebaseconfig.js";
 
 const BooksForm = () => {
-    const db = FirestoreDB;
     const [selectedDate, setSelectedDate] = useState(null);
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
@@ -27,7 +25,7 @@ const BooksForm = () => {
         console.log('People:', people);
         console.log('Time:', time);
         const DataBooking = {"Date":selectedDate, "Name": name,"PhoneNumber":phone, "Hour":time, "People":people};
-        functions.uploadDoc(db, "Bookings", DataBooking);
+        functions.uploadDoc("Bookings", DataBooking);
     };
     return (
         <ScrollView style={styles.container}>
@@ -39,7 +37,7 @@ const BooksForm = () => {
                 <Text style={styles.text}>Name: </Text>
                 <TextInput
                     placeholder="Ingrese su nombre"
-                    value={nombre}
+                    value={name}
                     onChangeText={(text) => setName(text)}
                     style={styles.input}
                 />
@@ -49,7 +47,7 @@ const BooksForm = () => {
                 <Text style={styles.text}>Teléfono: </Text>
                 <TextInput
                     placeholder="Ingrese su número de teléfono"
-                    value={telefono}
+                    value={phone}
                     onChangeText={(text) => setPhone(text)}
                     style={styles.input}
                 />
@@ -57,7 +55,7 @@ const BooksForm = () => {
             <View style={styles.separator} />
             <View style={styles.campos}>
                 <Text style={styles.text}>Número de Personas: </Text>
-                <Picker selectedValue={numPersonas} onValueChange={(itemValue) => setPeople(itemValue)}
+                <Picker selectedValue={people} onValueChange={(itemValue) => setPeople(itemValue)}
                     style={styles.picker}>
                     <Picker.Item label="1" value="1" />
                     <Picker.Item label="2" value="2" />
@@ -74,7 +72,7 @@ const BooksForm = () => {
             <View style={styles.separator} />
             <View style={styles.campos}>
                 <Text style={styles.text}>Hora: </Text>
-                <Picker selectedValue={hora} onValueChange={(itemValue) => setTime(itemValue)}
+                <Picker selectedValue={time} onValueChange={(itemValue) => setTime(itemValue)}
                     style={styles.picker} itemStyle={styles.itemStyle}>
                     <Picker.Item label="13:00" value="13:00" />
                     <Picker.Item label="13:30" value="13:30" />

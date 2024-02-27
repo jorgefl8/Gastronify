@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Modal } from "react-native";
-import { FirestoreDB } from "../../firebase/firebaseconfig.js";
 import functions from "../../firebase/firebaseUtils.js";
 import Loading from "../components/Loading.jsx";
+import theme from "../theme";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Menu = () => {
   const [menuItems, setMenuItems] = useState([]);
-  const db = FirestoreDB;
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
     const fetchMenu = async () => {
-      const menuData = await functions.getCollection(db, "Menu");
+      const menuData = await functions.getCollection("Menu");
       setLoading(false);
       setMenuItems(menuData);
     };
@@ -140,7 +139,7 @@ const styles = StyleSheet.create({
     flex: 1,
     bottom: -5,
     right: -5,
-    backgroundColor: 'blue',
+    backgroundColor: theme.colors.secondary,
     width: 30,
     height: 30,
     borderRadius: 15,

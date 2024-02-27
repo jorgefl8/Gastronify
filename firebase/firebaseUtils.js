@@ -1,7 +1,9 @@
 import { getDocs, collection, addDoc } from "firebase/firestore";
+import { FirestoreDB } from "./firebaseconfig.js";
+import DataMenu from "../src/Menu.js"
+const db = FirestoreDB;
 
-// Devuelve un array con todos los documentos de la coleccion
-const getCollection = async (db, collection_) => {
+const getCollection = async (collection_) => {
     try {
         const querySnapshot = await getDocs(collection(db, collection_));
         var dataCollection = []
@@ -15,11 +17,20 @@ const getCollection = async (db, collection_) => {
 
 };
 // Suebe el documento como json a la coleccion dada
-const uploadDoc = async (db, collection_, data) => {
+const uploadDoc = async (collection_, data) => {
     try {
         const docRef = await addDoc(collection(db, collection_), data);
     } catch (error) {
         console.log(error);
     }
 }
-export default { getCollection, uploadDoc };
+
+const uploadJSON = async (collection_) => {
+    try {
+        DataMenu.forEach(async x => await addDoc(collection(db, collection_), x));
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export default { getCollection, uploadDoc, uploadJSON };

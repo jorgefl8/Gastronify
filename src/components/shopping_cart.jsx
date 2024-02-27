@@ -6,17 +6,21 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ShopCart = () => {
   const [numProductos, setNumProductos] = useState(0);
-  useEffect(() =>{
 
-  });
+  useEffect(() => {
+    console.log("Cambio")
+  }, []); // <- Utilizando una constante en el array de dependencias
+
   const handleAgregarProducto = async () => {
-    const cartString = await AsyncStorage.getItem('cart');
-    let cart = cartString;
-    const arrayDatos = JSON.parse(cart);
-    console.log(arrayDatos);
-    if (cart != 0 ) {
-      setNumProductos(arrayDatos.length);
-    } 
+    try {
+      const cartString = await AsyncStorage.getItem('cart');
+      if (cartString !== null) {
+        const cart = JSON.parse(cartString);
+        setNumProductos(cart.length);
+      }
+    } catch (error) {
+      console.error('Error fetching cart:', error);
+    }
   }
 
   return (
