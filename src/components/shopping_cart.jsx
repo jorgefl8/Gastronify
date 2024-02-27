@@ -1,15 +1,23 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import Icon from "react-native-vector-icons/Ionicons";
 import theme from "../theme";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ShopCart = () => {
   const [numProductos, setNumProductos] = useState(0);
+  useEffect(() =>{
 
-  const handleAgregarProducto = () => {
-    // Lógica para agregar un producto al carrito
-    setNumProductos(numProductos + 1);
-  };
+  });
+  const handleAgregarProducto = async () => {
+    const cartString = await AsyncStorage.getItem('cart');
+    let cart = cartString;
+    const arrayDatos = JSON.parse(cart);
+    console.log(arrayDatos);
+    if (cart != 0 ) {
+      setNumProductos(arrayDatos.length);
+    } 
+  }
 
   return (
     <View style={styles.container}>

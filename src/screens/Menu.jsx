@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Modal, ScrollView } from "react-native";
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Modal } from "react-native";
 import { FirestoreDB } from "../../firebase/firebaseconfig.js";
 import functions from "../../firebase/firebaseUtils.js";
 import Loading from "../components/Loading.jsx";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Menu = () => {
   const [menuItems, setMenuItems] = useState([]);
@@ -20,6 +21,22 @@ const Menu = () => {
 
     fetchMenu();
   }, []);
+
+  const AddShoppingCart = async (itemName) => {
+    try {
+      // Obtener el carrito actual del almacenamiento local
+      const cartString = await AsyncStorage.getItem('cart');
+      let cart = cartString ? JSON.parse(cartString) : [];
+      // Verificar si el producto ya está en el carrito
+      const existingItemIndex = cart.findIndex(item => item.name === itemName);
+      cart.push({ Name: itemName});
+      await AsyncStorage.setItem('cart', JSON.stringify(cart));
+      //AsyncStorage.removeItem('cart');
+      console.log('Producto añadido al carrito:', itemName);
+    } catch (error) {
+      console.error('Error al añadir producto al carrito:', error);
+    }
+  };
 
   const renderMenuItem = ({ item }) => {
     const truncatedDescription = item.Description.length > 80 ? item.Description.slice(0, 60) + "..." : item.Description;
@@ -79,7 +96,7 @@ const Menu = () => {
                 <TouchableOpacity onPress={() => setModalVisible(false)}>
                   <Text style={styles.closeButton}>Cerrar</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <TouchableOpacity onPress={() => AddShoppingCart(selectedItem?.Name)}>
                   <Text style={styles.closeButton}>Añadir a la cesta</Text>
                 </TouchableOpacity>
               </View>
