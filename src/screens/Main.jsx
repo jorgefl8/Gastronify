@@ -63,7 +63,7 @@ const Main = () => {
   }
 
   return (
-      <View style={{ flex: 1, paddingTop: Platform.OS === 'ios' ? Constants.statusBarHeight : 0,backgroundColor: Platform.OS === 'ios' ? theme.appBar.primary : 0 }}>
+      <View style={{ flex: 1, paddingTop: Platform.OS === 'ios' ? Constants.statusBarHeight : 0, backgroundColor: Platform.OS === 'ios' ? theme.appBar.primary : 0 }}>
         <StatusBar backgroundColor={theme.appBar.primary} />
         <Routes>
           <Route path='/' element={<Home/>} />
@@ -72,8 +72,8 @@ const Main = () => {
           <Route path='/reservarcita' element={<ReservarCitaForm />} /> 
           <Route path='*' element={<Navigate to='/' />} />
         </Routes>
-        <Carrito/>
-        <AppBar/>
+        <Carrito />
+        <AppBar />
       </View>
 
   );

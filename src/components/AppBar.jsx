@@ -32,7 +32,6 @@ const AppBar = () => {
   return (
     <View style={styles.container}>
       <AppBarTab to="/" icon="home-outline">
-        {" "}
         Home
       </AppBarTab>
       <AppBarTab to="/menu" icon="reader-outline">
@@ -47,11 +46,9 @@ const AppBar = () => {
 
 const styles = StyleSheet.create({
   container: {
-    zIndex: 0,
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
@@ -72,12 +69,7 @@ const styles = StyleSheet.create({
   },
   active: {
     color: theme.appBar.textPrimary,
-  },
-  separator: {
-    width: 1,
-    height: "100%",
-    backgroundColor: "#fff",
-  },
+  }
 });
 
 export default AppBar;
