@@ -93,7 +93,8 @@ const Menu = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingTop: 20,
     flex: 1
   },
   title: {
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
   menuItemContainer: {
     flexDirection: "row",
     marginBottom: 10,
-    width: "100%"
+    width: "100%",
   },
   imageContainer: {
     marginTop: 5,

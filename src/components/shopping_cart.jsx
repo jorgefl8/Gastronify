@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from "react-native-vector-icons/Ionicons";
-
+import theme from "../theme";
 
 const ShopCart = () => {
   const [numProductos, setNumProductos] = useState(0);
@@ -14,12 +14,14 @@ const ShopCart = () => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={handleAgregarProducto}>
-        <Icon name="cart-outline" size={40} />
-        {numProductos > 0 && (
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>{numProductos}</Text>
-          </View>
-        )}
+        <View style={styles.cartIconContainer}>
+          <Icon name="cart-outline" size={40} />
+          {numProductos > 0 && (
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>{numProductos}</Text>
+            </View>
+          )}
+        </View>
       </TouchableOpacity>
     </View>
   );
@@ -27,21 +29,20 @@ const ShopCart = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'grey',
-    left: 0,
+    left: -20,
     right: 0,
-    bottom: 0,
+    bottom: 10,
     height: 60,
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
     flexDirection: 'row',
-    alignItems: 'center',
   },
   badge: {
-    backgroundColor: 'red',
+    backgroundColor: 'black',
     borderRadius: 10,
     position: 'absolute',
-    top: -5,
-    right: -5,
+    bottom: 0,
+    right: 0,
     justifyContent: 'center',
     alignItems: 'center',
     width: 18,
@@ -51,6 +52,13 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 13,
   },
+  cartIconContainer: {
+    backgroundColor: theme.colors.secondary,
+    borderRadius: 100,
+    padding: 10,
+    borderColor:"black",
+    borderWidth: 1,
+  }
 });
 
 export default ShopCart;
