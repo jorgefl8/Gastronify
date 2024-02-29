@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import { Link } from 'react-router-native';
 import Icon from "react-native-vector-icons/Ionicons";
 import theme from "../theme";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -8,24 +9,24 @@ const ShopCart = () => {
   const [numProductos, setNumProductos] = useState(0);
 
   useEffect(() => {
-    console.log("Cambio")
-  }, []); // <- Utilizando una constante en el array de dependencias
-
-  const handleAgregarProducto = async () => {
-    try {
-      const cartString = await AsyncStorage.getItem('cart');
-      if (cartString !== null) {
-        const cart = JSON.parse(cartString);
-        setNumProductos(cart.length);
+    const loadCartItems = async () => {
+      try {
+        const cartString = await AsyncStorage.getItem('cart');
+        if (cartString !== null) {
+          const cart = JSON.parse(cartString);
+          setNumProductos(cart.length);
+        }
+      } catch (error) {
+        console.error('Error fetching cart:', error);
       }
-    } catch (error) {
-      console.error('Error fetching cart:', error);
-    }
-  }
+    };
+
+    loadCartItems();
+  }, []);
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={handleAgregarProducto}>
+      <Link to="/shopping">
         <View style={styles.cartIconContainer}>
           <Icon name="cart-outline" size={40} />
           {numProductos > 0 && (
@@ -34,7 +35,7 @@ const ShopCart = () => {
             </View>
           )}
         </View>
-      </TouchableOpacity>
+      </Link>
     </View>
   );
 };

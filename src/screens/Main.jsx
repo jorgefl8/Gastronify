@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View,  StatusBar, Platform, StyleSheet } from "react-native";
+import { View, StatusBar, Platform, StyleSheet } from "react-native";
 import Constants from 'expo-constants'
 import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
 import Login from "./Login.jsx";
@@ -12,6 +12,8 @@ import Profile from "./Profile.jsx";
 import { Navigate, Route, Routes } from 'react-router-native';
 import Loading from "../components/Loading.jsx";
 import BooksForm from "./BooksForm.jsx";
+import ShoppingScreen from "./shoppingScreen.jsx";
+import { Link } from "react-router-native";
 import ShopCart from "../components/shopping_cart.jsx"
 
 
@@ -45,7 +47,7 @@ const Main = () => {
 
   if (loading) {
     return (
-      <Loading/>
+      <Loading />
     );
   }
 
@@ -54,8 +56,8 @@ const Main = () => {
       <View style={styles.container}>
         <StatusBar backgroundColor={theme.appBar.primary} />
         <Routes>
-          <Route path='/login' element={<Login/>} />
-          <Route path='/register' element={<Register/>} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
           <Route path='*' element={<Navigate to='/login' />} />
         </Routes>
       </View>
@@ -64,18 +66,19 @@ const Main = () => {
   }
 
   return (
-      <View style={styles.container}>
-        <StatusBar backgroundColor={theme.appBar.primary} />
-        <Routes>
-          <Route path='/' element={<Home/>} />
-          <Route path='/menu' element={<Menu/>} />
-          <Route path='/profile' element={<Profile handleLogout={handleLogout}/>} />
-          <Route path='/books' element={<BooksForm />} /> 
-          <Route path='*' element={<Navigate to='/' />} />
-        </Routes>
+    <View style={styles.container}>
+      <StatusBar backgroundColor={theme.appBar.primary} />
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/menu' element={<Menu />} />
+        <Route path='/profile' element={<Profile handleLogout={handleLogout} />} />
+        <Route path='/books' element={<BooksForm />} />
+        <Route path='/shopping' element={<ShoppingScreen />} />
+        <Route path='*' element={<Navigate to='/' />} />
+      </Routes>
         <ShopCart />
-        <AppBar />
-      </View>
+      <AppBar />
+    </View>
 
   );
 };
@@ -86,7 +89,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.backgroundColor,
-    paddingTop: Platform.OS === 'ios' ? Constants.statusBarHeight : 0,    
+    paddingTop: Platform.OS === 'ios' ? Constants.statusBarHeight : 0,
   }
 });
 

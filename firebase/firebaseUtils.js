@@ -25,7 +25,7 @@ const uploadDoc = async (collection_, data) => {
     }
 }
 
-const uploadJSON = async (collection_) => {
+const uploadJSONMenu = async (collection_) => {
     try {
         DataMenu.forEach(async x => await addDoc(collection(db, collection_), x));
     } catch (error) {
@@ -33,4 +33,4 @@ const uploadJSON = async (collection_) => {
     }
 }
 
-export default { getCollection, uploadDoc, uploadJSON };
+export default { getCollection, uploadDoc, uploadJSONMenu };
