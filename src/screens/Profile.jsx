@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import { View, Text, StyleSheet,TouchableOpacity} from "react-native";
 import { FirebaseAuth, FirestoreDB } from "../../firebase/firebaseconfig.js";
+import functions from "../../firebase/firebaseUtils.js";
 import { doc, getDoc } from "firebase/firestore";
 import Loading from "../components/Loading.jsx";
 import theme from "../theme.js";
@@ -11,28 +12,16 @@ const Profile = (props) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const currentUser = doc(
-          FirestoreDB,
-          "Users",
-          FirebaseAuth.currentUser.uid
-        );
-        const userDoc = await getDoc(currentUser);
-        if (userDoc.exists()) {
-          setUser(userDoc.data());
-        } else {
-          console.log("No such document!");
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      } finally {
-        setLoading(false);
-      }
+    const fetchMenu = async () => {
+      const DatUser = await functions.getCollectionByDoc("Users", FirebaseAuth.currentUser.uid);
+      setLoading(false);
+      setUser(DatUser);
     };
 
-    fetchData();
+    fetchMenu();
   }, []);
+
+
   if (loading) {
     return <Loading/>;
   }
@@ -78,7 +67,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
-    marginVertical: 200
   },
   profileInfo: {
     alignItems: "center",
@@ -94,6 +82,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    height: "40%"
   },
   infoText: {
     marginBottom: 10,
@@ -109,7 +98,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.secondary,
     padding: 8,
-    borderRadius: 5,
+    borderRadius: 5, 
+ 
     margin: 6,
   },
   buttonText: {

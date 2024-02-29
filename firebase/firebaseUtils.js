@@ -1,4 +1,4 @@
-import { getDocs, collection, addDoc } from "firebase/firestore";
+import { getDocs, collection, addDoc, doc, getDoc } from "firebase/firestore";
 import { FirestoreDB } from "./firebaseconfig.js";
 import DataMenu from "../src/Menu.js"
 const db = FirestoreDB;
@@ -33,4 +33,23 @@ const uploadJSONMenu = async (collection_) => {
     }
 }
 
-export default { getCollection, uploadDoc, uploadJSONMenu };
+const getCollectionByDoc = async (collection_, doc_) => {
+    try {
+        console.log(collection_, doc_)
+      const currentUser = doc(
+        db,
+        collection_,
+        doc_
+      );
+      const userDoc = await getDoc(currentUser);
+      if (userDoc.exists()) {
+        return userDoc.data();
+      } else {
+        console.log("No such document!");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } 
+  };
+
+export default { getCollection, uploadDoc, uploadJSONMenu, getCollectionByDoc };
