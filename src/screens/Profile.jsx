@@ -34,7 +34,7 @@ const Profile = (props) => {
     fetchData();
   }, []);
   if (loading) {
-    return <Loading />;
+    return <Loading/>;
   }
 
   return (

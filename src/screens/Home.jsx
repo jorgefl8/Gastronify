@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, StyleSheet, Image, ScrollView , TouchableWithoutFeedback} from "react-native";
+import { Text, View, StyleSheet, Image, ScrollView , TouchableOpacity} from "react-native";
 import theme from "../theme";
 import NewsSection from "../components/NewsSection";
 import Information from "../components/Information";
@@ -17,10 +17,10 @@ const Home = () => {
                 <Text style={styles.textSubheader}>Welcome to our App!</Text>
                 <View style={styles.separator} />
                 <View style={styles.buttonContainer}>
-                    <Link to="/menu" style={styles.button} component={TouchableWithoutFeedback}>
+                    <Link to="/menu" style={styles.button} component={TouchableOpacity}>
                         <Text style={styles.buttonText}>¡Pide ya!</Text>
                     </Link>
-                    <Link to="/books" style={styles.button} component={TouchableWithoutFeedback}>
+                    <Link to="/books" style={styles.button} component={TouchableOpacity}>
                         <Text style={styles.buttonText}>Haz tu reserva</Text>
                     </Link>
                 </View>
