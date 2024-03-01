@@ -28,18 +28,27 @@ const Menu = ({ onCartUpdate }) => {
     return item.Category === selectedCategory;
   });
 
-  const AddShoppingCart = async (itemName) => {
+  const AddShoppingCart = async (item) => {
     try {
       // Obtener el carrito actual del almacenamiento local
       const cartString = await AsyncStorage.getItem('cart');
       let cart = cartString ? JSON.parse(cartString) : [];
-      // Verificar si el producto ya está en el carrito
-      const existingItemIndex = cart.findIndex(item => item.name === itemName);
-      cart.push({ Name: itemName });
+      
+      const existingItemIndex = cart.findIndex(cartItem => cartItem.Name === item.Name);
+      if (existingItemIndex !== -1) {
+        // Si el producto ya está en el carrito, actualizar la cantidad
+        cart[existingItemIndex].Quantity += 1;
+      } else {
+        // Si el producto no está en el carrito, agregarlo con cantidad 1
+        item.Quantity = 1;
+        cart.push(item);
+      }
       await AsyncStorage.setItem('cart', JSON.stringify(cart));
-      //AsyncStorage.removeItem('cart');
+      // Cerrar el modal
       setModalVisible(false);
-      console.log('Producto añadido al carrito:', itemName);
+      console.log(cart);
+      //await AsyncStorage.removeItem('cart');
+      // Actualizar el carrito llamando a la función proporcionada como prop
       onCartUpdate();
     } catch (error) {
       console.error('Error al añadir producto al carrito:', error);
@@ -124,7 +133,7 @@ const Menu = ({ onCartUpdate }) => {
                 <TouchableOpacity onPress={() => setModalVisible(false)}>
                   <Text style={styles.closeButton}>Cerrar</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => AddShoppingCart(selectedItem?.Name)}>
+                <TouchableOpacity onPress={() => AddShoppingCart(selectedItem)}>
                   <Text style={styles.closeButton}>Añadir a la cesta</Text>
                 </TouchableOpacity>
               </View>
