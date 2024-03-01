@@ -35,7 +35,7 @@ const uploadJSONMenu = async (collection_) => {
 
 const getCollectionByDoc = async (collection_, doc_) => {
     try {
-        console.log(collection_, doc_)
+        //console.log(collection_, doc_)
       const currentUser = doc(
         db,
         collection_,

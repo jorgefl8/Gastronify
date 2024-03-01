@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, StatusBar, Platform, StyleSheet } from "react-native";
 import Constants from 'expo-constants'
 import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
-import { Navigate, Route, Routes } from 'react-router-native';
+import { Navigate, Route, Routes, useLocation } from 'react-router-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Login from "./Login.jsx";
@@ -21,6 +21,9 @@ const Main = () => {
   const [loading, setLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [numProductos, setNumProductos] = useState(0);
+  const [showCart, setShowCart] = useState(false); // Estado para controlar la visibilidad del carrito
+
+  const location = useLocation(); 
 
   useEffect(() => {
     loadCartItems();
@@ -37,12 +40,12 @@ const Main = () => {
       unsubscribe(); // Limpia el listener al desmontar el componente
     };
   }, [numProductos]);
+
   const loadCartItems = async () => {
     try {
       const cartString = await AsyncStorage.getItem('cart');
       if (cartString !== null) {
         const cart = JSON.parse(cartString);
-        // Sumar las cantidades de todos los productos en el carrito
         const totalQuantity = cart.reduce((total, currentItem) => total + currentItem.Quantity, 0);
         setNumProductos(totalQuantity);
       }
@@ -50,7 +53,6 @@ const Main = () => {
       console.error('Error fetching cart:', error);
     }
   };
-
 
   const handleLogout = async () => {
     try {
@@ -60,6 +62,11 @@ const Main = () => {
       console.log("Error al cerrar sesión:", error);
     }
   };
+
+  useEffect(() => {
+    // Si la ruta actual es '/menu' o '/shopping', mostrar el carrito
+    setShowCart(location.pathname === '/menu' || location.pathname === '/' || location.pathname === '/profile');
+  }, [location]);
 
   if (loading) {
     return (
@@ -92,7 +99,7 @@ const Main = () => {
         <Route path='/shopping' element={<ShoppingScreen updateCart={() => loadCartItems()} />} />
         <Route path='*' element={<Navigate to='/' />} />
       </Routes>
-      <ShopCart numProductos={numProductos} />
+      {showCart && <ShopCart numProductos={numProductos} />}
       <AppBar />
     </View>
 
@@ -108,4 +115,3 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === 'ios' ? Constants.statusBarHeight : 0,
   }
 });
-
