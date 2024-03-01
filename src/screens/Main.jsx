@@ -15,13 +15,15 @@ import BooksForm from "./BooksForm.jsx";
 import ShoppingScreen from "./shoppingScreen.jsx";
 import { Link } from "react-router-native";
 import ShopCart from "../components/shopping_cart.jsx"
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [numProductos, setNumProductos] = useState(0);
 
   useEffect(() => {
+    loadCartItems();
     const unsubscribe = FirebaseAuth.onAuthStateChanged((user) => {
       if (user) {
         setIsLoggedIn(true);
@@ -34,7 +36,18 @@ const Main = () => {
     return () => {
       unsubscribe(); // Limpia el listener al desmontar el componente
     };
-  }, []);
+  }, [numProductos]);
+  const loadCartItems = async () => {
+    try {
+      const cartString = await AsyncStorage.getItem('cart');
+      if (cartString !== null) {
+        const cart = JSON.parse(cartString);
+        setNumProductos(cart.length);
+      }
+    } catch (error) {
+      console.error('Error fetching cart:', error);
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -70,13 +83,13 @@ const Main = () => {
       <StatusBar backgroundColor={theme.appBar.primary} />
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/menu' element={<Menu />} />
+        <Route path="/menu" element={<Menu onCartUpdate={() => setNumProductos(numProductos + 1)} />} />
         <Route path='/profile' element={<Profile handleLogout={handleLogout} />} />
         <Route path='/books' element={<BooksForm />} />
         <Route path='/shopping' element={<ShoppingScreen />} />
         <Route path='*' element={<Navigate to='/' />} />
       </Routes>
-        <ShopCart />
+      <ShopCart numProductos={numProductos} />
       <AppBar />
     </View>
 
