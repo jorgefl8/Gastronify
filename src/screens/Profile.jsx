@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet,TouchableOpacity} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { FirebaseAuth, FirestoreDB } from "../../firebase/firebaseconfig.js";
 import functions from "../../firebase/firebaseUtils.js";
 import { doc, getDoc } from "firebase/firestore";
@@ -13,7 +13,10 @@ const Profile = (props) => {
 
   useEffect(() => {
     const fetchMenu = async () => {
-      const DatUser = await functions.getCollectionByDoc("Users", FirebaseAuth.currentUser.uid);
+      const DatUser = await functions.getCollectionByDoc(
+        "Users",
+        FirebaseAuth.currentUser.uid
+      );
       setLoading(false);
       setUser(DatUser);
     };
@@ -21,17 +24,19 @@ const Profile = (props) => {
     fetchMenu();
   }, []);
 
-
   if (loading) {
-    return <Loading/>;
+    return <Loading />;
   }
 
   return (
     <View style={styles.container}>
-      <View style={styles.profileInfo}>
-        <Text style={styles.infoText}>
-          Name: {user ? user.Name : "User data not available yet"}
+      <View style={styles.Header}>
+        <Text style={{ fontSize: 20 }}>
+          Hi !, {user ? user.Name : "Usuario"}, welcome to your profile
         </Text>
+      </View>
+      <View style={styles.profileInfo}>
+        <Text style={styles.infoText}> Your data is: </Text>
         <Text style={styles.infoText}>
           Last name: {user ? user.LastName : "Not available yet"}
         </Text>
@@ -82,7 +87,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    height: "40%"
+    height: "40%",
   },
   infoText: {
     marginBottom: 10,
@@ -98,14 +103,24 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.secondary,
     padding: 8,
-    borderRadius: 5, 
- 
+    borderRadius: 5,
+
     margin: 6,
   },
   buttonText: {
     color: "white",
     fontSize: 16,
     textAlign: "center",
+  },
+  Header: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 100, // Ajusta este valor según tus necesidades
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: theme.colors.terciary,
   },
 });
 
