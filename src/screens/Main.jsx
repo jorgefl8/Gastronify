@@ -49,7 +49,7 @@ const Main = () => {
         const cart = JSON.parse(cartString);
         const totalQuantity = cart.reduce((total, currentItem) => total + currentItem.Quantity, 0);
         setNumProductos(totalQuantity);
-      }
+      } else {setNumProductos(0);}
     } catch (error) {
       console.error('Error fetching cart:', error);
     }

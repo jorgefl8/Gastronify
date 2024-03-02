@@ -9,6 +9,7 @@ import functions from '../../firebase/firebaseUtils.js';
 
 const ShoppingScreen = ({ updateCart, userData }) => {
   const [cartItems, setCartItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true); // Estado de carga
 
   useEffect(() => {
     loadCartItems();
@@ -21,8 +22,10 @@ const ShoppingScreen = ({ updateCart, userData }) => {
         const cart = JSON.parse(cartString);
         setCartItems(cart);
       }
+      setIsLoading(false); // Cambia el estado de carga a falso cuando se complete la carga
     } catch (error) {
       console.error('Error fetching cart:', error);
+      setIsLoading(false); // Manejar errores y cambiar el estado de carga a falso
     }
   };
 
@@ -82,8 +85,9 @@ const ShoppingScreen = ({ updateCart, userData }) => {
     return total > 15 ? 0 : 2.99;
   };
 
+
   const handlePlaceOrder = async () => {
-    // Función para mostrar el carrito con solo Name, Price, Ingredients, Quantity
+    setIsLoading(true);
     const formattedCart = cartItems.map(item => ({
       Name: item.Name,
       Price: item.Price,
@@ -92,6 +96,10 @@ const ShoppingScreen = ({ updateCart, userData }) => {
     }));
     const Order = {userData: userData, order: formattedCart, Date: Timestamp.now()};
     await functions.uploadDoc("Orders", Order);
+    await AsyncStorage.removeItem('cart');
+    setCartItems([]);
+    updateCart(); // Asegúrate de llamar a updateCart después de completar el pedido
+    setIsLoading(false);
   };
 
   const renderSummary = () => (
@@ -129,23 +137,26 @@ const ShoppingScreen = ({ updateCart, userData }) => {
       <TouchableOpacity onPress={() => increaseQuantity(item.Name)}>
         <Text style={styles.quantityButton}>+</Text>
       </TouchableOpacity>
-
     </View>
   );
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Shopping Cart</Text>
-      {cartItems.length === 0 ? (
+      {isLoading ? (
+        <Loading /> // Muestra el componente de carga mientras se está cargando
+      ) : cartItems.length === 0 ? (
         <Text>Your cart is empty</Text>
       ) : (
-        <FlatList
-          data={cartItems}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
-        />
+        <>
+          <FlatList
+            data={cartItems}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => index.toString()}
+          />
+          {renderSummary()}
+        </>
       )}
-      {cartItems.length > 0 && renderSummary()}
     </View>
   );
 };
