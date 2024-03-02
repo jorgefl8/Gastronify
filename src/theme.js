@@ -17,6 +17,7 @@ const theme = {
       textSecondary: '#252525',
       primary: '#FFD438',
       secondary: '#FF5252',
+      terciary: '#FF8F52',
       backgroundColor: "#F5EBDC",
     },
     fontSizes: {
