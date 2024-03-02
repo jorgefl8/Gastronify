@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { View, StatusBar, Platform, StyleSheet } from "react-native";
+import { View, StatusBar, Platform, StyleSheet, TouchableOpacity, Text } from "react-native";
 import Constants from 'expo-constants'
 import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
-import { Navigate, Route, Routes, useLocation } from 'react-router-native';
+import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Login from "./Login.jsx";
@@ -22,11 +22,17 @@ const Main = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(false);
   const [numProductos, setNumProductos] = useState(0);
-  const [showCart, setShowCart] = useState(false); // Estado para controlar la visibilidad del carrito
+  const [showCart, setShowCart] = useState(true); // Estado para controlar la visibilidad del carrito
+  const [showAppBar, setShowAppBar] = useState(true); // Estado para controlar la visibilidad de la AppBar
 
   const location = useLocation(); 
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!loading){
+      setShowCart(location.pathname === '/menu' || location.pathname === '/' || location.pathname === '/profile');
+      setShowAppBar(location.pathname !== '/shopping');
+    }
     loadCartItems();
     const unsubscribe = FirebaseAuth.onAuthStateChanged((user) => {
       if (user) {
@@ -40,7 +46,7 @@ const Main = () => {
     return () => {
       unsubscribe(); 
     };
-  }, [numProductos]);
+  }, [numProductos, location]);
 
   const loadCartItems = async () => {
     try {
@@ -64,11 +70,6 @@ const Main = () => {
     }
   };
 
-  useEffect(() => {
-    // Si la ruta actual es '/menu' o '/shopping', mostrar el carrito
-    setShowCart(location.pathname === '/menu' || location.pathname === '/' || location.pathname === '/profile');
-  }, [location]);
-
   if (loading) {
     return (
       <Loading />
@@ -85,7 +86,6 @@ const Main = () => {
           <Route path='*' element={<Navigate to='/login' />} />
         </Routes>
       </View>
-
     );
   }
 
@@ -101,9 +101,14 @@ const Main = () => {
         <Route path='*' element={<Navigate to='/' />} />
       </Routes>
       {showCart && <ShopCart numProductos={numProductos} />}
-      <AppBar />
+      {showAppBar && <AppBar />}
+      {/* Botón de retroceso solo visible en la pantalla de compras */}
+      {!showAppBar && (
+        <TouchableOpacity onPress={() => navigate(-1)} style={styles.backButton}>
+          <Text style={styles.backButtonText}>Back</Text>
+        </TouchableOpacity>
+      )}
     </View>
-
   );
 };
 
@@ -114,5 +119,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.backgroundColor,
     paddingTop: Platform.OS === 'ios' ? Constants.statusBarHeight : 0,
-  }
+    position: 'relative', // Agregar esta línea para posicionar el botón correctamente
+  },
+  backButton: {
+    position: 'absolute',
+    top: Constants.statusBarHeight + (Platform.OS === "ios" ? 25 : 5),
+    right: 20,
+  },
+  backButtonText: {
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+    fontSize: 16,
+    color: 'black',
+  },
 });

@@ -59,29 +59,29 @@ const Menu = ({ onCartUpdate }) => {
     const truncatedDescription = item.Description.length > 80 ? item.Description.slice(0, 60) + "..." : item.Description;
 
     return (
-      <View style={styles.menuItemContainer}>
-        <View style={styles.imageContainer}>
-          <Image
-            source={{ uri: item.Image }}
-            style={styles.image}
-          />
-          <TouchableOpacity style={styles.addButton} onPress={() => { setSelectedItem(item); setModalVisible(true) }}>
-            <Text style={styles.addButtonText}>+</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.detailsContainer}>
-          <View style={styles.detailsPrincipal}>
-            <Text style={styles.name}>{item.Name}</Text>
-            <Text style={styles.price}>{item.Price} €</Text>
-          </View>
-          <Text style={styles.description}>{truncatedDescription}</Text>
-        </View>
-      </View>
+      <TouchableOpacity style={styles.menuItemContainer} onPress={() => { setSelectedItem(item); setModalVisible(true);}}>
+  <View style={styles.imageContainer}>
+    <Image
+      source={{ uri: item.Image }}
+      style={styles.image}
+    />
+    <TouchableOpacity style={styles.addButton} onPress={() => { AddShoppingCart(item)}}>
+      <Text style={styles.addButtonText}>+</Text>
+    </TouchableOpacity>
+  </View>
+  <View style={styles.detailsContainer}>
+    <View style={styles.detailsPrincipal}>
+      <Text style={styles.name}>{item.Name}</Text>
+      <Text style={styles.price}>{item.Price} €</Text>
+    </View>
+    <Text style={styles.description}>{truncatedDescription}</Text>
+  </View>
+</TouchableOpacity>
     )
   };
 
   return (
-    <View style={[styles.container, loading && styles.loadingContainer]}>
+    <View style={styles.container}>
       {loading ? (
         <Loading />
       ) : (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, Alert } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image,Animated, Easing, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from "react-native-vector-icons/Ionicons";
 import theme from "../theme.js";
@@ -9,10 +9,21 @@ import functions from '../../firebase/firebaseUtils.js';
 
 const ShoppingScreen = ({ updateCart, userData }) => {
   const [cartItems, setCartItems] = useState([]);
-  const [isLoading, setIsLoading] = useState(true); // Estado de carga
+  const [isLoading, setIsLoading] = useState(false); // Estado de carga
+  const [slideAnimation] = useState(new Animated.Value(100)); // Valor inicial fuera de la pantalla
 
   useEffect(() => {
     loadCartItems();
+    // Animación para deslizar hacia arriba
+    Animated.timing(
+      slideAnimation,
+      {
+        toValue: 0,  
+        duration: 1000, // Ajusta la duración de la animación según sea necesario
+        easing: Easing.out(Easing.ease), // Cambia el tipo de easing
+        useNativeDriver: false, 
+      }
+    ).start();
   }, []);
 
   const loadCartItems = async () => {
@@ -22,10 +33,8 @@ const ShoppingScreen = ({ updateCart, userData }) => {
         const cart = JSON.parse(cartString);
         setCartItems(cart);
       }
-      setIsLoading(false); // Cambia el estado de carga a falso cuando se complete la carga
     } catch (error) {
       console.error('Error fetching cart:', error);
-      setIsLoading(false); // Manejar errores y cambiar el estado de carga a falso
     }
   };
 
@@ -85,7 +94,6 @@ const ShoppingScreen = ({ updateCart, userData }) => {
     return total > 15 ? 0 : 2.99;
   };
 
-
   const handlePlaceOrder = async () => {
     setIsLoading(true);
     const formattedCart = cartItems.map(item => ({
@@ -95,12 +103,34 @@ const ShoppingScreen = ({ updateCart, userData }) => {
       Quantity: item.Quantity
     }));
     const Order = {userData: userData, order: formattedCart, Date: Timestamp.now()};
+    
+    // Check if UserData has address and payment method
+    if (!userData.Address || !userData.PaymentMethod) {
+      // Show modal
+      showModal();
+      return;
+    }
+  
+    // Proceed with placing the order
     await functions.uploadDoc("Orders", Order);
     await AsyncStorage.removeItem('cart');
     setCartItems([]);
-    updateCart(); // Asegúrate de llamar a updateCart después de completar el pedido
+    updateCart(); // Make sure to call updateCart after completing the order
     setIsLoading(false);
   };
+  
+  const showModal = () => {
+    Alert.alert(
+      'Missing Information',
+      'To place an order, you need to enter a valid address and payment method.',
+      [
+        { text: 'OK', onPress: () => setIsLoading(false) }
+      ],
+      { cancelable: false }
+    );
+  };
+  
+  
 
   const renderSummary = () => (
     <View style={styles.summaryContainer}>
