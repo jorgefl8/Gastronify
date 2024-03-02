@@ -13,6 +13,7 @@
     "@react-native-async-storage/async-storage": "^1.22.2",
     "@react-native-picker/picker": "^2.6.1",
     "expo": "~50.0.7",
+    "expo-auth-session": "^5.4.0",
     "expo-status-bar": "~1.11.1",
     "firebase": "^10.8.0",
     "react": "18.2.0",
@@ -21,6 +22,7 @@
     "react-native-animatable": "^1.4.0",
     "react-native-calendars": "^1.1303.0",
     "react-native-date-picker": "^4.3.6",
+    "react-native-google-signin": "^2.1.1",
     "react-native-web": "~0.19.6",
     "react-router-native": "^6.22.1"
   },

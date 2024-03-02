@@ -1,9 +1,15 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions, Image } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { Link } from "react-router-native";
-import Icon from "react-native-vector-icons/Ionicons";
+
 
 const Login = () => {
   const auth = FirebaseAuth;
@@ -19,11 +25,9 @@ const Login = () => {
     }
   };
 
-  const handleLoginFacebook = async () => { };
+  const handleLoginFacebook = async () => {};
 
-  const handleLoginGoogle = async () => { };
-
-  const handleLoginApple = async () => { };
+  const handleLoginGoogle = async () => {};
 
   return (
     <View style={styles.container}>
@@ -46,36 +50,7 @@ const Login = () => {
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Log In</Text>
       </TouchableOpacity>
-      <View style={styles.separatorv2} />
-      <Text style={styles.text}>Accede con</Text>
-      <View style={styles.buttonLoginContainer}>
-        <View style={styles.buttonLoggers}>
-          <TouchableOpacity
-            style={styles.iconGoogle}
-            onPress={handleLoginGoogle}
-          >
-            <Icon name="logo-google" size={40} color="black" style={styles.icon} />
-          </TouchableOpacity>
-          </View>
-          <View style={styles.buttonLoggers}>
-          <TouchableOpacity
-            style={styles.iconFacebook}
-            onPress={handleLoginApple}
-          >
-            <Icon name="logo-apple" size={40} color="black" style={styles.icon} />
-            
-          </TouchableOpacity>
-          </View>
-          <View style={styles.buttonLoggers}>
-          <TouchableOpacity
-            style={styles.iconFacebook}
-            onPress={handleLoginFacebook}
-          >
-            <Icon name="logo-facebook" size={40} color="black" style={styles.icon} />
-          </TouchableOpacity>
-        
-        </View>
-      </View>
+      <View style={styles.separator} />
       <Text style={styles.registerText}>
         <Link to="/register" style={styles.registerContainer}>
           <Text style={styles.registerText}>
@@ -87,8 +62,6 @@ const Login = () => {
     </View>
   );
 };
-
-const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -114,52 +87,23 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   button: {
-    width: width - 40, // Usamos el ancho de la pantalla menos el padding
+    width: 300,
     height: 50,
     backgroundColor: "blue",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 8,
-    marginBottom: 15,
   },
   buttonText: {
     color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
   },
-  icon: {
-    margin: 10, // Espacio entre el icono y el texto del botón
-  },
   separator: {
     height: 10,
   },
-  separatorv2: {
-    marginTop: 10,
-    backgroundColor: "#ccc",
-    height: 1, // Altura de 1 para crear la línea
-    width: "100%", // Ocupa todo el ancho disponible
-  },
   registerLink: {
     color: "blue",
-  },
-  buttonLoginContainer: {
-    flexDirection: "row",
-    width: width - 40, // Usamos el ancho de la pantalla menos el padding
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  buttonLoggers: {
-    flexDirection: "row",
-    margin: 10,
-  },
-  text: {
-    fontSize: 16,
-    color: "black",
-    marginTop: 10,
-    marginHorizontal: 10,
-  },
-  textOr: {
-    marginHorizontal: 10,
   },
 });
 

@@ -11,6 +11,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { Link } from "react-router-native";
 import { Timestamp } from "firebase/firestore";
+import theme from "../theme.js";
 
 const Register = () => {
   const auth = FirebaseAuth;
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f0f0f0",
+    backgroundColor: theme.colors.backgroundColor,
     padding: 20,
   },
   title: {
