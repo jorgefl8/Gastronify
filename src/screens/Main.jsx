@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { View, StatusBar, Platform, StyleSheet } from "react-native";
 import Constants from 'expo-constants'
 import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
+import { Navigate, Route, Routes, useLocation } from 'react-router-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import Login from "./Login.jsx";
 import Register from "./Register.jsx";
 import theme from "../theme.js";
@@ -9,19 +12,21 @@ import AppBar from "../components/AppBar.jsx";
 import Home from "./Home.jsx";
 import Menu from "./Menu.jsx";
 import Profile from "./Profile.jsx";
-import { Navigate, Route, Routes } from 'react-router-native';
 import Loading from "../components/Loading.jsx";
 import BooksForm from "./BooksForm.jsx";
 import ShoppingScreen from "./shoppingScreen.jsx";
-import { Link } from "react-router-native";
 import ShopCart from "../components/shopping_cart.jsx"
-
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [numProductos, setNumProductos] = useState(0);
+  const [showCart, setShowCart] = useState(false); // Estado para controlar la visibilidad del carrito
+
+  const location = useLocation(); 
 
   useEffect(() => {
+    loadCartItems();
     const unsubscribe = FirebaseAuth.onAuthStateChanged((user) => {
       if (user) {
         setIsLoggedIn(true);
@@ -34,7 +39,20 @@ const Main = () => {
     return () => {
       unsubscribe(); // Limpia el listener al desmontar el componente
     };
-  }, []);
+  }, [numProductos]);
+
+  const loadCartItems = async () => {
+    try {
+      const cartString = await AsyncStorage.getItem('cart');
+      if (cartString !== null) {
+        const cart = JSON.parse(cartString);
+        const totalQuantity = cart.reduce((total, currentItem) => total + currentItem.Quantity, 0);
+        setNumProductos(totalQuantity);
+      }
+    } catch (error) {
+      console.error('Error fetching cart:', error);
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -44,6 +62,11 @@ const Main = () => {
       console.log("Error al cerrar sesión:", error);
     }
   };
+
+  useEffect(() => {
+    // Si la ruta actual es '/menu' o '/shopping', mostrar el carrito
+    setShowCart(location.pathname === '/menu' || location.pathname === '/' || location.pathname === '/profile');
+  }, [location]);
 
   if (loading) {
     return (
@@ -70,13 +93,13 @@ const Main = () => {
       <StatusBar backgroundColor={theme.appBar.primary} />
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/menu' element={<Menu />} />
+        <Route path="/menu" element={<Menu onCartUpdate={() => loadCartItems()} />} />
         <Route path='/profile' element={<Profile handleLogout={handleLogout} />} />
         <Route path='/books' element={<BooksForm />} />
-        <Route path='/shopping' element={<ShoppingScreen />} />
+        <Route path='/shopping' element={<ShoppingScreen updateCart={() => loadCartItems()} />} />
         <Route path='*' element={<Navigate to='/' />} />
       </Routes>
-        <ShopCart />
+      {showCart && <ShopCart numProductos={numProductos} />}
       <AppBar />
     </View>
 
@@ -92,4 +115,3 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === 'ios' ? Constants.statusBarHeight : 0,
   }
 });
-

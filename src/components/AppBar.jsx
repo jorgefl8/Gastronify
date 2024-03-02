@@ -2,7 +2,6 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity,Platform } from "react-native";
 import { useNavigate, useLocation } from "react-router-native";
 import Icon from "react-native-vector-icons/Ionicons";
-
 import theme from "../theme.js";
 
 const AppBarTab = ({ children, to, icon }) => {

@@ -5,11 +5,12 @@ import Loading from "../components/Loading.jsx";
 import theme from "../theme";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Menu = () => {
+const Menu = ({ onCartUpdate }) => {
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   useEffect(() => {
     const fetchMenu = async () => {
@@ -20,18 +21,35 @@ const Menu = () => {
 
     fetchMenu();
   }, []);
+  const filteredMenuItems = menuItems.filter(item => {
+    if (selectedCategory === "All") {
+      return true;
+    }
+    return item.Category === selectedCategory;
+  });
 
-  const AddShoppingCart = async (itemName) => {
+  const AddShoppingCart = async (item) => {
     try {
       // Obtener el carrito actual del almacenamiento local
       const cartString = await AsyncStorage.getItem('cart');
       let cart = cartString ? JSON.parse(cartString) : [];
-      // Verificar si el producto ya está en el carrito
-      const existingItemIndex = cart.findIndex(item => item.name === itemName);
-      cart.push({ Name: itemName});
+      
+      const existingItemIndex = cart.findIndex(cartItem => cartItem.Name === item.Name);
+      if (existingItemIndex !== -1) {
+        // Si el producto ya está en el carrito, actualizar la cantidad
+        cart[existingItemIndex].Quantity += 1;
+      } else {
+        // Si el producto no está en el carrito, agregarlo con cantidad 1
+        item.Quantity = 1;
+        cart.push(item);
+      }
       await AsyncStorage.setItem('cart', JSON.stringify(cart));
-      //AsyncStorage.removeItem('cart');
-      console.log('Producto añadido al carrito:', itemName);
+      // Cerrar el modal
+      setModalVisible(false);
+      console.log(cart);
+      //await AsyncStorage.removeItem('cart');
+      // Actualizar el carrito llamando a la función proporcionada como prop
+      onCartUpdate();
     } catch (error) {
       console.error('Error al añadir producto al carrito:', error);
     }
@@ -69,8 +87,28 @@ const Menu = () => {
       ) : (
         <View>
           <Text style={styles.title}>Menu</Text>
+          <View style={styles.categoryBar}>
+            <TouchableOpacity onPress={() => setSelectedCategory("All")}>
+              <Text style={styles.categoryButton}>All</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setSelectedCategory("Salad")}>
+              <Text style={styles.categoryButton}>Salad</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setSelectedCategory("Pizza")}>
+              <Text style={styles.categoryButton}>Pizza</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setSelectedCategory("Pasta")}>
+              <Text style={styles.categoryButton}>Pasta</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setSelectedCategory("Seafood")}>
+              <Text style={styles.categoryButton}>Seafood</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setSelectedCategory("Burger")}>
+              <Text style={styles.categoryButton}>Burger</Text>
+            </TouchableOpacity>
+          </View>
           <FlatList
-            data={menuItems}
+            data={filteredMenuItems} // Aquí le pasas la lista filtrada
             renderItem={renderMenuItem}
             keyExtractor={(item, index) => index.toString()}
           />
@@ -95,7 +133,7 @@ const Menu = () => {
                 <TouchableOpacity onPress={() => setModalVisible(false)}>
                   <Text style={styles.closeButton}>Cerrar</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => AddShoppingCart(selectedItem?.Name)}>
+                <TouchableOpacity onPress={() => AddShoppingCart(selectedItem)}>
                   <Text style={styles.closeButton}>Añadir a la cesta</Text>
                 </TouchableOpacity>
               </View>
@@ -170,8 +208,8 @@ const styles = StyleSheet.create({
     alignItems: "center" // Centra horizontalmente el contenido
   },
   modalView: {
-    margin: 20,
-    backgroundColor: "white",
+    margin: 10,
+    backgroundColor: theme.colors.backgroundColor,
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
@@ -182,7 +220,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5
+    elevation: 10
   },
   closeButton: {
     marginTop: 10,
@@ -192,6 +230,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  categoryBar: {
+    backgroundColor: theme.colors.backgroundColor,
+    paddingBottom: 10,
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+  },
+  categoryButton: {
+    padding: 5,
+    borderRadius: 5,
+    backgroundColor: theme.colors.secondary,
+    marginHorizontal: 5,
   },
 });
 

@@ -3,26 +3,8 @@ import { View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import { Link } from 'react-router-native';
 import Icon from "react-native-vector-icons/Ionicons";
 import theme from "../theme";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ShopCart = () => {
-  const [numProductos, setNumProductos] = useState(0);
-
-  useEffect(() => {
-    const loadCartItems = async () => {
-      try {
-        const cartString = await AsyncStorage.getItem('cart');
-        if (cartString !== null) {
-          const cart = JSON.parse(cartString);
-          setNumProductos(cart.length);
-        }
-      } catch (error) {
-        console.error('Error fetching cart:', error);
-      }
-    };
-
-    loadCartItems();
-  }, []);
+const ShopCart = ({ numProductos }) => {
 
   return (
     <View style={styles.container}>
