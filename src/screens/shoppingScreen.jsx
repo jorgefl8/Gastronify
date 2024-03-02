@@ -15,7 +15,6 @@ const ShoppingScreen = ({ updateCart }) => {
     try {
       const cartString = await AsyncStorage.getItem('cart');
       if (cartString !== null) {
-
         const cart = JSON.parse(cartString);
         setCartItems(cart);
       }
@@ -67,6 +66,30 @@ const ShoppingScreen = ({ updateCart }) => {
     }
   };
 
+  const calculateTotal = () => {
+    let total = 0;
+    cartItems.forEach(item => {
+      total += item.Price * item.Quantity;
+    });
+    return total;
+  };
+
+  const calculateShippingCost = () => {
+    const total = calculateTotal();
+    return total > 15 ? 0 : 2.99;
+  };
+
+  const renderSummary = () => (
+    <View style={styles.summaryContainer}>
+      <Text style={styles.summaryText}>Total: ${calculateTotal().toFixed(2)}</Text>
+      <Text style={styles.summaryText}>Shipping: ${calculateShippingCost().toFixed(2)}</Text>
+      <Text style={styles.summaryText}>Grand Total: ${(calculateTotal() + calculateShippingCost()).toFixed(2)}</Text>
+      <TouchableOpacity style={styles.orderButton}>
+        <Text style={styles.orderButtonText}>Place Order</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
       <Image
@@ -80,7 +103,7 @@ const ShoppingScreen = ({ updateCart }) => {
       {item.Quantity === 1 ?
         (
           <TouchableOpacity onPress={() => removeFromCart(item.Name)}>
-          <Icon name="trash" size={theme.appBar.icon.size} color="black" />
+            <Icon name="trash" size={theme.appBar.icon.size} color="black" />
           </TouchableOpacity>
         ) : (
           <TouchableOpacity onPress={() => decreaseQuantity(item.Name)}>
@@ -107,6 +130,7 @@ const ShoppingScreen = ({ updateCart }) => {
           keyExtractor={(item, index) => index.toString()}
         />
       )}
+      {cartItems.length > 0 && renderSummary()}
     </View>
   );
 };
@@ -147,7 +171,29 @@ const styles = StyleSheet.create({
   removeButton: {
     fontSize: 20,
   },
-  Image: { width: 65, height: 65 }
+  Image: { width: 65, height: 65 },
+  summaryContainer: {
+    marginTop: 0,
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
+    paddingTop: 10,
+  },
+  summaryText: {
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  orderButton: {
+    backgroundColor: theme.colors.primary,
+    paddingVertical: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    alignItems: 'center',
+  },
+  orderButtonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
 });
 
 export default ShoppingScreen;

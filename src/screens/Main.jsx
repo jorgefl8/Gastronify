@@ -37,7 +37,7 @@ const Main = () => {
     });
 
     return () => {
-      unsubscribe(); // Limpia el listener al desmontar el componente
+      unsubscribe(); 
     };
   }, [numProductos]);
 

@@ -46,7 +46,7 @@ const Menu = ({ onCartUpdate }) => {
       await AsyncStorage.setItem('cart', JSON.stringify(cart));
       // Cerrar el modal
       setModalVisible(false);
-      console.log(cart);
+      //console.log(cart);
       //await AsyncStorage.removeItem('cart');
       // Actualizar el carrito llamando a la función proporcionada como prop
       onCartUpdate();
@@ -148,7 +148,7 @@ const Menu = ({ onCartUpdate }) => {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingBottom: 30,
     flex: 1
   },
   title: {
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
   },
   categoryButton: {
     padding: 5,
-    borderRadius: 5,
+    borderRadius: 10,
     backgroundColor: theme.colors.secondary,
     marginHorizontal: 5,
   },
