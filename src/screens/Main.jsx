@@ -20,6 +20,7 @@ import ShopCart from "../components/shopping_cart.jsx"
 const Main = () => {
   const [loading, setLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState(false);
   const [numProductos, setNumProductos] = useState(0);
   const [showCart, setShowCart] = useState(false); // Estado para controlar la visibilidad del carrito
 
@@ -94,9 +95,9 @@ const Main = () => {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path="/menu" element={<Menu onCartUpdate={() => loadCartItems()} />} />
-        <Route path='/profile' element={<Profile handleLogout={handleLogout} />} />
+        <Route path='/profile' element={<Profile handleLogout={handleLogout} saveUserData={setUserData} />} />
         <Route path='/books' element={<BooksForm />} />
-        <Route path='/shopping' element={<ShoppingScreen updateCart={() => loadCartItems()} />} />
+        <Route path='/shopping' element={<ShoppingScreen updateCart={() => loadCartItems()} userData={userData} />} />
         <Route path='*' element={<Navigate to='/' />} />
       </Routes>
       {showCart && <ShopCart numProductos={numProductos} />}

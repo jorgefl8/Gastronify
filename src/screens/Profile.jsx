@@ -19,6 +19,8 @@ const Profile = (props) => {
       );
       setLoading(false);
       setUser(DatUser);
+      // Llama a la función de guardar datos del usuario en Main
+      props.saveUserData(DatUser);
     };
 
     fetchMenu();

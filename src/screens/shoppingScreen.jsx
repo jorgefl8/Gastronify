@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from "react-native-vector-icons/Ionicons";
 import theme from "../theme.js";
+import Loading from "../components/Loading.jsx";
+import { Timestamp } from "firebase/firestore";
+import functions from '../../firebase/firebaseUtils.js';
 
-const ShoppingScreen = ({ updateCart }) => {
+const ShoppingScreen = ({ updateCart, userData }) => {
   const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
@@ -79,12 +82,24 @@ const ShoppingScreen = ({ updateCart }) => {
     return total > 15 ? 0 : 2.99;
   };
 
+  const handlePlaceOrder = async () => {
+    // Función para mostrar el carrito con solo Name, Price, Ingredients, Quantity
+    const formattedCart = cartItems.map(item => ({
+      Name: item.Name,
+      Price: item.Price,
+      Ingredients: item.Ingredients,
+      Quantity: item.Quantity
+    }));
+    const Order = {userData: userData, order: formattedCart, Date: Timestamp.now()};
+    await functions.uploadDoc("Orders", Order);
+  };
+
   const renderSummary = () => (
     <View style={styles.summaryContainer}>
       <Text style={styles.summaryText}>Total: ${calculateTotal().toFixed(2)}</Text>
       <Text style={styles.summaryText}>Shipping: ${calculateShippingCost().toFixed(2)}</Text>
       <Text style={styles.summaryText}>Grand Total: ${(calculateTotal() + calculateShippingCost()).toFixed(2)}</Text>
-      <TouchableOpacity style={styles.orderButton}>
+      <TouchableOpacity style={styles.orderButton} onPress={handlePlaceOrder}>
         <Text style={styles.orderButtonText}>Place Order</Text>
       </TouchableOpacity>
     </View>
