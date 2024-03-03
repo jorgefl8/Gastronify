@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Modal } from "react-native";
+import Checkbox from "expo-checkbox";
 import functions from "../../firebase/firebaseUtils.js";
 import Loading from "../components/Loading.jsx";
 import theme from "../theme";
@@ -8,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Menu = ({ onCartUpdate }) => {
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isChecked, setIsChecked] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -21,64 +23,85 @@ const Menu = ({ onCartUpdate }) => {
 
     fetchMenu();
   }, []);
-  const filteredMenuItems = menuItems.filter(item => {
-    if (selectedCategory === "All") {
-      return true;
-    }
-    return item.Category === selectedCategory;
-  });
 
+  const handleIngredientToggle = (ingredient) => {
+    setIsChecked(prevState => ({
+      ...prevState,
+      [ingredient]: !prevState[ingredient]
+    }));
+  };
+
+  const handleOpenModal = (item) => {
+    const initialCheckedState = {};
+    item.Ingredients.forEach(ingredient => {
+      initialCheckedState[ingredient] = true;
+    });
+
+    setIsChecked(initialCheckedState);
+    setModalVisible(true);
+  };
+
+  const renderIngredientItem = ({ item }) => (
+    <View style={styles.ingredientItem}>
+      <Checkbox
+        value={isChecked[item]}
+        onValueChange={() => handleIngredientToggle(item)}
+        color={isChecked[item] ? theme.colors.secondary : undefined}
+      />
+      <Text style={styles.paragraph}>{item}</Text>
+    </View>
+  );
+
+  const renderMenuItem = ({ item }) => {
+    const truncatedDescription = item.Description.length > 80 ? `${item.Description.slice(0, 60)}...` : item.Description;
+
+    return (
+      <TouchableOpacity style={styles.menuItemContainer} onPress={() => { setSelectedItem(item); handleOpenModal(item); }}>
+        <View style={styles.imageContainer}>
+          <Image source={{ uri: item.Image }} style={styles.image} />
+          <TouchableOpacity style={styles.addButton} onPress={() => { AddShoppingCart(item) }}>
+            <Text style={styles.addButtonText}>+</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.detailsContainer}>
+          <View style={styles.detailsPrincipal}>
+            <Text style={styles.name}>{item.Name}</Text>
+            <Text style={styles.price}>{item.Price} €</Text>
+          </View>
+          <Text style={styles.description}>{truncatedDescription}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
   const AddShoppingCart = async (item) => {
     try {
-      // Obtener el carrito actual del almacenamiento local
+      const ModifyIngredients = Object.entries(isChecked)
+        .filter(([key, value]) => !value)
+        .map(([key, value]) => key);
+
       const cartString = await AsyncStorage.getItem('cart');
       let cart = cartString ? JSON.parse(cartString) : [];
-      
-      const existingItemIndex = cart.findIndex(cartItem => cartItem.Name === item.Name);
+      const existingItemIndex = cart.findIndex(cartItem => {
+        const cartItemModifyIngredientsString = JSON.stringify(cartItem.ModifyIngredients);
+        return cartItem.Name === item.Name && cartItemModifyIngredientsString === JSON.stringify(ModifyIngredients);
+      });
+      item.ModifyIngredients = ModifyIngredients;
+
       if (existingItemIndex !== -1) {
-        // Si el producto ya está en el carrito, actualizar la cantidad
         cart[existingItemIndex].Quantity += 1;
       } else {
-        // Si el producto no está en el carrito, agregarlo con cantidad 1
         item.Quantity = 1;
         cart.push(item);
       }
       await AsyncStorage.setItem('cart', JSON.stringify(cart));
-      // Cerrar el modal
       setModalVisible(false);
-      //console.log(cart);
-      //await AsyncStorage.removeItem('cart');
-      // Actualizar el carrito llamando a la función proporcionada como prop
+      console.log(cart);
       onCartUpdate();
     } catch (error) {
       console.error('Error al añadir producto al carrito:', error);
     }
   };
 
-  const renderMenuItem = ({ item }) => {
-    const truncatedDescription = item.Description.length > 80 ? item.Description.slice(0, 60) + "..." : item.Description;
-
-    return (
-      <TouchableOpacity style={styles.menuItemContainer} onPress={() => { setSelectedItem(item); setModalVisible(true);}}>
-  <View style={styles.imageContainer}>
-    <Image
-      source={{ uri: item.Image }}
-      style={styles.image}
-    />
-    <TouchableOpacity style={styles.addButton} onPress={() => { AddShoppingCart(item)}}>
-      <Text style={styles.addButtonText}>+</Text>
-    </TouchableOpacity>
-  </View>
-  <View style={styles.detailsContainer}>
-    <View style={styles.detailsPrincipal}>
-      <Text style={styles.name}>{item.Name}</Text>
-      <Text style={styles.price}>{item.Price} €</Text>
-    </View>
-    <Text style={styles.description}>{truncatedDescription}</Text>
-  </View>
-</TouchableOpacity>
-    )
-  };
 
   return (
     <View style={styles.container}>
@@ -88,27 +111,14 @@ const Menu = ({ onCartUpdate }) => {
         <View>
           <Text style={styles.title}>Menu</Text>
           <View style={styles.categoryBar}>
-            <TouchableOpacity onPress={() => setSelectedCategory("All")}>
-              <Text style={styles.categoryButton}>All</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setSelectedCategory("Salad")}>
-              <Text style={styles.categoryButton}>Salad</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setSelectedCategory("Pizza")}>
-              <Text style={styles.categoryButton}>Pizza</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setSelectedCategory("Pasta")}>
-              <Text style={styles.categoryButton}>Pasta</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setSelectedCategory("Seafood")}>
-              <Text style={styles.categoryButton}>Seafood</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setSelectedCategory("Burger")}>
-              <Text style={styles.categoryButton}>Burger</Text>
-            </TouchableOpacity>
+            {["All", "Salad", "Pizza", "Pasta", "Seafood", "Burger"].map(category => (
+              <TouchableOpacity key={category} onPress={() => setSelectedCategory(category)}>
+                <Text style={styles.categoryButton}>{category}</Text>
+              </TouchableOpacity>
+            ))}
           </View>
           <FlatList
-            data={filteredMenuItems} // Aquí le pasas la lista filtrada
+            data={menuItems.filter(item => selectedCategory === "All" || item.Category === selectedCategory)}
             renderItem={renderMenuItem}
             keyExtractor={(item, index) => index.toString()}
           />
@@ -120,27 +130,28 @@ const Menu = ({ onCartUpdate }) => {
           >
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
-                <Image
-                  source={{ uri: selectedItem?.Image }}
-                  style={{ width: 200, height: 200, marginBottom: 10 }}
-                />
+                <Image source={{ uri: selectedItem?.Image }} style={{ width: 200, height: 200, marginBottom: 10 }} />
                 <Text>{selectedItem?.Name}</Text>
                 <Text>{selectedItem?.Description}</Text>
                 <Text>{selectedItem?.Price} €</Text>
-                <TouchableOpacity onPress={() => setModalVisible(false)}>
-                  <Text style={styles.closeButton}>Modificar Ingredientes</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => setModalVisible(false)}>
-                  <Text style={styles.closeButton}>Cerrar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => AddShoppingCart(selectedItem)}>
-                  <Text style={styles.closeButton}>Añadir a la cesta</Text>
-                </TouchableOpacity>
+                <FlatList
+                  data={selectedItem?.Ingredients}
+                  renderItem={renderIngredientItem}
+                  keyExtractor={(item, index) => index.toString()}
+                />
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity onPress={() => setModalVisible(false)}>
+                    <Text style={styles.closeButton}>Cerrar</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => AddShoppingCart(selectedItem)}>
+                    <Text style={styles.closeButton}>Añadir a la cesta</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           </Modal>
-
-        </View>)}
+        </View>
+      )}
     </View>
   );
 };
@@ -203,10 +214,6 @@ const styles = StyleSheet.create({
   price: {
     textAlign: "right",
   },
-  loadingContainer: {
-    justifyContent: "center", // Centra verticalmente el contenido
-    alignItems: "center" // Centra horizontalmente el contenido
-  },
   modalView: {
     margin: 10,
     backgroundColor: theme.colors.backgroundColor,
@@ -223,8 +230,10 @@ const styles = StyleSheet.create({
     elevation: 10
   },
   closeButton: {
-    marginTop: 10,
-    color: 'blue',
+    backgroundColor: theme.colors.primary,
+    padding: 5,
+    margin: 10,
+    borderRadius: 10
   },
   centeredView: {
     flex: 1,
@@ -243,7 +252,18 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.secondary,
     marginHorizontal: 5,
   },
+  ingredientItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 5
+  },
+  paragraph: {
+    marginLeft: 10
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    margin: 10
+  }
 });
-
 
 export default Menu;

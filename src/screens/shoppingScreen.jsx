@@ -38,9 +38,9 @@ const ShoppingScreen = ({ updateCart, userData }) => {
     }
   };
 
-  const removeFromCart = async (productName) => {
+  const removeFromCart = async (product) => {
     try {
-      const updatedCart = cartItems.filter(item => item.Name !== productName);
+      const updatedCart = cartItems.filter(item =>!(item.Name == product.Name && item.ModifyIngredients == product.ModifyIngredients));
       await AsyncStorage.setItem('cart', JSON.stringify(updatedCart));
       setCartItems(updatedCart);
       updateCart();
@@ -49,10 +49,10 @@ const ShoppingScreen = ({ updateCart, userData }) => {
     }
   };
 
-  const decreaseQuantity = async (productName) => {
+  const decreaseQuantity = async (product) => {
     try {
       const updatedCart = cartItems.map(item => {
-        if (item.Name === productName && item.Quantity > 0) {
+        if (item.Name === product.Name && item.ModifyIngredients == product.ModifyIngredients && item.Quantity > 0) {
           return { ...item, Quantity: item.Quantity - 1 };
         }
         return item;
@@ -65,10 +65,10 @@ const ShoppingScreen = ({ updateCart, userData }) => {
     }
   };
 
-  const increaseQuantity = async (productName) => {
+  const increaseQuantity = async (product) => {
     try {
       const updatedCart = cartItems.map(item => {
-        if (item.Name === productName) {
+        if (item.Name === product.Name && item.ModifyIngredients == product.ModifyIngredients) {
           return { ...item, Quantity: item.Quantity + 1 };
         }
         return item;
@@ -95,7 +95,7 @@ const ShoppingScreen = ({ updateCart, userData }) => {
   };
 
   const handlePlaceOrder = async () => {
-    setIsLoading(true);
+    
     const formattedCart = cartItems.map(item => ({
       Name: item.Name,
       Price: item.Price,
@@ -108,15 +108,14 @@ const ShoppingScreen = ({ updateCart, userData }) => {
     if (!userData.Address || !userData.PaymentMethod) {
       // Show modal
       showModal();
-      return;
-    }
-  
+    }else{
+      setIsLoading(true);
     // Proceed with placing the order
     await functions.uploadDoc("Orders", Order);
     await AsyncStorage.removeItem('cart');
     setCartItems([]);
     updateCart(); // Make sure to call updateCart after completing the order
-    setIsLoading(false);
+    setIsLoading(false);}
   };
   
   const showModal = () => {
@@ -151,20 +150,21 @@ const ShoppingScreen = ({ updateCart, userData }) => {
       />
       <View style={styles.itemDetails}>
         <Text>{item.Name}</Text>
+        <Text>{item?.ModifyIngredients && item.ModifyIngredients.length > 0 ? `No ${item.ModifyIngredients.join(", ")}` : ""}</Text>
         <Text>{item.Price}</Text>
       </View>
       {item.Quantity === 1 ?
         (
-          <TouchableOpacity onPress={() => removeFromCart(item.Name)}>
+          <TouchableOpacity onPress={() => removeFromCart(item)}>
             <Icon name="trash" size={theme.appBar.icon.size} color="black" />
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity onPress={() => decreaseQuantity(item.Name)}>
+          <TouchableOpacity onPress={() => decreaseQuantity(item)}>
             <Text style={styles.quantityButton}>-</Text>
           </TouchableOpacity>
         )}
       <Text style={styles.quantity}>{item.Quantity}</Text>
-      <TouchableOpacity onPress={() => increaseQuantity(item.Name)}>
+      <TouchableOpacity onPress={() => increaseQuantity(item)}>
         <Text style={styles.quantityButton}>+</Text>
       </TouchableOpacity>
     </View>
