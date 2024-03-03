@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Modal } from "react-native";
+import React, { useEffect, useState, useRef } from "react";
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Modal, ScrollView } from "react-native";
 import Checkbox from "expo-checkbox";
 import functions from "../../firebase/firebaseUtils.js";
 import Loading from "../components/Loading.jsx";
@@ -13,6 +13,7 @@ const Menu = ({ onCartUpdate }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const scrollViewRef = useRef(null);
 
   useEffect(() => {
     const fetchMenu = async () => {
@@ -122,34 +123,40 @@ const Menu = ({ onCartUpdate }) => {
             renderItem={renderMenuItem}
             keyExtractor={(item, index) => index.toString()}
           />
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => setModalVisible(false)}
-          >
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <Image source={{ uri: selectedItem?.Image }} style={{ width: 200, height: 200, marginBottom: 10 }} />
-                <Text>{selectedItem?.Name}</Text>
-                <Text>{selectedItem?.Description}</Text>
-                <Text>{selectedItem?.Price} €</Text>
-                <FlatList
-                  data={selectedItem?.Ingredients}
-                  renderItem={renderIngredientItem}
-                  keyExtractor={(item, index) => index.toString()}
-                />
-                <View style={styles.buttonContainer}>
-                  <TouchableOpacity onPress={() => setModalVisible(false)}>
-                    <Text style={styles.closeButton}>Cerrar</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => AddShoppingCart(selectedItem)}>
-                    <Text style={styles.closeButton}>Añadir a la cesta</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-          </Modal>
+         <Modal
+  animationType="slide"
+  transparent={true}
+  visible={modalVisible}
+  onRequestClose={() => setModalVisible(false)}
+>
+  <TouchableOpacity
+    style={styles.centeredView}
+    onPress={() => setModalVisible(false)}
+  >
+    <View style={styles.modalBackground} />
+  </TouchableOpacity>
+  <View style={styles.modalView}>
+    <Image source={{ uri: selectedItem?.Image }} style={{ width: 200, height: 200, marginBottom: 10 }} />
+    <Text>{selectedItem?.Name}</Text>
+    <Text>{selectedItem?.Description}</Text>
+    <Text>{selectedItem?.Price} €</Text>
+    <FlatList
+      style={styles.flatList}
+      contentContainerStyle={styles.flatListContent}
+      data={selectedItem?.Ingredients}
+      renderItem={renderIngredientItem}
+      keyExtractor={(item, index) => index.toString()}
+    />
+    <View style={styles.buttonContainer}>
+      <TouchableOpacity onPress={() => setModalVisible(false)}>
+        <Text style={styles.closeButton}>Cerrar</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => AddShoppingCart(selectedItem)}>
+        <Text style={styles.closeButton}>Añadir a la cesta</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+</Modal>
         </View>
       )}
     </View>
@@ -263,7 +270,11 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     margin: 10
-  }
+  },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
 });
 
 export default Menu;
