@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Modal } from "react-native";
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Modal, Share } from "react-native";
 import Checkbox from "expo-checkbox";
 import functions from "../../firebase/firebaseUtils.js";
 import Loading from "../components/Loading.jsx";
 import theme from "../theme";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
+import GestureRecognizer from 'react-native-swipe-gestures';
 import { Ionicons, SimpleLineIcons } from '@expo/vector-icons'; // Importa los iconos de Ionicons
 
 const Menu = ({ onCartUpdate }) => {
@@ -43,6 +43,25 @@ const Menu = ({ onCartUpdate }) => {
     setIsChecked(initialCheckedState);
     setModalVisible(true);
   };
+  const handleShare = async () => {
+    try {
+      // Obtener la URL de la imagen de Firebase Storage u otro servidor
+      const imageUri = await selectedItem?.Image; // Reemplaza "functions.getImageUrl" con la función adecuada para obtener la URL de la imagen
+  
+      // Crear el contenido a compartir con la URL de la imagen
+      const shareContent = `¡Mira este artículo en el menú!\n\n${selectedItem?.Name}\n${selectedItem?.Description}\n\n${imageUri}`;
+  
+      // Compartir el contenido
+      Share.share({
+        message: shareContent,
+      })
+      .then(result => console.log(result))
+      .catch(error => console.log(error));
+    } catch (error) {
+      console.error('Error al obtener la URL de la imagen:', error);
+    }
+  };
+  
 
   const renderIngredientItem = ({ item }) => (
     <View style={styles.ingredientItem}>
@@ -98,7 +117,7 @@ const Menu = ({ onCartUpdate }) => {
       }
       await AsyncStorage.setItem('cart', JSON.stringify(cart));
       setModalVisible(false);
-      console.log(cart);
+      //console.log(cart);
       onCartUpdate();
     } catch (error) {
       console.error('Error al añadir producto al carrito:', error);
@@ -147,7 +166,7 @@ const Menu = ({ onCartUpdate }) => {
                       <SimpleLineIcons name="close" size={32} color="white" />
                     </TouchableOpacity>
                     <View style={styles.line}></View>
-                    <TouchableOpacity style={{ marginRight: 15 }} onPress={() => {/* Lógica para compartir */ }}>
+                    <TouchableOpacity style={{ marginRight: 15 }} onPress={() => handleShare()}>
                       <Ionicons name="share" size={32} color="white" />
                     </TouchableOpacity>
                   </View>
@@ -166,9 +185,9 @@ const Menu = ({ onCartUpdate }) => {
                     renderItem={renderIngredientItem}
                     keyExtractor={(item, index) => index.toString()}
                   />
-                    <TouchableOpacity style={styles.closeButton} onPress={() => AddShoppingCart(selectedItem)}>
-                      <Text >Add to cart</Text>
-                    </TouchableOpacity>
+                  <TouchableOpacity style={styles.closeButton} onPress={() => AddShoppingCart(selectedItem)}>
+                    <Text >Add to cart</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             </Modal>
@@ -266,7 +285,7 @@ const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
     alignContent: "center",
-    justifyContent:"center"
+    justifyContent: "center"
   },
   modalView: {
     backgroundColor: theme.colors.backgroundColor,
