@@ -6,7 +6,7 @@ import Loading from "../components/Loading.jsx";
 import theme from "../theme";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
-import { Ionicons, SimpleLineIcons } from '@expo/vector-icons'; // Importa los iconos de Ionicons
+import { Ionicons } from '@expo/vector-icons'; // Importa los iconos de Ionicons
 
 const Menu = ({ onCartUpdate }) => {
   const [menuItems, setMenuItems] = useState([]);
@@ -126,6 +126,7 @@ const Menu = ({ onCartUpdate }) => {
           />
           <GestureRecognizer
             onSwipeDown={() => setModalVisible(false)}
+            onSwipeRight={() => setModalVisible(false)}
           >
             <Modal
               animationType="slide"
@@ -140,35 +141,32 @@ const Menu = ({ onCartUpdate }) => {
                 <View style={styles.modalBackground} />
               </TouchableOpacity>
               <View style={styles.modalView}>
-                <View style={styles.headerView}>
-                  <Image source={{ uri: selectedItem?.Image }} style={styles.modalImage} />
-                  <View style={styles.headerRow}>
-                    <TouchableOpacity style={{ marginLeft: 15 }} onPress={() => setModalVisible(false)}>
-                      <SimpleLineIcons name="close" size={32} color="white" />
-                    </TouchableOpacity>
-                    <View style={styles.line}></View>
-                    <TouchableOpacity style={{ marginRight: 15 }} onPress={() => {/* Lógica para compartir */ }}>
-                      <Ionicons name="share" size={32} color="white" />
-                    </TouchableOpacity>
-                  </View>
 
+                <View style={styles.modalHeader}>
+                  <TouchableOpacity onPress={() => setModalVisible(false)}>
+                    <Ionicons name="close" size={32} color="black" />
+                  </TouchableOpacity>
+                  <View style={styles.line}></View>
+                  <TouchableOpacity onPress={() => {/* Lógica para compartir */ }}>
+                    <Ionicons name="share" size={32} color="black" />
+                  </TouchableOpacity>
                 </View>
-                <View style={styles.BottomView}>
-                  <View style={styles.priceTitleRow}>
-                    <Text style={styles.titleModal}>{selectedItem?.Name}</Text>
-                    <Text style={styles.priceModal}>{selectedItem?.Price} €</Text>
 
-                  </View>
-                  <Text style={styles.description}>{selectedItem?.Description}</Text>
-                  <FlatList
-                    contentContainerStyle={{ marginTop: 5 }} // Alinea los elementos a la izquierda
-                    data={selectedItem?.Ingredients}
-                    renderItem={renderIngredientItem}
-                    keyExtractor={(item, index) => index.toString()}
-                  />
-                    <TouchableOpacity style={styles.closeButton} onPress={() => AddShoppingCart(selectedItem)}>
-                      <Text >Add to cart</Text>
-                    </TouchableOpacity>
+                <Image source={{ uri: selectedItem?.Image }} style={{ width: 200, height: 200, marginBottom: 10 }} />
+                <Text>{selectedItem?.Name}</Text>
+                <Text>{selectedItem?.Description}</Text>
+                <Text>{selectedItem?.Price} €</Text>
+                <FlatList
+                  style={styles.flatList}
+                  contentContainerStyle={styles.flatListContent}
+                  data={selectedItem?.Ingredients}
+                  renderItem={renderIngredientItem}
+                  keyExtractor={(item, index) => index.toString()}
+                />
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity onPress={() => AddShoppingCart(selectedItem)}>
+                    <Text style={styles.closeButton}>Añadir a la cesta</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             </Modal>
@@ -180,7 +178,6 @@ const Menu = ({ onCartUpdate }) => {
 };
 
 const styles = StyleSheet.create({
-  // Estilos para el componente Menu en general
   container: {
     paddingHorizontal: 20,
     paddingBottom: 30,
@@ -236,11 +233,36 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   price: {
-    textAlign: "left", // Ajustamos el texto a la izquierda
-    fontSize: 15, // Hacemos el tamaño del texto más grande
-    marginRight: 10, // Agregamos un margen a la derecha para separarlo del título
+    textAlign: "right",
   },
-
+  modalView: {
+    margin: 0,
+    backgroundColor: theme.colors.backgroundColor,
+    borderTopStartRadius: 40,
+    borderTopEndRadius: 40,
+    padding: 20,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 10
+  },
+  closeButton: {
+    backgroundColor: theme.colors.primary,
+    padding: 10,
+    paddingHorizontal: 40,
+    margin: 15,
+    borderRadius: 10,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   categoryBar: {
     backgroundColor: theme.colors.backgroundColor,
     paddingBottom: 10,
@@ -261,80 +283,31 @@ const styles = StyleSheet.create({
   paragraph: {
     marginLeft: 10
   },
-
-  // Estilos para el modal
-  centeredView: {
+  buttonContainer: {
+    flexDirection: 'row',
+    margin: 10
+  },
+  modalBackground: {
     flex: 1,
-    alignContent: "center",
-    justifyContent:"center"
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  modalView: {
-    backgroundColor: theme.colors.backgroundColor,
-    borderTopStartRadius: 40,
-    borderTopEndRadius: 40,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 10
-  },
-  BottomView: {
-    paddingHorizontal: 30,
-    paddingBottom: 20,
-    paddingTop: 10
-  },
-  priceTitleRow: {
-    marginBottom: 5,
-    justifyContent: "flex-start",
-    alignItems: "flex-start"
-  },
-  priceModal: {
-    fontSize: 20,
-  },
-  titleModal: {
-    fontSize: 30,
-  },
-  closeButton: {
-    backgroundColor: theme.colors.primary,
+  AreaScroll: {
     padding: 10,
-    margin: 10,
-    marginBottom: 10,
-    borderRadius: 40,
-    alignItems: "center"
+    marginBottom: 20
   },
-
-  headerView: {
-    width: '100%',
-    alignItems: "flex-start",
-  },
-  headerRow: {
+  modalHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 10,
     width: '100%',
-    position: "absolute"
+    marginBottom: 20,
   },
   line: {
     width: 100,
-    height: 6,
+    height: 4,
     backgroundColor: "grey",
     alignSelf: "center",
     borderRadius: 10,
-  },
-  modalImage: {
-    width: '100%',
-    height: 250,
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
-  },
-
-  description: {
-    marginBottom: 10,
-  },
+  }
 });
-
 
 export default Menu;
