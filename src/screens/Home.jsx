@@ -11,7 +11,7 @@ const Home = () => {
         <View style={styles.container}>
             <View style={styles.header} >
                 <Image style={styles.image} source={require('../../assets/appicon.png')} />
-                <Text style={styles.textHeader}>GATRONIFY</Text>
+                <Text style={styles.textHeader}>GASTRONIFY</Text>
             </View>
             <ScrollView>
                 <Text style={styles.textSubheader}>Welcome to our app!</Text>
