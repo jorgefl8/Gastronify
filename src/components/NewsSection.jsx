@@ -1,52 +1,93 @@
 import React from "react";
-import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, Image } from "react-native";
+import Carousel from 'react-native-snap-carousel';
 import theme from "../theme";
 
-
 const NewsSection = () => {
-    return (
-        <View style={styles.novedadesContainer}>
-            <Text style={styles.sectionTitle}>¡ NOVEDADES !</Text>
+    const newsData = [
+        { id: 1, image: require('../../assets/novedad7.jpg') },
+        { id: 2, image: require('../../assets/novedad1.jpg') },
+        { id: 3, image: require('../../assets/novedad2.jpg') },
+        { id: 4, image: require('../../assets/novedad3.jpg') },
+    ];
+    const newsData2 = [
+        { id: 5, image: require('../../assets/novedad5.jpg') },
+        { id: 6, image: require('../../assets/novedad8.jpg') },
+        { id: 7, image: require('../../assets/novedad4.jpg') },
+        { id: 8, image: require('../../assets/novedad6.jpg') },
+    ];
 
-            <View style={styles.imageCollage}>
-                <Image source={require('../../assets/novedad5.jpg')} style={styles.image} />
-                <Image source={require('../../assets/novedad1.jpg')} style={styles.image} />
-                <Image source={require('../../assets/novedad2.jpg')} style={styles.image} />
-                <Image source={require('../../assets/novedad4.jpg')} style={styles.image} />
+    const renderItem = ({ item }) => {
+        return (
+            <View style={styles.imageContainer}>
+                <Image source={item.image} style={styles.image} />
+            </View>
+        );
+    };
+
+    return (
+        <View style={styles.container}>
+            <View style={styles.novedadesContainer}>
+                <Text style={styles.sectionTitle}> N E W S </Text>
+
+                <Carousel
+                    data={newsData}
+                    renderItem={renderItem}
+                    sliderWidth={300}
+                    itemWidth={300}
+                    loop={true}
+                    autoplay={true}
+                    autoplayInterval={3000}
+                />
+            </View>
+
+            <View style={styles.novedadesContainer}>
+                <Carousel
+                    data={newsData2}
+                    renderItem={renderItem}
+                    sliderWidth={300}
+                    itemWidth={300}
+                    loop={true}
+                    autoplay={true}
+                    autoplayInterval={3000}
+                />
             </View>
         </View>
+
     );
 };
 
 const styles = StyleSheet.create({
-    separator: {
-        height: 16,
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20,
     },
     novedadesContainer: {
-        paddingHorizontal: 16,
-    },
-    title: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center",
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20,
     },
     sectionTitle: {
         textAlign: 'center',
-        fontSize: 20,
+        fontSize: 25,
         fontWeight: 'bold',
-        marginBottom: 8,
+        fontStyle: 'italic',
+        marginBottom: 15,
         fontFamily: theme.fonts.special,
     },
-    imageCollage: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
+    imageContainer: {
+        width: 300,
+        height: 180,
+        borderRadius: 8,
+        overflow: 'hidden',
     },
     image: {
-        width: '48%',
-        height: 150,
-        marginBottom: 10,
+        width: '100%',
+        height: '100%',
     },
 });
 
-export default NewsSection;  
+export default NewsSection;
