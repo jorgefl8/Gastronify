@@ -76,7 +76,7 @@ const Menu = ({ onCartUpdate }) => {
 
   const renderMenuItem = ({ item }) => {
     const truncatedDescription = item.Description.length > 80 ? `${item.Description.slice(0, 60)}...` : item.Description;
-
+  
     return (
       <TouchableOpacity style={styles.menuItemContainer} onPress={() => { setSelectedItem(item); handleOpenModal(item); }}>
         <View style={styles.imageContainer}>
@@ -88,13 +88,25 @@ const Menu = ({ onCartUpdate }) => {
         <View style={styles.detailsContainer}>
           <View style={styles.detailsPrincipal}>
             <Text style={styles.name}>{item.Name}</Text>
-            <Text style={styles.price}>{item.Price} €</Text>
+            {item.PriceOffer ? (
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={[styles.price, { textDecorationLine: 'line-through'}]}>
+                  {item.Price} €
+                </Text>
+                <Text style={[styles.price, { color: 'red' }]}>
+                  {item.PriceOffer} €
+                </Text>
+              </View>
+            ) : (
+              <Text style={styles.price}>{item.Price} €</Text>
+            )}
           </View>
           <Text style={styles.description}>{truncatedDescription}</Text>
         </View>
       </TouchableOpacity>
     );
   };
+  
   const AddShoppingCart = async (item) => {
     try {
       const ModifyIngredients = Object.entries(isChecked)

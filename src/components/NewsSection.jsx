@@ -9,6 +9,10 @@ const NewsSection = () => {
         { id: 2, image: require('../../assets/novedad1.jpg') },
         { id: 3, image: require('../../assets/novedad2.jpg') },
         { id: 4, image: require('../../assets/novedad3.jpg') },
+        { id: 5, image: require('../../assets/novedad5.jpg') },
+        { id: 6, image: require('../../assets/novedad8.jpg') },
+        { id: 7, image: require('../../assets/novedad4.jpg') },
+        { id: 8, image: require('../../assets/novedad6.jpg') },
     ];
     const newsData2 = [
         { id: 5, image: require('../../assets/novedad5.jpg') },
