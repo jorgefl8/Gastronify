@@ -151,7 +151,20 @@ const ShoppingScreen = ({ updateCart, userData }) => {
       <View style={styles.itemDetails}>
         <Text>{item.Name}</Text>
         <Text>{item?.ModifyIngredients && item.ModifyIngredients.length > 0 ? `No ${item.ModifyIngredients.join(", ")}` : ""}</Text>
-        <Text>{item.Price}</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          {item?.PriceOffer ? (
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 10 }}>
+              <Text style={[styles.price, { textDecorationLine: 'line-through' }]}>
+                {item.Price} €
+              </Text>
+              <Text style={[styles.price, { color: 'red', marginLeft: 5 }]}>
+                {item.PriceOffer} €
+              </Text>
+            </View>
+          ) : (
+            <Text style={styles.price}>{item.Price} €</Text>
+          )}
+        </View>
       </View>
       {item.Quantity === 1 ?
         (
@@ -169,6 +182,7 @@ const ShoppingScreen = ({ updateCart, userData }) => {
       </TouchableOpacity>
     </View>
   );
+  
 
   return (
     <View style={styles.container}>
