@@ -21,7 +21,7 @@ const Home = () => {
                         <Text style={styles.buttonText}>Order now!</Text>
                     </Link>
                     <Link to="/books" style={styles.button} component={TouchableOpacity}>
-                        <Text style={styles.buttonText}>Make a Reservation</Text>
+                        <Text style={styles.buttonText}>Book</Text>
                     </Link>
                 </View>
                 <View style={styles.separator} />
@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
         textAlign: 'center',
+        fontWeight: theme.fontWeights.bold,
     },
 });
 

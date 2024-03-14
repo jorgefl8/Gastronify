@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, Button, StyleSheet, Text, Alert} from 'react-native';
+import { ScrollView, TouchableOpacity, StyleSheet, Text, Alert } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { TextInput } from 'react-native';
 import { View } from 'react-native-animatable';
@@ -19,7 +19,7 @@ const BooksForm = () => {
     };
 
     const handleSubmit = () => {
-        console.log('Selected Date:', selectedDate);   
+        console.log('Selected Date:', selectedDate);
         console.log('Name:', name);
         console.log('Phone:', phone);
         console.log('People:', people);
@@ -33,10 +33,9 @@ const BooksForm = () => {
         );
     };
     return (
-            <ScrollView style={styles.container}>
-                <Calendar onDayPress={handleDateSelect} />
-                <View style={styles.separator} />
-                <Text style={styles.text}>Selected Date: {selectedDate}</Text>
+            <View style={styles.container}>
+                <Calendar onDayPress={handleDateSelect} style={styles.calendarview}
+                    markedDates={{ [selectedDate]: { selected: true, selectedColor: theme.colors.secondary } }} />
                 <View style={styles.separator} />
                 <View style={styles.campos}>
                     <Text style={styles.text}>Name: </Text>
@@ -94,16 +93,24 @@ const BooksForm = () => {
                 </View>
 
                 <View style={styles.separator} />
-                <Button title="Book" onPress={handleSubmit} style={styles.button} />
-            </ScrollView>
+                {/* <Button title="Book" onPress={handleSubmit} style={styles.button} /> */}
+                <TouchableOpacity style={styles.button} onPress={handleSubmit}>   
+                    <Text style={styles.buttonText}>BOOK</Text>
+                </TouchableOpacity>
+                
+            </View>
     );
 };
 
 const styles = StyleSheet.create({
+    calendarview: {
+        borderRadius: 10,
+    },
     container: {
-        flex: 1,
-        padding: 20,
-        margin: 20,
+        flexGrow: 1,
+        padding: 12,
+        margin: 8,
+        marginBottom: 0,
     },
     text: {
         color: theme.colors.textPrimary,
@@ -134,13 +141,22 @@ const styles = StyleSheet.create({
     itemStyle: {
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
     },
-    button:{
+    button: {
         flex: 1,
         backgroundColor: theme.colors.secondary,
         padding: 8,
         borderRadius: 5,
-        margin: 6,
-    }
+        width: '33%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignSelf: 'center',
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: theme.fontWeights.bold,
+        
+    },
 });
 
 export default BooksForm;
