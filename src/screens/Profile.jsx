@@ -49,12 +49,17 @@ const Profile = (props) => {
       </View>
       <View style={styles.subHeader}>
         <ScrollView style={styles.menu}>
-          <MenuItem iconName="user" text="Datos Personales" />
-          <MenuItem iconName="credit-card" text="Métodos de Pago" />
-          <MenuItem iconName="language" text="Idioma" />
-          <MenuItem iconName="info" text="Información" />
-          <MenuItem iconName="list-alt" text="Mis Pedidos" />
-          <MenuItem iconName="map-marker" text="Dirección de Entrega" />
+          <MenuItem key="personalData" iconName="user" text="Datos Personales" />
+          <MenuItem key="deliveryAddress" iconName="map-marker" text="Direcciónes de Entrega" />
+          <MenuItem key="orders" iconName="list-alt" text="Mis Pedidos" />
+          <MenuItem key="paymentMethods" iconName="credit-card" text="Métodos de Pago" />
+          <MenuItem key="language" iconName="language" text="Idioma" />
+          <MenuItem key="info" iconName="info" text="Información" />
+          <View style={styles.button}>
+            <TouchableOpacity onPress={props.handleLogout}>
+              <Text style={styles.buttonText}>Log out</Text>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
       </View>
     </View>
@@ -65,8 +70,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: theme.colors.backgroundColor,
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
     padding: 20,
   },
   Header: {
@@ -94,9 +97,19 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginLeft: 10,
   },
+  button: {
+    backgroundColor: theme.colors.secondary,
+    padding: 8,
+    borderRadius: 5,
+    margin: 6,
+  },
+  buttonText: {
+    color: 'white',
+    textAlign: 'center',
+  },
   menuItemIcon: {
     marginLeft: 20,
-  },
+  }
 });
 
 export default Profile;

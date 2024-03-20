@@ -47,21 +47,21 @@ const Menu = ({ onCartUpdate }) => {
     try {
       // Obtener la URL de la imagen de Firebase Storage u otro servidor
       const imageUri = await selectedItem?.Image; // Reemplaza "functions.getImageUrl" con la función adecuada para obtener la URL de la imagen
-  
+
       // Crear el contenido a compartir con la URL de la imagen
       const shareContent = `¡Mira este artículo en el menú!\n\n${selectedItem?.Name}\n${selectedItem?.Description}\n\n${imageUri}`;
-  
+
       // Compartir el contenido
       Share.share({
         message: shareContent,
       })
-      .then(result => console.log(result))
-      .catch(error => console.log(error));
+        .then(result => console.log(result))
+        .catch(error => console.log(error));
     } catch (error) {
       console.error('Error al obtener la URL de la imagen:', error);
     }
   };
-  
+
 
   const renderIngredientItem = ({ item }) => (
     <View style={styles.ingredientItem}>
@@ -76,7 +76,7 @@ const Menu = ({ onCartUpdate }) => {
 
   const renderMenuItem = ({ item }) => {
     const truncatedDescription = item.Description.length > 80 ? `${item.Description.slice(0, 60)}...` : item.Description;
-  
+
     return (
       <TouchableOpacity style={styles.menuItemContainer} onPress={() => { setSelectedItem(item); handleOpenModal(item); }}>
         <View style={styles.imageContainer}>
@@ -90,7 +90,7 @@ const Menu = ({ onCartUpdate }) => {
             <Text style={styles.name}>{item.Name}</Text>
             {item.PriceOffer ? (
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={[styles.price, { textDecorationLine: 'line-through'}]}>
+                <Text style={[styles.price, { textDecorationLine: 'line-through' }]}>
                   {item.Price} €
                 </Text>
                 <Text style={[styles.price, { color: 'red' }]}>
@@ -106,7 +106,7 @@ const Menu = ({ onCartUpdate }) => {
       </TouchableOpacity>
     );
   };
-  
+
   const AddShoppingCart = async (item) => {
     try {
       const ModifyIngredients = Object.entries(isChecked)
@@ -187,7 +187,10 @@ const Menu = ({ onCartUpdate }) => {
                 <View style={styles.BottomView}>
                   <View style={styles.priceTitleRow}>
                     <Text style={styles.titleModal}>{selectedItem?.Name}</Text>
-                    <Text style={styles.priceModal}>{selectedItem?.Price} €</Text>
+                    <Text style={styles.priceModal}>
+                      {selectedItem?.PriceOffer ? selectedItem.PriceOffer + ' €' : selectedItem.Price + ' €'}
+                    </Text>
+
 
                   </View>
                   <Text style={styles.description}>{selectedItem?.Description}</Text>
