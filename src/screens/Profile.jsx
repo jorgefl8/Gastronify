@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { FirebaseAuth, FirestoreDB } from "../../firebase/firebaseconfig.js";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
 import functions from "../../firebase/firebaseUtils.js";
 import { doc, getDoc } from "firebase/firestore";
 import Loading from "../components/Loading.jsx";
 import theme from "../theme.js";
 import { Link } from "react-router-native";
+import Icon from "react-native-vector-icons/FontAwesome"; // Importa el icono que desees usar
 
 const Profile = (props) => {
   const [user, setUser] = useState(null);
@@ -26,6 +27,15 @@ const Profile = (props) => {
     fetchMenu();
   }, []);
 
+  const MenuItem = ({ iconName, text }) => {
+    return (
+      <TouchableOpacity style={styles.menuItem}>
+        <Icon name={iconName} size={20} style={styles.menuItemIcon} />
+        <Text style={styles.menuItemText}>{text}</Text>
+      </TouchableOpacity>
+    );
+  };
+
   if (loading) {
     return <Loading />;
   }
@@ -37,31 +47,15 @@ const Profile = (props) => {
           Hi !, {user ? user.Name : "Usuario"}, welcome to your profile
         </Text>
       </View>
-      <View style={styles.profileInfo}>
-        <Text style={styles.infoText}> Your data is: </Text>
-        <Text style={styles.infoText}>
-          Last name: {user ? user.LastName : "Not available yet"}
-        </Text>
-        <Text style={styles.infoText}>
-          Email:{user ? user.Email : "Email not available yet"}
-        </Text>
-        <Text style={styles.infoText}>
-          Telephone Number: {user ? user.TelephoneNumber : "Not available yet"}
-        </Text>
-        <View style={styles.buttonsContainer}>
-          <Link title="Modify Data" style={styles.button}>
-            <Text style={styles.buttonText}>Modify data</Text>
-          </Link>
-          <View style={styles.button}>
-            <Text
-              style={styles.buttonText}
-              title="Log Out"
-              onPress={props.handleLogout}
-            >
-              Log out
-            </Text>
-          </View>
-        </View>
+      <View style={styles.subHeader}>
+        <ScrollView style={styles.menu}>
+          <MenuItem iconName="user" text="Datos Personales" />
+          <MenuItem iconName="credit-card" text="Métodos de Pago" />
+          <MenuItem iconName="language" text="Idioma" />
+          <MenuItem iconName="info" text="Información" />
+          <MenuItem iconName="list-alt" text="Mis Pedidos" />
+          <MenuItem iconName="map-marker" text="Dirección de Entrega" />
+        </ScrollView>
       </View>
     </View>
   );
@@ -75,54 +69,33 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
   },
-  profileInfo: {
-    alignItems: "center",
-    backgroundColor: theme.colors.backgroundColor,
-    borderRadius: 10,
-    padding: 20,
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    height: "40%",
-  },
-  infoText: {
-    marginBottom: 10,
-    fontSize: theme.fontSizes.body,
-  },
-  buttonsContainer: {
-    flexDirection: "row",
-    marginTop: 3,
-    alignItems: "center",
-    flex: 1,
-  },
-  button: {
-    flex: 1,
-    backgroundColor: theme.colors.secondary,
-    padding: 8,
-    borderRadius: 5,
-
-    margin: 6,
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 16,
-    textAlign: "center",
-  },
   Header: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    height: 100, // Ajusta este valor según tus necesidades
+    height: 100,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: theme.colors.terciary,
+  },
+  subHeader: {
+    flex: 1,
+    marginTop: 100, // Ajusta según la altura del Header
+  },
+  menuItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  menuItemText: {
+    fontSize: 18,
+    marginLeft: 10,
+  },
+  menuItemIcon: {
+    marginLeft: 20,
   },
 });
 
