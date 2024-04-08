@@ -21,6 +21,7 @@ const Menu = ({ onCartUpdate }) => {
     const fetchMenu = async () => {
       const menuData = await functions.getCollection("Menu");
       setLoading(false);
+      //console.log(menuData);
       setMenuItems(menuData);
     };
 
@@ -45,10 +46,7 @@ const Menu = ({ onCartUpdate }) => {
   };
   const handleShare = async () => {
     try {
-      // Obtener la URL de la imagen de Firebase Storage u otro servidor
-      const imageUri = await selectedItem?.Image; // Reemplaza "functions.getImageUrl" con la función adecuada para obtener la URL de la imagen
-
-      // Crear el contenido a compartir con la URL de la imagen
+      const imageUri = await selectedItem?.Image; 
       const shareContent = `¡Mira este artículo en el menú!\n\n${selectedItem?.Name}\n${selectedItem?.Description}\n\n${imageUri}`;
 
       // Compartir el contenido
@@ -188,7 +186,7 @@ const Menu = ({ onCartUpdate }) => {
                   <View style={styles.priceTitleRow}>
                     <Text style={styles.titleModal}>{selectedItem?.Name}</Text>
                     <Text style={styles.priceModal}>
-                      {selectedItem?.PriceOffer ? selectedItem.PriceOffer + ' €' : selectedItem.Price + ' €'}
+                      
                     </Text>
 
 
