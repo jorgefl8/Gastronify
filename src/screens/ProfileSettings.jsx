@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
 import functions from "../../firebase/firebaseUtils.js";
-import { doc, getDoc } from "firebase/firestore";
 import Loading from "../components/Loading.jsx";
 import theme from "../theme.js";
 import { Link } from "react-router-native";
 
-const Profile = (props) => {
+const ProfileSettings = (props) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -126,4 +125,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Profile;
+export default ProfileSettings;

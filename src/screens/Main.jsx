@@ -14,6 +14,7 @@ import Menu from "./Menu.jsx";
 import Profile from "./Profile.jsx";
 import Loading from "../components/Loading.jsx";
 import BooksForm from "./BooksForm.jsx";
+import ProfileSettings from "./ProfileSettings.jsx";
 import ShoppingScreen from "./shoppingScreen.jsx";
 import ShopCart from "../components/shopping_cart.jsx"
 
@@ -97,6 +98,7 @@ const Main = () => {
         <Route path="/menu" element={<Menu onCartUpdate={() => loadCartItems()} />} />
         <Route path='/profile' element={<Profile handleLogout={handleLogout} saveUserData={setUserData} />} />
         <Route path='/books' element={<BooksForm />} />
+        <Route path='/ProfileSettings' element={<ProfileSettings />} />
         <Route path='/shopping' element={<ShoppingScreen updateCart={() => loadCartItems()} userData={userData} />} />
         <Route path='*' element={<Navigate to='/' />} />
       </Routes>

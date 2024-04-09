@@ -2,11 +2,9 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
 import functions from "../../firebase/firebaseUtils.js";
-import { doc, getDoc } from "firebase/firestore";
 import Loading from "../components/Loading.jsx";
 import theme from "../theme.js";
 import { Link } from "react-router-native";
-import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-native';
 import Icon from "react-native-vector-icons/FontAwesome"; // Importa el icono que desees usar
 
 const Profile = (props) => {
@@ -28,14 +26,17 @@ const Profile = (props) => {
     fetchMenu();
   }, []);
 
-  const MenuItem = ({ iconName, text }) => {
+  const MenuItem = ({ iconName, text, to }) => {
     return (
-      <TouchableOpacity style={styles.menuItem}>
-        <Icon name={iconName} size={20} style={styles.menuItemIcon} />
-        <Text style={styles.menuItemText}>{text}</Text>
-      </TouchableOpacity>
+      <Link to={to} style={styles.link}>
+        <TouchableOpacity style={styles.menuItem}>
+          <Icon name={iconName} size={20} style={styles.menuItemIcon} />
+          <Text style={styles.menuItemText}>{text}</Text>
+        </TouchableOpacity>
+      </Link>
     );
   };
+  
 
   if (loading) {
     return <Loading />;
@@ -50,7 +51,8 @@ const Profile = (props) => {
       </View>
       <View style={styles.subHeader}>
         <ScrollView style={styles.menu}>
-          <MenuItem key="personalData" iconName="user" text="Datos Personales" element={<Navigate to='/src/screens/ProfileSettings.jsx' />} />
+        
+          <MenuItem key="personalData" iconName="user" text="Datos Personales" to="ProfileSettings"/>
           <MenuItem key="deliveryAddress" iconName="map-marker" text="Direcciónes de Entrega" />
           <MenuItem key="orders" iconName="list-alt" text="Mis Pedidos" />
           <MenuItem key="paymentMethods" iconName="credit-card" text="Métodos de Pago" />
