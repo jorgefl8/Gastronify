@@ -1,4 +1,4 @@
-import { getDocs, collection, addDoc, doc, getDoc } from "firebase/firestore";
+import { getDocs, collection, addDoc, doc, getDoc , setDoc} from "firebase/firestore";
 import { FirestoreDB } from "./firebaseconfig.js";
 import DataMenu from "../src/Menu.js"
 const db = FirestoreDB;
@@ -52,4 +52,14 @@ const getCollectionByDoc = async (collection_, doc_) => {
     } 
   };
 
-export default { getCollection, uploadDoc, uploadJSONMenu, getCollectionByDoc };
+const updateDocByUid = async (collection_, doc_, data) => {
+    try {
+        await setDoc(doc(db, collection_, doc_), data);
+    } catch (error) {
+        console.log(error);
+    }
+
+
+}
+
+export default { getCollection, uploadDoc, uploadJSONMenu, getCollectionByDoc, updateDocByUid };
