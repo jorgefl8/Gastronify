@@ -28,11 +28,8 @@ const Profile = (props) => {
 
   const MenuItem = ({ iconName, text, to }) => {
     return (
-      <Link to={to} style={styles.link}>
-        <TouchableOpacity style={styles.menuItem}>
-          <Icon name={iconName} size={20} style={styles.menuItemIcon} />
+      <Link to={"/"+to} style={styles.link}>
           <Text style={styles.menuItemText}>{text}</Text>
-        </TouchableOpacity>
       </Link>
     );
   };
