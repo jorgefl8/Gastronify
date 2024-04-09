@@ -17,6 +17,7 @@ import BooksForm from "./BooksForm.jsx";
 import ProfileSettings from "./ProfileSettings.jsx";
 import ShoppingScreen from "./shoppingScreen.jsx";
 import ShopCart from "../components/shopping_cart.jsx"
+import Delivery from "./Delivery.jsx";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -99,6 +100,7 @@ const Main = () => {
         <Route path='/profile' element={<Profile handleLogout={handleLogout} saveUserData={setUserData} />} />
         <Route path='/books' element={<BooksForm />} />
         <Route path='/ProfileSettings' element={<ProfileSettings />} />
+        <Route path='/delivery' element={<Delivery />} />
         <Route path='/shopping' element={<ShoppingScreen updateCart={() => loadCartItems()} userData={userData} />} />
         <Route path='*' element={<Navigate to='/' />} />
       </Routes>

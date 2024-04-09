@@ -58,7 +58,7 @@ const Profile = (props) => {
         <ScrollView style={styles.menu}>
         
           <MenuItem key="personalData" iconName="user" text="Datos Personales" to="ProfileSettings"/>
-          <MenuItem key="deliveryAddress" iconName="map-marker" text="Direcciónes de Entrega" />
+          <MenuItem key="deliveryAddress" iconName="map-marker" text="Direcciónes de Entrega" to= "delivery"/>
           <MenuItem key="orders" iconName="list-alt" text="Mis Pedidos" />
           <MenuItem key="paymentMethods" iconName="credit-card" text="Métodos de Pago" />
           <MenuItem key="language" iconName="language" text="Idioma" />
