@@ -11,13 +11,6 @@ const ProfileSettings = (props) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
-  const [modifiedData, setModifiedData] = useState({
-    Name: "",
-    LastName: "",
-    Email: "",
-    TelephoneNumber: "",
-  });
-
 
   useEffect(() => {
     const fetchMenu = async () => {
@@ -25,7 +18,6 @@ const ProfileSettings = (props) => {
         "Users",
         FirebaseAuth.currentUser.uid
       );
-      console.log(DatUser);
       setLoading(false);
       setUser(DatUser);
       // Llama a la función de guardar datos del usuario en Main
@@ -38,23 +30,18 @@ const ProfileSettings = (props) => {
   const handleSaveChanges = async () => {
     try {
       // Actualiza los datos del usuario localmente en el estado
-
-      setUser({
-        ...user,
-        Name: modifiedData.Name,
-        LastName: modifiedData.LastName,
-        Email: modifiedData.Email,
-        TelephoneNumber: modifiedData.TelephoneNumber,
-        
-      });
-      console.log(user);
-      await functions.updateDocByUid("Users",FirebaseAuth.currentUser.uid ,user);
-
+      await functions.updateDocByUid("Users", FirebaseAuth.currentUser.uid, user);
       setModalVisible(false);
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleChange = (field, value) => {
+    setUser({
+      ...user,
+      [field]: value,
+    });
   };
 
   if (loading) {
@@ -63,93 +50,82 @@ const ProfileSettings = (props) => {
 
   return (
     <View style={styles.container}>
-    <View style={styles.Header}>
-      <Text style={{ fontSize: 20 }}>
-        Hi !, {user ? user.Name : "Usuario"}, welcome to your profile
-      </Text>
-    </View>
-    <View style={styles.profileInfo}>
-      <Text style={styles.infoText}> Your data is: </Text>
-      <Text style={styles.infoText}>
-        Name: {user ? user.Name : "Not available yet"}
-      </Text>
-      <Text style={styles.infoText}>
-        Last name: {user ? user.LastName : "Not available yet"}
-      </Text>
-      <Text style={styles.infoText}>
-        Email:{user ? user.Email : "Email not available yet"}
-      </Text>
-      <Text style={styles.infoText}>
-        Telephone Number: {user ? user.TelephoneNumber : "Not available yet"}
-      </Text>
-      <View style={styles.buttonsContainer}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => setModalVisible(true)}
-        >
-          <Text style={styles.buttonText}>Modify data</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={props.handleLogout}
-        >
-          <Text style={styles.buttonText}>Log out</Text>
-        </TouchableOpacity>
+      <View style={styles.Header}>
+        <Text style={{ fontSize: 20 }}>
+          Hi !, {user ? user.Name : "Usuario"}, welcome to your profile
+        </Text>
       </View>
-    </View>
-
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={modalVisible}
-      onRequestClose={() => {
-        setModalVisible(false);
-      }}
-    >
-      <View style={styles.modalContainer}>
-        <View style={styles.modalContent}>
-          <TextInput
-            style={styles.input}
-            placeholder="Name"
-            value={modifiedData.Name}
-            onChangeText={(text) =>
-              setModifiedData({ ...modifiedData, Name: text })
-            }
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Last Name"
-            value={modifiedData.LastName}
-            onChangeText={(text) =>
-              setModifiedData({ ...modifiedData, LastName: text })
-            }
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            value={modifiedData.Email}
-            onChangeText={(text) =>
-              setModifiedData({ ...modifiedData, Email: text })
-            }
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Telephone Number"
-            value={modifiedData.TelephoneNumber}
-            onChangeText={(text) =>
-              setModifiedData({ ...modifiedData, TelephoneNumber: text })
-            }
-          />
-          <Button title="Save Changes" onPress={handleSaveChanges} />
-          <Button
-            title="Cancel"
-            onPress={() => setModalVisible(false)}
-            color="red"
-          />
+      <View style={styles.profileInfo}>
+        <Text style={styles.infoText}> Your data is: </Text>
+        <Text style={styles.infoText}>
+          Name: {user ? user.Name : "Not available yet"}
+        </Text>
+        <Text style={styles.infoText}>
+          Last name: {user ? user.LastName : "Not available yet"}
+        </Text>
+        <Text style={styles.infoText}>
+          Email:{user ? user.Email : "Email not available yet"}
+        </Text>
+        <Text style={styles.infoText}>
+          Telephone Number: {user ? user.TelephoneNumber : "Not available yet"}
+        </Text>
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => setModalVisible(true)}
+          >
+            <Text style={styles.buttonText}>Modify data</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={props.handleLogout}>
+            <Text style={styles.buttonText}>Log out</Text>
+          </TouchableOpacity>
         </View>
       </View>
-    </Modal>
-  </View>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(false);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <TextInput
+              style={styles.input}
+              placeholder="Name"
+              value={user?.Name}
+              onChangeText={(text) => handleChange("Name", text)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Last Name"
+              value={user?.LastName}
+              onChangeText={(text) => handleChange("LastName", text)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              value={user?.Email}
+              onChangeText={(text) => handleChange("Email", text)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Telephone Number"
+              value={user?.TelephoneNumber}
+              onChangeText={(text) => handleChange("TelephoneNumber", text)}
+            />
+            <Button title="Save Changes" onPress={handleSaveChanges} />
+            <Button
+              title="Cancel"
+              onPress={() => setModalVisible(false)}
+              color="red"
+            />
+          </View>
+        </View>
+      </Modal>
+    </View>
   );
 };
 
@@ -200,13 +176,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   Header: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     height: 100, // Ajusta este valor según tus necesidades
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: theme.colors.terciary,
   },
   modalContainer: {
