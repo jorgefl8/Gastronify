@@ -57,12 +57,12 @@ const Profile = (props) => {
       <View style={styles.subHeader}>
         <ScrollView style={styles.menu}>
         
-          <MenuItem key="personalData" iconName="user" text="Datos Personales" to="ProfileSettings"/>
-          <MenuItem key="deliveryAddress" iconName="map-marker" text="Direcciónes de Entrega" to= "delivery"/>
-          <MenuItem key="orders" iconName="list-alt" text="Mis Pedidos" />
-          <MenuItem key="paymentMethods" iconName="credit-card" text="Métodos de Pago" />
-          <MenuItem key="language" iconName="language" text="Idioma" />
-          <MenuItem key="info" iconName="info" text="Información" />
+          <MenuItem key="personalData" iconName="user" text="Personal Data" to="ProfileSettings"/>
+          <MenuItem key="deliveryAddress" iconName="map-marker" text="Delivery addresses" to= "delivery"/>
+          <MenuItem key="orders" iconName="list-alt" text="My orders" />
+          <MenuItem key="paymentMethods" iconName="credit-card" text="Payment method" />
+          <MenuItem key="language" iconName="language" text="Language" />
+          <MenuItem key="info" iconName="info" text="Information" />
           <View style={styles.button}>
             <TouchableOpacity onPress={props.handleLogout}>
               <Text style={styles.buttonText}>Log out</Text>
