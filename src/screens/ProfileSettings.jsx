@@ -28,7 +28,7 @@ const ProfileSettings = (props) => {
       setLoading(false);
       setUser(DatUser);
       // Llama a la función de guardar datos del usuario en Main
-      props.saveUserData(DatUser);
+      //props.saveUserData(DatUser);
     };
 
     fetchMenu();
@@ -37,15 +37,16 @@ const ProfileSettings = (props) => {
   const handleSaveChanges = async () => {
     try {
       // Actualiza los datos del usuario localmente en el estado
+      console.log(user);
       setUser({
-        ...user,
         Name: modifiedData.Name,
         LastName: modifiedData.LastName,
         Email: modifiedData.Email,
-        TelephoneNumber: modifiedData.TelephoneNumber
+        TelephoneNumber: modifiedData.TelephoneNumber,
+        ...user
       });
 
-      functions.updateDocByUid("Users",FirebaseAuth.currentUser.uid ,modifiedData);
+      functions.updateDocByUid("Users",FirebaseAuth.currentUser.uid ,user);
 
       setModalVisible(false);
     }
@@ -67,6 +68,9 @@ const ProfileSettings = (props) => {
     </View>
     <View style={styles.profileInfo}>
       <Text style={styles.infoText}> Your data is: </Text>
+      <Text style={styles.infoText}>
+        Name: {user ? user.Name : "Not available yet"}
+      </Text>
       <Text style={styles.infoText}>
         Last name: {user ? user.LastName : "Not available yet"}
       </Text>

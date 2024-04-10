@@ -99,7 +99,7 @@ const Main = () => {
         <Route path="/menu" element={<Menu onCartUpdate={() => loadCartItems()} />} />
         <Route path='/profile' element={<Profile handleLogout={handleLogout} saveUserData={setUserData} />} />
         <Route path='/books' element={<BooksForm />} />
-        <Route path='/ProfileSettings' element={<ProfileSettings />} />
+        <Route path='/ProfileSettings' element={<ProfileSettings />} saveUserData={setUserData} />
         <Route path='/delivery' element={<Delivery />} />
         <Route path='/shopping' element={<ShoppingScreen updateCart={() => loadCartItems()} userData={userData} />} />
         <Route path='*' element={<Navigate to='/' />} />

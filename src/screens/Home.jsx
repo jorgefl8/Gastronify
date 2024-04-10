@@ -1,8 +1,8 @@
 import React from "react";
 import { Text, View, StyleSheet, Image, ScrollView , TouchableOpacity} from "react-native";
 import theme from "../theme";
-import NewsSection from "../components/NewsSection";
-import Information from "../components/Information";
+//import NewsSection from "../components/NewsSection";
+//import Information from "../components/Information";
 import { Link } from "react-router-native";
 
 
@@ -13,7 +13,7 @@ const Home = () => {
                 <Image style={styles.image} source={require('../../assets/appicon.png')} />
                 <Text style={styles.textHeader}>GASTRONIFY</Text>
             </View>
-            <ScrollView>
+         <ScrollView>
                 <Text style={styles.textSubheader}>Welcome to our app!</Text>
                 <View style={styles.separator} />
                 <View style={styles.buttonContainer}>
@@ -24,10 +24,12 @@ const Home = () => {
                         <Text style={styles.buttonText}>Book</Text>
                     </Link>
                 </View>
+                {/*
                 <View style={styles.separator} />
                 <NewsSection />
                 <View style={styles.separator} />
                 <Information />
+                */}
             </ScrollView>
         </View>
     )

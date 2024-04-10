@@ -67,9 +67,8 @@ const Delivery = () => {
       } else {
         // Create new address
         const newAddress = {
-          ...user,
+          id: Date.now().toString(),
           ...addressFormData,
-          id: Date.now().toString() // Generate unique ID for the new address
         };
         await functions.updateDocByUid("Users", FirebaseAuth.currentUser.uid, {
           ...user,
