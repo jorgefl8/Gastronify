@@ -1,10 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Modal, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  Modal,
+  TouchableOpacity,
+} from "react-native";
 import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
 import functions from "../../firebase/firebaseUtils.js";
 import Loading from "../components/Loading.jsx";
 import theme from "../theme.js";
 import { Link } from "react-router-native";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 const Delivery = () => {
   const [user, setUser] = useState(null);
@@ -13,9 +22,9 @@ const Delivery = () => {
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [addressFormData, setAddressFormData] = useState({
-    street: '',
-    city: '',
-    zip: '',
+    street: "",
+    city: "",
+    zip: "",
   });
 
   useEffect(() => {
@@ -41,9 +50,9 @@ const Delivery = () => {
   const handleCreateAddress = () => {
     setSelectedAddress(null);
     setAddressFormData({
-      street: '',
-      city: '',
-      zip: '',
+      street: "",
+      city: "",
+      zip: "",
     });
     setModalVisible(true);
   };
@@ -61,9 +70,15 @@ const Delivery = () => {
         // Update existing address
         await functions.updateDocByUid("Users", FirebaseAuth.currentUser.uid, {
           ...user,
-          addresses: addressList.map((address) => address.id === selectedAddress.id ? addressFormData : address)
+          addresses: addressList.map((address) =>
+            address.id === selectedAddress.id ? addressFormData : address
+          ),
         });
-        setAddressList(addressList.map((address) => address.id === selectedAddress.id ? addressFormData : address));
+        setAddressList(
+          addressList.map((address) =>
+            address.id === selectedAddress.id ? addressFormData : address
+          )
+        );
       } else {
         // Create new address
         const newAddress = {
@@ -72,7 +87,7 @@ const Delivery = () => {
         };
         await functions.updateDocByUid("Users", FirebaseAuth.currentUser.uid, {
           ...user,
-          addresses: [...addressList, newAddress]
+          addresses: [...addressList, newAddress],
         });
         setAddressList([...addressList, newAddress]);
       }
@@ -88,19 +103,30 @@ const Delivery = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Mis direcciones:</Text>
+      <Text style={styles.heading}>My Addresses:</Text>
       {addressList.length > 0 ? (
         addressList.map((address, index) => (
-          <TouchableOpacity key={index} onPress={() => handleEditAddress(address)}>
+          <TouchableOpacity
+            key={index}
+            onPress={() => handleEditAddress(address)}
+          >
             <View style={styles.addressContainer}>
-              <Text style={styles.addressText}>{address.street}, {address.city}, {address.zip}</Text>
+              <Icon name="map-marker" size={20} color="#fff" />
+              <Text iconName="map-marker" style={styles.addressText}>
+                {"   "}
+                {address.street}, {address.city}, {address.zip}
+              </Text>
             </View>
           </TouchableOpacity>
         ))
       ) : (
-        <Text style={styles.noAddressText}>No tienes direcciones guardadas.</Text>
+        <Text style={styles.noAddressText}>You have no saved addresses.</Text>
       )}
-      <Button title="Agregar nueva dirección" onPress={handleCreateAddress} />
+      <Button
+        style="button"
+        title="Add new address"
+        onPress={handleCreateAddress}
+      />
       <Modal
         animationType="slide"
         transparent={true}
@@ -111,11 +137,28 @@ const Delivery = () => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text>{selectedAddress ? 'Editar dirección:' : 'Agregar nueva dirección:'}</Text>
-            <TextInput style={styles.input} onChangeText={(value) => handleChange('street', value)} value={addressFormData.street} />
-            <TextInput style={styles.input} onChangeText={(value) => handleChange('city', value)} value={addressFormData.city} />
-            <TextInput style={styles.input} onChangeText={(value) => handleChange('zip', value)} value={addressFormData.zip} />
-            <Button title="Guardar dirección" onPress={handleSubmit} />
+            <Text>
+              {selectedAddress ? "Edit address:" : "Add new address:"}
+            </Text>
+            <Text>Street:</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={(value) => handleChange("street", value)}
+              value={addressFormData.street}
+            />
+            <Text>City:</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={(value) => handleChange("city", value)}
+              value={addressFormData.city}
+            />
+            <Text>ZIP:</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={(value) => handleChange("zip", value)}
+              value={addressFormData.zip}
+            />
+            <Button title="Save Address" onPress={handleSubmit} />
           </View>
         </View>
       </Modal>
@@ -132,25 +175,27 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 20,
     marginBottom: 10,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   addressContainer: {
-    backgroundColor: theme.colors.cardBackground,
+    backgroundColor: theme.colors.terciary,
     padding: 10,
     marginBottom: 10,
     borderRadius: 5,
+    flexDirection: "row",
   },
   addressText: {
     fontSize: 16,
   },
   noAddressText: {
     fontSize: 16,
-    fontStyle: 'italic',
+    fontStyle: "italic",
     marginBottom: 10,
   },
   input: {
     height: 40,
-    borderColor: '#ccc',
+    borderColor: theme.colors.secondary,
+    color: theme.colors.textPrimary,
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 10,
@@ -158,16 +203,23 @@ const styles = StyleSheet.create({
   },
   centeredView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 22,
+  },
+
+  button: {
+    backgroundColor: theme.colors.secondary,
+    padding: 8,
+    borderRadius: 5,
+    margin: 6,
   },
   modalView: {
     backgroundColor: theme.colors.cardBackground,
     borderRadius: 10,
     padding: 20,
-    alignItems: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
