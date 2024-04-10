@@ -25,6 +25,7 @@ const ProfileSettings = (props) => {
         "Users",
         FirebaseAuth.currentUser.uid
       );
+      console.log(DatUser);
       setLoading(false);
       setUser(DatUser);
       // Llama a la función de guardar datos del usuario en Main
@@ -37,16 +38,17 @@ const ProfileSettings = (props) => {
   const handleSaveChanges = async () => {
     try {
       // Actualiza los datos del usuario localmente en el estado
-      console.log(user);
+
       setUser({
+        ...user,
         Name: modifiedData.Name,
         LastName: modifiedData.LastName,
         Email: modifiedData.Email,
         TelephoneNumber: modifiedData.TelephoneNumber,
-        ...user
+        
       });
-
-      functions.updateDocByUid("Users",FirebaseAuth.currentUser.uid ,user);
+      console.log(user);
+      await functions.updateDocByUid("Users",FirebaseAuth.currentUser.uid ,user);
 
       setModalVisible(false);
     }
