@@ -13,7 +13,7 @@ import functions from "../../firebase/firebaseUtils.js";
 import Loading from "../components/Loading.jsx";
 import theme from "../theme.js";
 import { Link } from "react-router-native";
-import Icon from "react-native-vector-icons/FontAwesome";
+import Icon from "react-native-vector-icons/Entypo"
 
 const Delivery = () => {
   const [user, setUser] = useState(null);
@@ -111,7 +111,7 @@ const Delivery = () => {
             onPress={() => handleEditAddress(address)}
           >
             <View style={styles.addressContainer}>
-              <Icon name="map-marker" size={20} color="#fff" />
+              <Icon name="address" size={20} color="#fff" />
               <Text iconName="map-marker" style={styles.addressText}>
                 {"   "}
                 {address.street}, {address.city}, {address.zip}
@@ -159,6 +159,8 @@ const Delivery = () => {
               value={addressFormData.zip}
             />
             <Button title="Save Address" onPress={handleSubmit} />
+            <View style={styles.separator} />
+            <Button color="red" title="Cancel" onPress={() => setModalVisible(false)} />
           </View>
         </View>
       </Modal>
@@ -191,6 +193,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontStyle: "italic",
     marginBottom: 10,
+  },
+  separator: {
+    height: 15,
   },
   input: {
     height: 40,
