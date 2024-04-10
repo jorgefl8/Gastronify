@@ -60,7 +60,7 @@ const Profile = (props) => {
           <MenuItem key="personalData" iconName="user" text="Personal Data" to="ProfileSettings"/>
           <MenuItem key="deliveryAddress" iconName="map-marker" text="Delivery addresses" to= "delivery"/>
           <MenuItem key="orders" iconName="list-alt" text="My orders" />
-          <MenuItem key="paymentMethods" iconName="credit-card" text="Payment method" />
+          <MenuItem key="paymentMethods" iconName="credit-card" text="Payment method" to= "PaymentMethod" />
           <MenuItem key="language" iconName="language" text="Language" />
           <MenuItem key="info" iconName="info" text="Information" />
           <View style={styles.button}>

@@ -105,8 +105,11 @@ const ShoppingScreen = ({ updateCart, userData }) => {
     const Order = {userData: userData, order: formattedCart, Date: Timestamp.now()};
     
     // Check if UserData has address and payment method
-    if (!userData.Address || !userData.PaymentMethod) {
+    console.log(userData); 
+    if (!userData.addresses || !userData.paymentMethods) {
       // Show modal
+      console.log(userData.addresses); 
+      console.log(userData.paymentMethod);
       showModal();
     }else{
       setIsLoading(true);
