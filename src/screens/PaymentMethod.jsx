@@ -113,7 +113,8 @@ const PaymentMethod = () => {
             <TouchableOpacity onPress={() => handleEditMethod(method)}>
               <View style={styles.methodContainer}>
                 <Text style={styles.methodText}>{method.type}</Text>
-                {/* Add more fields to display here */}
+                <Text style={styles.methodText}>{method.cardNumber}</Text>
+                <Text style={styles.methodText}>{method.ExpirationDate}</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => handleDeleteMethod(method)}>
