@@ -94,9 +94,11 @@ const BooksForm = () => {
 
                 <View style={styles.separator} />
                 {/* <Button title="Book" onPress={handleSubmit} style={styles.button} /> */}
-                <TouchableOpacity style={styles.button} onPress={handleSubmit}>   
-                    <Text style={styles.buttonText}>BOOK</Text>
-                </TouchableOpacity>
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                        <Text style={styles.buttonText}>BOOK</Text>
+                    </TouchableOpacity>
+                </View>
                 
             </View>
     );
@@ -141,22 +143,23 @@ const styles = StyleSheet.create({
     itemStyle: {
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
     },
-    button: {
-        flex: 1,
+    buttonContainer: {
+        alignItems: 'center', // Alinea el botón en el centro horizontalmente
+        marginTop: 15, // Espacio entre el botón y otros elementos si es necesario
+      },
+      button: {
         backgroundColor: theme.colors.secondary,
-        padding: 8,
-        borderRadius: 5,
-        width: '33%',
+        paddingVertical: 12, // Ajusta el espacio vertical
+        paddingHorizontal: 25, // Ajusta el espacio horizontal
+        borderRadius: 8,
         alignItems: 'center',
         justifyContent: 'center',
-        alignSelf: 'center',
-    },
-    buttonText: {
+      },
+      buttonText: {
         color: 'white',
         fontSize: 18,
         fontWeight: theme.fontWeights.bold,
-        
-    },
+      },
 });
 
 export default BooksForm;

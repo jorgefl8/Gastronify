@@ -1,7 +1,9 @@
 import React from "react";
-import { Text, View, StyleSheet, Image } from "react-native";
-import Carousel from 'react-native-snap-carousel';
+import { Text, View, StyleSheet, Image, Dimensions } from "react-native";
+import Swiper from 'react-native-swiper';
 import theme from "../theme";
+
+const windowWidth = Dimensions.get('window').width;
 
 const NewsSection = () => {
     const newsData = [
@@ -21,43 +23,46 @@ const NewsSection = () => {
         { id: 8, image: require('../../assets/novedad6.jpg') },
     ];
 
-    const renderItem = ({ item }) => {
-        return (
-            <View style={styles.imageContainer}>
+    const renderNewsItem = (data) => {
+        return data.map(item => (
+            <View key={item.id} style={styles.imageContainer}>
                 <Image source={item.image} style={styles.image} />
             </View>
-        );
+        ));
     };
 
     return (
         <View style={styles.container}>
-            <View style={styles.novedadesContainer}>
+            <View style={styles.newsContainer}>
                 <Text style={styles.sectionTitle}> N E W S </Text>
 
-                <Carousel
-                    data={newsData}
-                    renderItem={renderItem}
-                    sliderWidth={300}
-                    itemWidth={300}
-                    loop={true}
-                    autoplay={true}
-                    autoplayInterval={3000}
-                />
+                <View style={styles.swiperContainer}>
+                    <Swiper
+                        autoplay={true}
+                        autoplayTimeout={3}
+                        loop={true}
+                        showsPagination={false}
+                        style={styles.swiper}
+                    >
+                        {renderNewsItem(newsData)}
+                    </Swiper>
+                </View>
             </View>
 
-            <View style={styles.novedadesContainer}>
-                <Carousel
-                    data={newsData2}
-                    renderItem={renderItem}
-                    sliderWidth={300}
-                    itemWidth={300}
-                    loop={true}
-                    autoplay={true}
-                    autoplayInterval={3000}
-                />
+            <View style={styles.newsContainer}>
+                <View style={styles.swiperContainer}>
+                    <Swiper
+                        autoplay={true}
+                        autoplayTimeout={3}
+                        loop={true}
+                        showsPagination={false}
+                        style={styles.swiper}
+                    >
+                        {renderNewsItem(newsData2)}
+                    </Swiper>
+                </View>
             </View>
         </View>
-
     );
 };
 
@@ -66,13 +71,18 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 20,
     },
-    novedadesContainer: {
+    newsContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 20,
+        width: windowWidth, //que ocupe todo el ancho de la 
+        marginBottom: 5,
+    },
+    swiperContainer: {
+        width: windowWidth / 1.5, //que ocupe 1/3 del ancho de la pantalla
+        height: 180,
+        overflow: 'hidden', 
     },
     sectionTitle: {
         textAlign: 'center',
@@ -83,8 +93,8 @@ const styles = StyleSheet.create({
         fontFamily: theme.fonts.special,
     },
     imageContainer: {
-        width: 300,
-        height: 180,
+        width: '100%',
+        height: '100%',
         borderRadius: 8,
         overflow: 'hidden',
     },
@@ -92,6 +102,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
     },
+    swiper: {}
 });
 
 export default NewsSection;

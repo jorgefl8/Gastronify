@@ -33,6 +33,7 @@
     "react-native-input-spinner": "^1.8.1",
     "react-native-snap-carousel": "^3.9.1",
     "react-native-swipe-gestures": "^1.0.5",
+    "react-native-swiper": "^1.6.0",
     "react-native-textinput-effects": "^0.6.3",
     "react-native-web": "~0.19.6",
     "react-router-native": "^6.22.1"
