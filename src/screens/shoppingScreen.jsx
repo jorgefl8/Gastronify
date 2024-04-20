@@ -1,89 +1,116 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image,Animated, Easing, Alert } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  Animated,
+  Easing,
+  Alert,
+} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icon from "react-native-vector-icons/Ionicons";
 import theme from "../theme.js";
-import Loading from "../components/Loading.jsx";
-import { Timestamp } from "firebase/firestore";
-import functions from '../../firebase/firebaseUtils.js';
+import { Timestamp, collection, addDoc } from "firebase/firestore";
+import { FirebaseAuth, FirestoreDB } from "../../firebase/firebaseconfig.js";
+import functions from "../../firebase/firebaseUtils.js";
 
 const ShoppingScreen = ({ updateCart, userData }) => {
+  const [user, setUser] = useState(null);
   const [cartItems, setCartItems] = useState([]);
-  const [isLoading, setIsLoading] = useState(false); // Estado de carga
-  const [slideAnimation] = useState(new Animated.Value(100)); // Valor inicial fuera de la pantalla
+  const [slideAnimation] = useState(new Animated.Value(100));
 
   useEffect(() => {
     loadCartItems();
-    // Animación para deslizar hacia arriba
-    Animated.timing(
-      slideAnimation,
-      {
-        toValue: 0,  
-        duration: 1000, // Ajusta la duración de la animación según sea necesario
-        easing: Easing.out(Easing.ease), // Cambia el tipo de easing
-        useNativeDriver: false, 
-      }
-    ).start();
+    Animated.timing(slideAnimation, {
+      toValue: 0,
+      duration: 1000,
+      easing: Easing.out(Easing.ease),
+      useNativeDriver: false,
+    }).start();
+    const fetchUserData = async () => {
+      const userData = await functions.getCollectionByDoc(
+        "Users",
+        FirebaseAuth.currentUser.uid
+      );
+      setUser(userData);
+    };
+    fetchUserData();
   }, []);
 
   const loadCartItems = async () => {
     try {
-      const cartString = await AsyncStorage.getItem('cart');
+      const cartString = await AsyncStorage.getItem("cart");
       if (cartString !== null) {
         const cart = JSON.parse(cartString);
         setCartItems(cart);
       }
     } catch (error) {
-      console.error('Error fetching cart:', error);
+      console.error("Error fetching cart:", error);
     }
   };
 
   const removeFromCart = async (product) => {
     try {
-      const updatedCart = cartItems.filter(item =>!(item.Name == product.Name && item.ModifyIngredients == product.ModifyIngredients));
-      await AsyncStorage.setItem('cart', JSON.stringify(updatedCart));
+      const updatedCart = cartItems.filter(
+        (item) =>
+          !(
+            item.Name == product.Name &&
+            item.ModifyIngredients == product.ModifyIngredients
+          )
+      );
+      await AsyncStorage.setItem("cart", JSON.stringify(updatedCart));
       setCartItems(updatedCart);
       updateCart();
     } catch (error) {
-      console.error('Error removing item from cart:', error);
+      console.error("Error removing item from cart:", error);
     }
   };
 
   const decreaseQuantity = async (product) => {
     try {
-      const updatedCart = cartItems.map(item => {
-        if (item.Name === product.Name && item.ModifyIngredients == product.ModifyIngredients && item.Quantity > 0) {
+      const updatedCart = cartItems.map((item) => {
+        if (
+          item.Name === product.Name &&
+          item.ModifyIngredients == product.ModifyIngredients &&
+          item.Quantity > 0
+        ) {
           return { ...item, Quantity: item.Quantity - 1 };
         }
         return item;
       });
-      await AsyncStorage.setItem('cart', JSON.stringify(updatedCart));
+      await AsyncStorage.setItem("cart", JSON.stringify(updatedCart));
       setCartItems(updatedCart);
       updateCart();
     } catch (error) {
-      console.error('Error decreasing quantity:', error);
+      console.error("Error decreasing quantity:", error);
     }
   };
 
   const increaseQuantity = async (product) => {
     try {
-      const updatedCart = cartItems.map(item => {
-        if (item.Name === product.Name && item.ModifyIngredients == product.ModifyIngredients) {
+      const updatedCart = cartItems.map((item) => {
+        if (
+          item.Name === product.Name &&
+          item.ModifyIngredients == product.ModifyIngredients
+        ) {
           return { ...item, Quantity: item.Quantity + 1 };
         }
         return item;
       });
-      await AsyncStorage.setItem('cart', JSON.stringify(updatedCart));
+      await AsyncStorage.setItem("cart", JSON.stringify(updatedCart));
       setCartItems(updatedCart);
       updateCart();
     } catch (error) {
-      console.error('Error increasing quantity:', error);
+      console.error("Error increasing quantity:", error);
     }
   };
 
   const calculateTotal = () => {
     let total = 0;
-    cartItems.forEach(item => {
+    cartItems.forEach((item) => {
       total += item.Price * item.Quantity;
     });
     return total;
@@ -95,50 +122,42 @@ const ShoppingScreen = ({ updateCart, userData }) => {
   };
 
   const handlePlaceOrder = async () => {
-    
-    const formattedCart = cartItems.map(item => ({
+    const formattedCart = cartItems.map((item) => ({
       Name: item.Name,
       Price: item.Price,
       Ingredients: item.Ingredients,
-      Quantity: item.Quantity
+      Quantity: item.Quantity,
     }));
-    const Order = {userData: userData, order: formattedCart, Date: Timestamp.now()};
-    
-    // Check if UserData has address and payment method
-    console.log(userData); 
-    if (!userData.addresses || !userData.paymentMethods) {
-      // Show modal
-      console.log(userData.addresses); 
-      console.log(userData.paymentMethod);
+    const userId = FirebaseAuth.currentUser.uid;
+    const Order = { itemsOrdered: formattedCart, Date: Timestamp.now() };
+    if (!user.addresses || !user.paymentMethods) {
       showModal();
-    }else{
-      setIsLoading(true);
-    // Proceed with placing the order
-    await functions.uploadDoc("Orders", Order);
-    await AsyncStorage.removeItem('cart');
-    setCartItems([]);
-    updateCart(); // Make sure to call updateCart after completing the order
-    setIsLoading(false);}
+    } else {
+      await addDoc(collection(FirestoreDB, "Users", userId, "orders"), Order);
+      await AsyncStorage.removeItem("cart");
+      setCartItems([]);
+      updateCart();
+    }
   };
-  
+
   const showModal = () => {
     Alert.alert(
-      'Missing Information',
-      'To place an order, you need to enter a valid address and payment method.',
-      [
-        { text: 'OK', onPress: () => setIsLoading(false) }
-      ],
-      { cancelable: false }
+      "Missing Information",
+      "To place an order, you need to enter a valid address and payment method."
     );
   };
-  
-  
 
   const renderSummary = () => (
     <View style={styles.summaryContainer}>
-      <Text style={styles.summaryText}>Total: ${calculateTotal().toFixed(2)}</Text>
-      <Text style={styles.summaryText}>Shipping: ${calculateShippingCost().toFixed(2)}</Text>
-      <Text style={styles.summaryText}>Grand Total: ${(calculateTotal() + calculateShippingCost()).toFixed(2)}</Text>
+      <Text style={styles.summaryText}>
+        Total: ${calculateTotal().toFixed(2)}
+      </Text>
+      <Text style={styles.summaryText}>
+        Shipping: ${calculateShippingCost().toFixed(2)}
+      </Text>
+      <Text style={styles.summaryText}>
+        Grand Total: ${(calculateTotal() + calculateShippingCost()).toFixed(2)}
+      </Text>
       <TouchableOpacity style={styles.orderButton} onPress={handlePlaceOrder}>
         <Text style={styles.orderButtonText}>Place Order</Text>
       </TouchableOpacity>
@@ -147,20 +166,29 @@ const ShoppingScreen = ({ updateCart, userData }) => {
 
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
-      <Image
-        source={{ uri: item.Image }}
-        style={styles.Image}
-      />
+      <Image source={{ uri: item.Image }} style={styles.Image} />
       <View style={styles.itemDetails}>
         <Text>{item.Name}</Text>
-        <Text>{item?.ModifyIngredients && item.ModifyIngredients.length > 0 ? `No ${item.ModifyIngredients.join(", ")}` : ""}</Text>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Text>
+          {item?.ModifyIngredients && item.ModifyIngredients.length > 0
+            ? `No ${item.ModifyIngredients.join(", ")}`
+            : ""}
+        </Text>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
           {item?.PriceOffer ? (
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 10 }}>
-              <Text style={[styles.price, { textDecorationLine: 'line-through' }]}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginRight: 10,
+              }}
+            >
+              <Text
+                style={[styles.price, { textDecorationLine: "line-through" }]}
+              >
                 {item.Price} €
               </Text>
-              <Text style={[styles.price, { color: 'red', marginLeft: 5 }]}>
+              <Text style={[styles.price, { color: "red", marginLeft: 5 }]}>
                 {item.PriceOffer} €
               </Text>
             </View>
@@ -169,30 +197,26 @@ const ShoppingScreen = ({ updateCart, userData }) => {
           )}
         </View>
       </View>
-      {item.Quantity === 1 ?
-        (
-          <TouchableOpacity onPress={() => removeFromCart(item)}>
-            <Icon name="trash" size={theme.appBar.icon.size} color="black" />
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity onPress={() => decreaseQuantity(item)}>
-            <Text style={styles.quantityButton}>-</Text>
-          </TouchableOpacity>
-        )}
+      {item.Quantity === 1 ? (
+        <TouchableOpacity onPress={() => removeFromCart(item)}>
+          <Icon name="trash" size={theme.appBar.icon.size} color="black" />
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity onPress={() => decreaseQuantity(item)}>
+          <Text style={styles.quantityButton}>-</Text>
+        </TouchableOpacity>
+      )}
       <Text style={styles.quantity}>{item.Quantity}</Text>
       <TouchableOpacity onPress={() => increaseQuantity(item)}>
         <Text style={styles.quantityButton}>+</Text>
       </TouchableOpacity>
     </View>
   );
-  
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Shopping Cart</Text>
-      {isLoading ? (
-        <Loading /> // Muestra el componente de carga mientras se está cargando
-      ) : cartItems.length === 0 ? (
+      {cartItems.length === 0 ? (
         <Text>Your cart is empty</Text>
       ) : (
         <>
@@ -215,22 +239,22 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   itemContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    borderBottomColor: "#ccc",
   },
   quantityButton: {
     fontSize: 20,
     paddingHorizontal: 10,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderRadius: 5,
   },
   quantity: {
@@ -248,7 +272,7 @@ const styles = StyleSheet.create({
   summaryContainer: {
     marginTop: 0,
     borderTopWidth: 1,
-    borderTopColor: '#ccc',
+    borderTopColor: "#ccc",
     paddingTop: 10,
   },
   summaryText: {
@@ -260,12 +284,12 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 5,
     marginTop: 10,
-    alignItems: 'center',
+    alignItems: "center",
   },
   orderButtonText: {
-    color: 'white',
+    color: "white",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });
 

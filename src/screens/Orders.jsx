@@ -2,189 +2,134 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
-  TextInput,
-  Button,
-  StyleSheet,
-  Modal,
   TouchableOpacity,
   Alert,
+  StyleSheet,
+  FlatList,
 } from "react-native";
 import Icon from "react-native-vector-icons/Entypo";
-import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
-import functions from "../../firebase/firebaseUtils.js";
-import Loading from "../components/Loading.jsx";
+import { FirebaseAuth, FirestoreDB } from "../../firebase/firebaseconfig.js";
 import theme from "../theme.js";
+import { collection, doc, deleteDoc, getDocs } from "firebase/firestore";
+import moment from "moment";
 
-const Delivery = () => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [addressList, setAddressList] = useState([]);
-  const [selectedAddress, setSelectedAddress] = useState(null);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [addressFormData, setAddressFormData] = useState({
-    street: "",
-    city: "",
-    zip: "",
-  });
+const Orders = () => {
+  const [orderList, setOrderList] = useState([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const userData = await functions.getCollectionByDoc(
+      // Obtenemos los pedidos de Firestore
+      const ordersRef = collection(
+        FirestoreDB,
         "Users",
-        FirebaseAuth.currentUser.uid
+        FirebaseAuth.currentUser.uid,
+        "orders"
       );
-      setUser(userData);
-      setLoading(false);
-      setAddressList(userData.addresses || []);
-    };
+      const snapshot = await getDocs(ordersRef);
+      const initialOrders = snapshot.docs.map((doc) => {
+        const orderData = doc.data();
+        const totalPrice = orderData.itemsOrdered.reduce((acc, product) => {
+          const price = parseFloat(product.Price);
+          const quantity = parseFloat(product.Quantity);
+          return acc + price * quantity;
+        }, 0);
+        return {
+          id: doc.id,
+          ...orderData,
+          totalPrice,
+          countdown: calculateCountdown(orderData.Date.seconds),
+        };
+      });
+      setOrderList(initialOrders);
+      // Actualiza la cuenta atrás cada segundo
+      const intervalId = setInterval(() => {
+        const updatedOrders = initialOrders.map((order) => ({
+          ...order,
+          countdown: calculateCountdown(order.Date.seconds),
+        }));
+        setOrderList(updatedOrders);
+      }, 5000);
 
+      return () => clearInterval(intervalId);
+    };
     fetchUserData();
   }, []);
 
-  const handleEditAddress = (address) => {
-    setSelectedAddress(address);
-    setAddressFormData(address);
-    setModalVisible(true);
+  // Función para calcular la cuenta atrás
+  const calculateCountdown = (orderSeconds) => {
+    const now = moment();
+    const orderTime = moment.unix(orderSeconds);
+    const duration = moment.duration(orderTime.diff(now));
+    const minutesPassed = duration.asMinutes();
+    if (minutesPassed >= 30) {
+      return "Order should be delivered";
+    } else {
+      return `Time left to deliver: ${30 + Math.ceil(minutesPassed)} min`;
+    }
   };
 
-  const handleCreateAddress = () => {
-    setSelectedAddress(null);
-    setAddressFormData({
-      street: "",
-      city: "",
-      zip: "",
-    });
-    setModalVisible(true);
-  };
-  const handleDeleteAddress = async (addressId) => {
+  const handleDeleteOrder = async (orderId) => {
     try {
-      await functions.updateDocByUid("Users", FirebaseAuth.currentUser.uid, {
-        ...user,
-        addresses: addressList.filter((address) => address.id !== addressId),
-      });
-      setAddressList(addressList.filter((address) => address.id !== addressId));
+      await deleteDoc(
+        doc(
+          FirestoreDB,
+          "Users",
+          FirebaseAuth.currentUser.uid,
+          "orders",
+          orderId
+        )
+      );
+      setOrderList(orderList.filter((order) => order.id !== orderId));
+      Alert.alert("Success", "Order successfully deleted.");
     } catch (error) {
       console.log(error);
-      Alert.alert("Error", "Failed to delete the address.");
+      Alert.alert("Error", "Failed to delete the order.");
     }
   };
-  const handleChange = (name, value) => {
-    setAddressFormData({
-      ...addressFormData,
-      [name]: value,
-    });
+  const convertTimestampToMoment = (timestamp) => {
+    return moment.unix(timestamp.seconds); // Convierte el Timestamp a un objeto Moment
   };
-
-  const validateForm = () => {
-    const { street, city, zip } = addressFormData;
-    return street.trim() != '' && city.trim() !='' && zip.trim() != '';
+  const formatDate = (timestamp) => {
+    const dateMoment = convertTimestampToMoment(timestamp);
+    return dateMoment.format("MMMM Do YYYY, h:mm:ss a"); // Formatea la fecha como "April 20th 2024, 7:06:35 pm"
   };
-
-  const handleSubmit = async () => {
-    if (!validateForm()) {
-      Alert.alert("Validation failed", "Please fill in all fields.");
-      return;
-    }
-    try {
-      if (selectedAddress) {
-        // Update existing address
-        await functions.updateDocByUid("Users", FirebaseAuth.currentUser.uid, {
-          ...user,
-          addresses: addressList.map((address) =>
-            address.id === selectedAddress.id ? addressFormData : address
-          ),
-        });
-        setAddressList(
-          addressList.map((address) =>
-            address.id === selectedAddress.id ? addressFormData : address
-          )
-        );
-      } else {
-        // Create new address
-        const newAddress = {
-          id: Date.now().toString(),
-          ...addressFormData,
-        };
-        await functions.updateDocByUid("Users", FirebaseAuth.currentUser.uid, {
-          ...user,
-          addresses: [...addressList, newAddress],
-        });
-        setAddressList([...addressList, newAddress]);
-      }
-      setModalVisible(false);
-    } catch (error) {
-      console.log(error);
-      Alert.alert("Error", "Failed to save the address.");
-    }
-  };
-
-  if (loading) {
-    return <Loading />;
-  }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>My Addresses:</Text>
-      {addressList.length > 0 ? (
-        addressList.map((address, index) => (
-          <View key={index} style={styles.addressContainer}>
-            <TouchableOpacity onPress={() => handleEditAddress(address)}>
-              <Icon name="edit" size={20} color="#fff" />   
-            </TouchableOpacity>
-            <Text style={styles.addressText}>
-                {address.street}, {address.city}, {address.zip}
+      <Text style={styles.heading}>My Orders:</Text>
+      {orderList.length > 0 ? (
+        orderList.map((order, index) => (
+          <View key={index} style={styles.orderContainer}>
+            <Text style={styles.orderText}>
+              <Text style={styles.label}>
+                Date Order: {formatDate(order.Date)}
               </Text>
-            <TouchableOpacity onPress={() => handleDeleteAddress(address.id)}>
+            </Text>
+            {order.itemsOrdered.map((item, idx) => (
+              <Text key={idx} style={styles.orderText}>
+                <Text style={styles.label}>Product:</Text> {item.Name}
+                <Text style={styles.label}> Quantity:</Text> {item.Quantity}
+                <Text style={styles.label}> Price:</Text> {item.Price}€
+              </Text>
+            ))}
+            <Text style={styles.orderText}>
+              <Text style={styles.label}>Total Price: </Text>
+              {order.totalPrice}€
+            </Text>
+            <Text style={styles.orderText}>
+              <Text style={styles.label}>{order.countdown}</Text>
+            </Text>
+            <TouchableOpacity
+              onPress={() => handleDeleteOrder(order.id)}
+              style={styles.trashIcon}
+            >
               <Icon name="trash" size={20} color="red" />
             </TouchableOpacity>
-           
           </View>
         ))
       ) : (
-        <Text style={styles.noAddressText}>You have no saved addresses.</Text>
+        <Text style={styles.noOrderText}>You have no orders.</Text>
       )}
-      <Button title="Add new address" onPress={handleCreateAddress} />
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text>
-              {selectedAddress ? "Edit address:" : "Add new address:"}
-            </Text>
-            <Text>Street:</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(value) => handleChange("street", value)}
-              value={addressFormData.street}
-            />
-            <Text>City:</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(value) => handleChange("city", value)}
-              value={addressFormData.city}
-            />
-            <Text>ZIP:</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(value) => handleChange("zip", value)}
-              value={addressFormData.zip}
-            />
-            <Button title="Save Address" onPress={handleSubmit} />
-            <View style={styles.separator} />
-            <Button
-              color="red"
-              title="Cancel"
-              onPress={() => setModalVisible(false)}
-            />
-          </View>
-        </View>
-      </Modal>
     </View>
   );
 };
@@ -200,59 +145,27 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontWeight: "bold",
   },
-  addressContainer: {
-    backgroundColor: theme.colors.terciary,
+  orderContainer: {
+    backgroundColor: theme.colors.primary,
     padding: 10,
     marginBottom: 10,
     borderRadius: 5,
-    flexDirection: "row",
   },
-  addressText: {
+  orderText: {
     fontSize: 16,
+    color: theme.colors.textPrimary,
   },
-  noAddressText: {
+  label: {
+    fontWeight: "bold",
+  },
+  noOrderText: {
     fontSize: 16,
     fontStyle: "italic",
     marginBottom: 10,
   },
-  separator: {
-    height: 15,
-  },
-  input: {
-    height: 40,
-    borderColor: theme.colors.secondary,
-    color: theme.colors.textPrimary,
-    borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-    borderRadius: 5,
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22,
-  },
-
-  button: {
-    backgroundColor: theme.colors.secondary,
-    padding: 8,
-    borderRadius: 5,
-    margin: 6,
-  },
-  modalView: {
-    backgroundColor: theme.colors.cardBackground,
-    borderRadius: 10,
-    padding: 20,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+  trashIcon: {
+    marginTop: 10,
   },
 });
-export default Delivery;
+
+export default Orders;
