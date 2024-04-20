@@ -9,7 +9,7 @@ import {
 import { FirebaseAuth, FirestoreDB } from "../../firebase/firebaseconfig.js";
 import { doc, setDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { Link } from "react-router-native";
+import { Link,useNavigate } from "react-router-native";
 import { Timestamp } from "firebase/firestore";
 import theme from "../theme.js";
 
@@ -48,6 +48,8 @@ const Register = () => {
       setError(error.message);
     }
   };
+  const navigate = useNavigate(); 
+
 
   return (
     <View style={styles.container}>
@@ -122,9 +124,9 @@ const Register = () => {
       <TouchableOpacity style={styles.button} onPress={handleRegister}>
         <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
-      <Link to="/login" style={styles.buttonCancel}>
+      <TouchableOpacity style={styles.buttonCancel} onPress={() => navigate("/login")}>
         <Text style={styles.buttonText}>Cancel</Text>
-      </Link>
+      </TouchableOpacity>
       <View style={styles.separator} />
     </View>
   );
@@ -163,7 +165,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   buttonCancel: {
-    width: 300,
+    width: "100%",
     height: 50,
     marginTop: 10,
     backgroundColor: "gray",

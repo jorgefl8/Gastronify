@@ -1,9 +1,18 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions, Image } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+  Image,
+} from "react-native";
 import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { Link } from "react-router-native";
+import { Link, useNavigate } from "react-router-native";
 import Icon from "react-native-vector-icons/Ionicons";
+import theme from "../theme";
 
 const Login = () => {
   const auth = FirebaseAuth;
@@ -19,12 +28,12 @@ const Login = () => {
     }
   };
 
-  const handleLoginFacebook = async () => { };
+  const handleLoginFacebook = async () => {};
 
-  const handleLoginGoogle = async () => { };
+  const handleLoginGoogle = async () => {};
+  const navigate = useNavigate(); 
 
-  const handleLoginApple = async () => { };
-
+  const handleLoginApple = async () => {};
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Log In</Text>
@@ -54,41 +63,51 @@ const Login = () => {
             style={styles.iconGoogle}
             onPress={handleLoginGoogle}
           >
-            <Icon name="logo-google" size={40} color="black" style={styles.icon} />
+            <Icon
+              name="logo-google"
+              size={40}
+              color="black"
+              style={styles.icon}
+            />
           </TouchableOpacity>
-          </View>
-          <View style={styles.buttonLoggers}>
+        </View>
+        <View style={styles.buttonLoggers}>
           <TouchableOpacity
             style={styles.iconFacebook}
             onPress={handleLoginApple}
           >
-            <Icon name="logo-apple" size={40} color="black" style={styles.icon} />
-            
+            <Icon
+              name="logo-apple"
+              size={40}
+              color="black"
+              style={styles.icon}
+            />
           </TouchableOpacity>
-          </View>
-          <View style={styles.buttonLoggers}>
+        </View>
+        <View style={styles.buttonLoggers}>
           <TouchableOpacity
             style={styles.iconFacebook}
             onPress={handleLoginFacebook}
           >
-            <Icon name="logo-facebook" size={40} color="black" style={styles.icon} />
+            <Icon
+              name="logo-facebook"
+              size={40}
+              color="black"
+              style={styles.icon}
+            />
           </TouchableOpacity>
-        
         </View>
       </View>
-      <Text style={styles.registerText}>
-        <Link to="/register" style={styles.registerContainer}>
-          <Text style={styles.registerText}>
-            Don't have an account?{" "}
-            <Text style={styles.registerLink}>Sign Up</Text>
-          </Text>
-        </Link>
-      </Text>
+      <View style={styles.separatorv2} />
+      <Text>Don't have an account?</Text>
+      <TouchableOpacity onPress={() => navigate("/register")}>
+        <Text style={styles.registerLink}>Sign Up</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   container: {
@@ -146,7 +165,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: width - 40, // Usamos el ancho de la pantalla menos el padding
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   buttonLoggers: {
     flexDirection: "row",
