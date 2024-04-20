@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, FlatList,Alert } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Alert,
+  StyleSheet,
+  FlatList
+} from "react-native";
 import Icon from "react-native-vector-icons/Entypo";
 import { FirebaseAuth, FirestoreDB } from "../../firebase/firebaseconfig.js";
 import theme from "../theme.js";
 import { collection, doc, deleteDoc, getDocs } from "firebase/firestore";
-import moment from 'moment';
+import moment from "moment";
 
 const Books = () => {
   const [bookList, setBookList] = useState([]);
@@ -18,12 +25,37 @@ const Books = () => {
         "books"
       );
       const snapshot = await getDocs(booksRef);
-      const books = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      const books = snapshot.docs.map((doc) => {
+        const bookData = doc.data();
+        return {
+          id: doc.id,
+          ...bookData,
+          countdown: calculateCountdown(bookData.Date)
+        };
+      });
       setBookList(books);
+      const intervalId = setInterval(() => {
+        setBookList(currentBooks => currentBooks.map(book => ({
+          ...book,
+          countdown: calculateCountdown(book.Date)
+        })));
+      }, 1000); // Actualiza cada minuto
+      return () => clearInterval(intervalId);
     };
 
     fetchBooks();
   }, []);
+
+  const calculateCountdown = (date) => {
+    const now = moment();
+    const reservationDate = moment(date);
+    const duration = moment.duration(reservationDate.diff(now));
+    if (duration.asMinutes() <= 0) {
+      return "Hope you enjoyed the meal!.";
+    } else {
+      return `${duration.days()} days ${duration.hours()} hours ${duration.minutes()} minutes ${duration.seconds()} seconds `;
+    }
+  };
 
   const handleDeleteBook = async (bookId) => {
     try {
@@ -36,10 +68,11 @@ const Books = () => {
     }
   };
 
-  const renderItem = ({ item }) => (
+  const renderBook = ({ item }) => (
     <View style={styles.bookContainer}>
       <Text style={styles.bookText}><Text style={styles.label}>Name:</Text> {item.Name}</Text>
-      <Text style={styles.bookText}><Text style={styles.label}>Date:</Text> {moment(item.Date).format("MMM Do YYYY")}</Text>
+      <Text style={styles.bookText}><Text style={styles.label}>Date:</Text> {moment(item.Date).format("MMMM Do YYYY, h:mm:ss a")}</Text>
+      <Text style={styles.bookText}><Text style={styles.label}>Time left:</Text> {item.countdown}</Text>
       <Text style={styles.bookText}><Text style={styles.label}>People:</Text> {item.People}</Text>
       <Text style={styles.bookText}><Text style={styles.label}>PhoneNumber:</Text> {item.PhoneNumber}</Text>
       <TouchableOpacity onPress={() => handleDeleteBook(item.id)} style={styles.trashIcon}>
@@ -49,16 +82,13 @@ const Books = () => {
   );
 
   return (
-    
     <FlatList
-    data={bookList}
-    keyExtractor={item => item.id}
-    renderItem={renderItem}
-    ListHeaderComponent={() => (
-      <Text style={styles.heading}>My Bookings:</Text>
-    )}
-    contentContainerStyle={styles.container}
-  />
+      data={bookList}
+      keyExtractor={item => item.id.toString()}
+      renderItem={renderBook}
+      ListHeaderComponent={() => <Text style={styles.heading}>My Bookings:</Text>}
+      contentContainerStyle={styles.container}
+    />
   );
 };
 
@@ -66,6 +96,11 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     backgroundColor: theme.colors.background,
+  },
+  heading: {
+    fontSize: 20,
+    marginBottom: 10,
+    fontWeight: "bold",
   },
   bookContainer: {
     backgroundColor: theme.colors.primary,
@@ -76,11 +111,6 @@ const styles = StyleSheet.create({
   bookText: {
     fontSize: 16,
     color: theme.colors.textPrimary,
-  },
-  heading: {
-    fontSize: 20,
-    marginBottom: 10,
-    fontWeight: "bold",
   },
   label: {
     fontWeight: 'bold',
