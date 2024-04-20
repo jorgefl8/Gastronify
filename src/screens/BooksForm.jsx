@@ -40,7 +40,7 @@ const BooksForm = () => {
     if (trimmedPhone.length != 9) {
       Alert.alert(
         "Validation Error",
-        "Please enter a valid phone number with at least 10 digits."
+        "Please enter a valid phone number with 9 digits."
       );
       return false;
     }

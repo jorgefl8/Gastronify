@@ -61,7 +61,6 @@ const Profile = (props) => {
           <MenuItem key="orders" iconName="list-alt" text="My orders" to="orders"/>
           <MenuItem key="books" iconName="list-alt" text="My books" to="books"/>
           <MenuItem key="paymentMethods" iconName="credit-card" text="Payment method" to= "PaymentMethod" />
-          <MenuItem key="language" iconName="language" text="Language" />
           <View style={styles.button}>
             <TouchableOpacity onPress={props.handleLogout}>
               <Text style={styles.buttonText}>Log out</Text>
