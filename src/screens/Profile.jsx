@@ -50,7 +50,7 @@ const Profile = (props) => {
     <View style={styles.container}>
       <View style={styles.Header}>
         <Text style={{ fontSize: 20 }}>
-          Hi !, {user ? user.Name : "Usuario"}, welcome to your profile
+          Hi {user ? user.Name : "Usuario"} !, welcome to your profile
         </Text>
       </View>
       <View style={styles.subHeader}>
