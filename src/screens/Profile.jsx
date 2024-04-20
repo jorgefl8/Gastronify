@@ -57,8 +57,9 @@ const Profile = (props) => {
         <ScrollView style={styles.menu}>
         
           <MenuItem key="personalData" iconName="user" text="Personal Data" to="ProfileSettings"/>
-          <MenuItem key="deliveryAddress" iconName="map-marker" text="Delivery addresses" to= "delivery"/>
-          <MenuItem key="orders" iconName="list-alt" text="My orders" />
+          <MenuItem key="deliveryAddress" iconName="map-marker" text="Delivery addresses" to= "deliveryAddress"/>
+          <MenuItem key="orders" iconName="list-alt" text="My orders" to="orders"/>
+          <MenuItem key="books" iconName="list-alt" text="My books" to="books"/>
           <MenuItem key="paymentMethods" iconName="credit-card" text="Payment method" to= "PaymentMethod" />
           <MenuItem key="language" iconName="language" text="Language" />
           <MenuItem key="info" iconName="info" text="Information" />
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
     height: 100,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: theme.colors.terciary,
+    backgroundColor: theme.colors.primary,
   },
   subHeader: {
     flex: 1,

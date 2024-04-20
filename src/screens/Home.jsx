@@ -20,7 +20,7 @@ const Home = () => {
                     <Link to="/menu" style={styles.button} component={TouchableOpacity}>
                         <Text style={styles.buttonText}>Order now!</Text>
                     </Link>
-                    <Link to="/books" style={styles.button} component={TouchableOpacity}>
+                    <Link to="/booksForm" style={styles.button} component={TouchableOpacity}>
                         <Text style={styles.buttonText}>Book</Text>
                     </Link>
                 </View>

@@ -31,6 +31,7 @@
     "react-native-google-signin": "^2.1.1",
     "react-native-image-slider-box": "^2.0.7",
     "react-native-input-spinner": "^1.8.1",
+    "react-native-picker-select": "^9.1.3",
     "react-native-snap-carousel": "^3.9.1",
     "react-native-swipe-gestures": "^1.0.5",
     "react-native-swiper": "^1.6.0",
