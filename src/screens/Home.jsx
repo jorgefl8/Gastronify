@@ -29,7 +29,6 @@ const Home = () => {
                 <NewsSection />
                 <View style={styles.separator} />
                 <Information />
-                
             </ScrollView>
         </View>
     )
