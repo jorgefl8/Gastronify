@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   addressContainer: {
-    backgroundColor: theme.colors.terciary,
+    backgroundColor: theme.colors.primary,
     padding: 10,
     marginBottom: 10,
     borderRadius: 5,
