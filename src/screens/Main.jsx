@@ -14,8 +14,11 @@ import Menu from "./Menu.jsx";
 import Profile from "./Profile.jsx";
 import Loading from "../components/Loading.jsx";
 import BooksForm from "./BooksForm.jsx";
+import ProfileSettings from "./ProfileSettings.jsx";
+import PaymentMethod from "./PaymentMethod.jsx";
 import ShoppingScreen from "./shoppingScreen.jsx";
 import ShopCart from "../components/shopping_cart.jsx"
+import Delivery from "./Delivery.jsx";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -97,6 +100,9 @@ const Main = () => {
         <Route path="/menu" element={<Menu onCartUpdate={() => loadCartItems()} />} />
         <Route path='/profile' element={<Profile handleLogout={handleLogout} saveUserData={setUserData} />} />
         <Route path='/books' element={<BooksForm />} />
+        <Route path='/ProfileSettings' element={<ProfileSettings />} saveUserData={setUserData} />
+        <Route path='/PaymentMethod' element={<PaymentMethod />} saveUserData={setUserData} />
+        <Route path='/delivery' element={<Delivery />} />
         <Route path='/shopping' element={<ShoppingScreen updateCart={() => loadCartItems()} userData={userData} />} />
         <Route path='*' element={<Navigate to='/' />} />
       </Routes>

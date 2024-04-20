@@ -11,23 +11,25 @@ const Home = () => {
         <View style={styles.container}>
             <View style={styles.header} >
                 <Image style={styles.image} source={require('../../assets/appicon.png')} />
-                <Text style={styles.textHeader}>RESTAURANT APP</Text>
+                <Text style={styles.textHeader}>GASTRONIFY</Text>
             </View>
-            <ScrollView>
-                <Text style={styles.textSubheader}>Welcome to our App!</Text>
+         <ScrollView>
+                <Text style={styles.textSubheader}>Welcome to our app!</Text>
                 <View style={styles.separator} />
                 <View style={styles.buttonContainer}>
                     <Link to="/menu" style={styles.button} component={TouchableOpacity}>
-                        <Text style={styles.buttonText}>¡Pide ya!</Text>
+                        <Text style={styles.buttonText}>Order now!</Text>
                     </Link>
                     <Link to="/books" style={styles.button} component={TouchableOpacity}>
-                        <Text style={styles.buttonText}>Haz tu reserva</Text>
+                        <Text style={styles.buttonText}>Book</Text>
                     </Link>
                 </View>
+                
                 <View style={styles.separator} />
                 <NewsSection />
                 <View style={styles.separator} />
                 <Information />
+                
             </ScrollView>
         </View>
     )
@@ -43,7 +45,8 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
-        marginBottom: 5,
+        marginBottom: 8,
+        marginTop: 10,
     },
     textHeader: {
         color: theme.colors.textPrimary,
@@ -79,6 +82,7 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
         textAlign: 'center',
+        fontWeight: theme.fontWeights.bold,
     },
 });
 

@@ -105,8 +105,11 @@ const ShoppingScreen = ({ updateCart, userData }) => {
     const Order = {userData: userData, order: formattedCart, Date: Timestamp.now()};
     
     // Check if UserData has address and payment method
-    if (!userData.Address || !userData.PaymentMethod) {
+    console.log(userData); 
+    if (!userData.addresses || !userData.paymentMethods) {
       // Show modal
+      console.log(userData.addresses); 
+      console.log(userData.paymentMethod);
       showModal();
     }else{
       setIsLoading(true);
@@ -151,7 +154,20 @@ const ShoppingScreen = ({ updateCart, userData }) => {
       <View style={styles.itemDetails}>
         <Text>{item.Name}</Text>
         <Text>{item?.ModifyIngredients && item.ModifyIngredients.length > 0 ? `No ${item.ModifyIngredients.join(", ")}` : ""}</Text>
-        <Text>{item.Price}</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          {item?.PriceOffer ? (
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 10 }}>
+              <Text style={[styles.price, { textDecorationLine: 'line-through' }]}>
+                {item.Price} €
+              </Text>
+              <Text style={[styles.price, { color: 'red', marginLeft: 5 }]}>
+                {item.PriceOffer} €
+              </Text>
+            </View>
+          ) : (
+            <Text style={styles.price}>{item.Price} €</Text>
+          )}
+        </View>
       </View>
       {item.Quantity === 1 ?
         (
@@ -169,6 +185,7 @@ const ShoppingScreen = ({ updateCart, userData }) => {
       </TouchableOpacity>
     </View>
   );
+  
 
   return (
     <View style={styles.container}>
