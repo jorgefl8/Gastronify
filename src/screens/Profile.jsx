@@ -5,7 +5,6 @@ import functions from "../../firebase/firebaseUtils.js";
 import Loading from "../components/Loading.jsx";
 import theme from "../theme.js";
 import { Link } from "react-router-native";
-import Icon from "react-native-vector-icons/FontAwesome"; // Importa el icono que desees usar
 
 const Profile = (props) => {
   const [user, setUser] = useState(null);
