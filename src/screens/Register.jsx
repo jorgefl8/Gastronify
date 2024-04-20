@@ -34,7 +34,7 @@ const Register = () => {
           const dateOfBirth = new Date(year, month - 1, day);
           const timestamp = Timestamp.fromDate(dateOfBirth); // Convertir a Timestamp
           //console.log("Usuario registrado: ", user.uid);
-          setDoc(doc(db, "Users", user.uid), {
+          setDoc(doc(FirestoreDB, "Users", user.uid), {
             LastName: lastName,
             Name: name,
             Email: email,
