@@ -7,13 +7,13 @@ import {
   StyleSheet,
   Modal,
   TouchableOpacity,
+  Alert,
 } from "react-native";
+import Icon from "react-native-vector-icons/Entypo";
 import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
 import functions from "../../firebase/firebaseUtils.js";
 import Loading from "../components/Loading.jsx";
 import theme from "../theme.js";
-import { Link } from "react-router-native";
-import Icon from "react-native-vector-icons/Entypo"
 
 const Delivery = () => {
   const [user, setUser] = useState(null);
@@ -35,7 +35,7 @@ const Delivery = () => {
       );
       setUser(userData);
       setLoading(false);
-      setAddressList(userData.addresses || []); // Assuming addresses are stored in an array
+      setAddressList(userData.addresses || []);
     };
 
     fetchUserData();
@@ -56,7 +56,18 @@ const Delivery = () => {
     });
     setModalVisible(true);
   };
-
+  const handleDeleteAddress = async (addressId) => {
+    try {
+      await functions.updateDocByUid("Users", FirebaseAuth.currentUser.uid, {
+        ...user,
+        addresses: addressList.filter((address) => address.id !== addressId),
+      });
+      setAddressList(addressList.filter((address) => address.id !== addressId));
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Error", "Failed to delete the address.");
+    }
+  };
   const handleChange = (name, value) => {
     setAddressFormData({
       ...addressFormData,
@@ -64,7 +75,16 @@ const Delivery = () => {
     });
   };
 
+  const validateForm = () => {
+    const { street, city, zip } = addressFormData;
+    return street.trim() != '' && city.trim() !='' && zip.trim() != '';
+  };
+
   const handleSubmit = async () => {
+    if (!validateForm()) {
+      Alert.alert("Validation failed", "Please fill in all fields.");
+      return;
+    }
     try {
       if (selectedAddress) {
         // Update existing address
@@ -94,6 +114,7 @@ const Delivery = () => {
       setModalVisible(false);
     } catch (error) {
       console.log(error);
+      Alert.alert("Error", "Failed to save the address.");
     }
   };
 
@@ -106,27 +127,23 @@ const Delivery = () => {
       <Text style={styles.heading}>My Addresses:</Text>
       {addressList.length > 0 ? (
         addressList.map((address, index) => (
-          <TouchableOpacity
-            key={index}
-            onPress={() => handleEditAddress(address)}
-          >
-            <View style={styles.addressContainer}>
-              <Icon name="address" size={20} color="#fff" />
-              <Text iconName="map-marker" style={styles.addressText}>
-                {"   "}
+          <View key={index} style={styles.addressContainer}>
+            <TouchableOpacity onPress={() => handleEditAddress(address)}>
+              <Icon name="edit" size={20} color="#fff" />   
+            </TouchableOpacity>
+            <Text style={styles.addressText}>
                 {address.street}, {address.city}, {address.zip}
               </Text>
-            </View>
-          </TouchableOpacity>
+            <TouchableOpacity onPress={() => handleDeleteAddress(address.id)}>
+              <Icon name="trash" size={20} color="red" />
+            </TouchableOpacity>
+           
+          </View>
         ))
       ) : (
         <Text style={styles.noAddressText}>You have no saved addresses.</Text>
       )}
-      <Button
-        style="button"
-        title="Add new address"
-        onPress={handleCreateAddress}
-      />
+      <Button title="Add new address" onPress={handleCreateAddress} />
       <Modal
         animationType="slide"
         transparent={true}
@@ -160,7 +177,11 @@ const Delivery = () => {
             />
             <Button title="Save Address" onPress={handleSubmit} />
             <View style={styles.separator} />
-            <Button color="red" title="Cancel" onPress={() => setModalVisible(false)} />
+            <Button
+              color="red"
+              title="Cancel"
+              onPress={() => setModalVisible(false)}
+            />
           </View>
         </View>
       </Modal>
@@ -234,5 +255,4 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
 });
-
 export default Delivery;
