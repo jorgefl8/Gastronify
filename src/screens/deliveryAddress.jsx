@@ -209,6 +209,7 @@ const styles = StyleSheet.create({
   },
   addressText: {
     fontSize: 16,
+    marginHorizontal: 10,
   },
   noAddressText: {
     fontSize: 16,
@@ -241,7 +242,7 @@ const styles = StyleSheet.create({
     margin: 6,
   },
   modalView: {
-    backgroundColor: theme.colors.cardBackground,
+    backgroundColor: theme.colors.backgroundColor,
     borderRadius: 10,
     padding: 20,
     alignItems: "center",

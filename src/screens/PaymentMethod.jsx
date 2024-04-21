@@ -249,8 +249,10 @@ const styles = StyleSheet.create({
   modalView: {
     margin: 20,
     marginTop: 250, // Adjust modal position
-    backgroundColor: 'white',
+    backgroundColor: theme.colors.background,
     borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'black',
     padding: 35,
     alignItems: 'center',
     shadowColor: '#000',
