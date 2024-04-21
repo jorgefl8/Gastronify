@@ -129,7 +129,7 @@ const Delivery = () => {
         addressList.map((address, index) => (
           <View key={index} style={styles.addressContainer}>
             <TouchableOpacity onPress={() => handleEditAddress(address)}>
-              <Icon name="edit" size={20} color="#fff" />   
+              <Icon name="edit" size={20} color="black" />   
             </TouchableOpacity>
             <Text style={styles.addressText}>
                 {address.street}, {address.city}, {address.zip}
@@ -221,19 +221,22 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
+    width: "80%",
     borderColor: theme.colors.secondary,
     color: theme.colors.textPrimary,
     borderWidth: 1,
     marginBottom: 10,
+    marginTop: 5,
     paddingHorizontal: 10,
     borderRadius: 5,
   },
   centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22,
-  },
+  flex: 1,
+  justifyContent: "center",
+  alignItems: "center",
+  marginTop: 22,
+  paddingHorizontal: '5%', 
+},
 
   button: {
     backgroundColor: theme.colors.secondary,
@@ -254,6 +257,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    width: '80%', // Ajusta este valor según tus necesidades
   },
+  
 });
 export default Delivery;
