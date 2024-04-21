@@ -185,8 +185,8 @@ const Menu = ({ onCartUpdate }) => {
                 <View style={styles.BottomView}>
                   <View style={styles.priceTitleRow}>
                     <Text style={styles.titleModal}>{selectedItem?.Name}</Text>
-                    <Text style={styles.priceModal}>
-                      
+                    <Text style={selectedItem?.PriceOffer ? { color: 'red' , fontSize: 20} :styles.priceModal }>
+                    {selectedItem?.PriceOffer ? selectedItem?.PriceOffer : selectedItem?.Price} €
                     </Text>
 
 
