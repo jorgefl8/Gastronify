@@ -11,10 +11,8 @@ import { Calendar } from "react-native-calendars";
 import RNPickerSelect from "react-native-picker-select"; // Importación del componente
 import Icon from "react-native-vector-icons/Feather"; // Asegúrate de tener esta librería instalada
 import theme from "../theme.js";
-import { FirebaseAuth,FirestoreDB } from "../../firebase/firebaseconfig.js";
-import { collection, addDoc } from "firebase/firestore";
-
-
+import { FirebaseAuth, FirestoreDB } from "../../firebase/firebaseconfig.js";
+import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
 
 const BooksForm = () => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -51,11 +49,6 @@ const BooksForm = () => {
     if (!validateForm()) {
       return;
     }
-    console.log("Selected Date:", selectedDate);
-    console.log("Name:", name);
-    console.log("Phone:", phone);
-    console.log("People:", people);
-    console.log("Time:", time);
     const DataBooking = {
       Date: selectedDate,
       Name: name,
@@ -63,24 +56,43 @@ const BooksForm = () => {
       Hour: time,
       People: people,
     };
-    uploadBooking(DataBooking);
+    console.log(DataBooking);
+    checkGlobalBooking(DataBooking).then((exists) => {
+      if (exists) {
+        Alert.alert("Booking Error", "A booking with the same date, hour and number of people already exists.");
+      } else {
+        uploadBooking(DataBooking);
+      }
+    });
   };
-
+  async function checkGlobalBooking(bookingData) {
+    const bookingRef = collection(FirestoreDB, "AllBookings");
+    const querySnapshot = await getDocs(query(bookingRef, where("Date", "==", bookingData.Date), where("People", "==", bookingData.People), where("Hour", "==", bookingData.Hour)));
+    return !querySnapshot.empty; // returns true if a booking exists with the same date and number of people
+  }
+  
   function uploadBooking(bookingData) {
-    const userId = FirebaseAuth.currentUser.uid ?  FirebaseAuth.currentUser.uid : null;
+    const userId = FirebaseAuth.currentUser.uid
+      ? FirebaseAuth.currentUser.uid
+      : null;
     if (!userId) {
       Alert.alert("Error", "No authenticated user found.");
       return;
     }
-    addDoc(collection(FirestoreDB, "Users", userId, "books"), bookingData).then(() => {
+    addDoc(collection(FirestoreDB, "AllBookings"), bookingData);
+    addDoc(collection(FirestoreDB, "Users", userId, "books"), bookingData)
+      .then(() => {
         console.log("Reservation successfully written!");
-        Alert.alert("Reservation Completed", "We are waiting for you!", [{ text: "OK", onPress: () => console.log("OK Pressed") }]);
+        Alert.alert("Reservation Completed", "We are waiting for you!", [
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error writing document: ", error);
         Alert.alert("Error", "Failed to complete the reservation.");
       });
   }
+
   return (
     <View style={styles.container}>
       <Calendar
