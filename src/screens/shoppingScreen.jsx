@@ -8,6 +8,7 @@ import {
   Image,
   Animated,
   Easing,
+  Modal,
   Alert,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -21,6 +22,9 @@ const ShoppingScreen = ({ updateCart, userData }) => {
   const [user, setUser] = useState(null);
   const [cartItems, setCartItems] = useState([]);
   const [slideAnimation] = useState(new Animated.Value(100));
+  const [progressWidth, setProgress] = useState(new Animated.Value(0));
+  const [isOrdering, setIsOrdering] = useState(false);
+  const [progressComplete, setProgressComplete] = useState(false);
 
   useEffect(() => {
     loadCartItems();
@@ -121,6 +125,23 @@ const ShoppingScreen = ({ updateCart, userData }) => {
     return total > 15 ? 0 : 2.99;
   };
 
+  const showOrderingModal = async () => {
+    setIsOrdering(true);
+    Animated.timing(progressWidth, {
+      toValue: 1,
+      duration: 5000,
+      useNativeDriver: false,
+    }).start(() => {
+      setProgress(new Animated.Value(0));
+      setProgressComplete(true);
+      setTimeout(() => {
+        setIsOrdering(false);
+        setProgressComplete(false);
+        setCartItems([]);
+      }, 500); // Espera 500ms antes de cerrar el modal
+    });
+  };
+
   const handlePlaceOrder = async () => {
     const formattedCart = cartItems.map((item) => ({
       Name: item.Name,
@@ -130,13 +151,14 @@ const ShoppingScreen = ({ updateCart, userData }) => {
     }));
     const userId = FirebaseAuth.currentUser.uid;
     const Order = { itemsOrdered: formattedCart, Date: Timestamp.now() };
-    if (!user.addresses || !user.paymentMethods) {
-      showModal();
-    } else {
+
+    if (user.addresses.length > 0 && user.paymentMethods.length > 0) {
+      await showOrderingModal();
       await addDoc(collection(FirestoreDB, "Users", userId, "orders"), Order);
       await AsyncStorage.removeItem("cart");
-      setCartItems([]);
       updateCart();
+    } else {
+      showModal();
     }
   };
 
@@ -213,6 +235,33 @@ const ShoppingScreen = ({ updateCart, userData }) => {
     </View>
   );
 
+  const renderOrderingModal = () => (
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={isOrdering}
+      onRequestClose={() => {
+        setIsOrdering(false);
+      }}
+    >
+      <View style={styles.modalContainer}>
+        <Text style={styles.modalText}>Realizando el pedido...</Text>
+        <Text style={styles.modalText}>Entrega estimada en 30 minutos</Text>
+        <Animated.View
+          style={[
+            styles.progressBar,
+            {
+              width: progressWidth.interpolate({
+                inputRange: [0, 1],
+                outputRange: ['0%', '100%'],
+              }),
+            },
+          ]}
+        />
+      </View>
+    </Modal>
+  );
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Shopping Cart</Text>
@@ -225,7 +274,9 @@ const ShoppingScreen = ({ updateCart, userData }) => {
             renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()}
           />
+          {renderOrderingModal()}
           {renderSummary()}
+
         </>
       )}
     </View>
@@ -265,9 +316,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 10,
   },
-  removeButton: {
-    fontSize: 20,
-  },
   Image: { width: 65, height: 65 },
   summaryContainer: {
     marginTop: 0,
@@ -290,6 +338,24 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     fontWeight: "bold",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: theme.colors.backgroundColor, // Semi-transparent background
+  },
+  modalText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000', // White text
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  progressBar: {
+    backgroundColor: theme.colors.primary,
+    height: 5,
+    marginBottom: 10,
   },
 });
 
