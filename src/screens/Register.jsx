@@ -9,7 +9,7 @@ import {
 import { FirebaseAuth, FirestoreDB } from "../../firebase/firebaseconfig.js";
 import { doc, setDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { Link,useNavigate } from "react-router-native";
+import { useNavigate } from "react-router-native";
 import { Timestamp } from "firebase/firestore";
 import theme from "../theme.js";
 

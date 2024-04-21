@@ -6,13 +6,11 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
-  Image,
 } from "react-native";
 import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { Link, useNavigate } from "react-router-native";
+import { useNavigate } from "react-router-native";
 import Icon from "react-native-vector-icons/Ionicons";
-import theme from "../theme";
 
 const Login = () => {
   const auth = FirebaseAuth;
@@ -24,7 +22,6 @@ const Login = () => {
       await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
       console.log(error);
-      setError(error.message);
     }
   };
 

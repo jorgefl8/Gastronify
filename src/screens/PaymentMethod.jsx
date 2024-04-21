@@ -1,27 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
-import PaymentMethodSelectionModal from '../components/PaymentMethodSelectionModal';
-import PaymentMethodDetailsModal from '../components/PaymentMethodDetailsModal';
+import {
+  View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert, Modal
+} from 'react-native';
+import RNPickerSelect from 'react-native-picker-select';
 import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
 import functions from "../../firebase/firebaseUtils.js";
-import Loading from "../components/Loading.jsx";
 import theme from "../theme.js";
-import { Link } from "react-router-native";
+import IconEntypo from 'react-native-vector-icons/Entypo'; // Asegúrate de tener esta librería instalada
 
 const PaymentMethod = () => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [selectedMethod, setSelectedMethod] = useState(null);
-  const [methodModalVisible, setMethodModalVisible] = useState(false);
-  const [detailsModalVisible, setDetailsModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const [methodFormData, setMethodFormData] = useState({
-    type: 'Visa', // Default type
-    email: '',
-    password: '',
+    type: '',
     cardNumber: '',
     cvv: '',
-    ExpirationDate: ''
+    expirationDate: ''
   });
 
   useEffect(() => {
@@ -31,38 +27,40 @@ const PaymentMethod = () => {
         FirebaseAuth.currentUser.uid
       );
       setUser(userData);
-      setLoading(false);
-      setPaymentMethods(userData.paymentMethods || []); // Assuming payment methods are stored in an array
+      setPaymentMethods(userData.paymentMethods || []);
     };
 
     fetchUserData();
   }, []);
 
-  const handleMethodSelection = (methodType) => {
-    setMethodFormData({
-      ...methodFormData,
-      type: methodType,
-    });
-    setMethodModalVisible(false);
-    setDetailsModalVisible(true);
-  };
-
   const handleEditMethod = (method) => {
     setSelectedMethod(method);
     setMethodFormData(method);
-    setDetailsModalVisible(true);
+    setModalVisible(true);
   };
 
+  const handleCreateMethod = () => {
+    setSelectedMethod(null);
+    setMethodFormData({
+      type: '',
+      cardNumber: '',
+      cvv: '',
+      expirationDate: ''
+    });
+    setModalVisible(true);
+  };
 
-  const handleDeleteMethod = async (method) => {
+  const handleDeleteMethod = async (methodId) => {
     try {
+      const updatedMethods = paymentMethods.filter(m => m.id !== methodId);
       await functions.updateDocByUid("Users", FirebaseAuth.currentUser.uid, {
         ...user,
-        paymentMethods: paymentMethods.filter(m => m.id !== method.id)
+        paymentMethods: updatedMethods
       });
-      setPaymentMethods(paymentMethods.filter(m => m.id !== method.id));
+      setPaymentMethods(updatedMethods);
     } catch (error) {
-      console.log(error);
+      console.error("Failed to delete the payment method: ", error);
+      Alert.alert("Error", "Failed to delete the payment method.");
     }
   };
 
@@ -73,77 +71,138 @@ const PaymentMethod = () => {
     });
   };
 
+  const isValidForm = () => {
+    const { type, cardNumber, cvv, expirationDate } = methodFormData;
+    
+    // Validación del número de la tarjeta: debe tener exactamente 16 dígitos
+    if (!cardNumber || cardNumber.length !== 16 || isNaN(cardNumber)) {
+        Alert.alert("Validation Error", "The card number must be exactly 16 digits.");
+        return false;
+    }
+    // Validación de la fecha de expiración
+    const expRegEx = /^(0[1-9]|1[0-2])\/([2-9][0-9])$/;
+    const currentYear = new Date().getFullYear() % 100; // last two digits
+    if (!expirationDate || !expRegEx.test(expirationDate) || parseInt(expirationDate.split('/')[1], 10) < currentYear) {
+        Alert.alert("Validation Error", "Please enter a valid expiration date (MM/YY).");
+        return false;
+    }
+
+    // Validación del CVV: debe tener exactamente 3 dígitos
+    if (!cvv || cvv.length !== 3 || isNaN(cvv)) {
+        Alert.alert("Validation Error", "The CVV must be exactly 3 digits.");
+        return false;
+    }
+
+    
+
+    // Si todas las validaciones son correctas
+    return true;
+};
+
+
   const handleSubmit = async () => {
+    if (!isValidForm()) {
+      return;
+    }
     try {
       if (selectedMethod) {
-        // Update existing payment method
+        const updatedMethods = paymentMethods.map((method) =>
+          method.id === selectedMethod.id ? { ...methodFormData, id: method.id } : method
+        );
         await functions.updateDocByUid("Users", FirebaseAuth.currentUser.uid, {
           ...user,
-          paymentMethods: paymentMethods.map((method) => method.id === selectedMethod.id ? methodFormData : method)
+          paymentMethods: updatedMethods
         });
-        setPaymentMethods(paymentMethods.map((method) => method.id === selectedMethod.id ? methodFormData : method));
+        setPaymentMethods(updatedMethods);
       } else {
-        // Create new payment method
         const newMethod = {
           id: Date.now().toString(),
           ...methodFormData,
         };
+        const updatedMethods = [...paymentMethods, newMethod];
         await functions.updateDocByUid("Users", FirebaseAuth.currentUser.uid, {
           ...user,
-          paymentMethods: [...paymentMethods, newMethod]
+          paymentMethods: updatedMethods
         });
-        setPaymentMethods([...paymentMethods, newMethod]);
+        setPaymentMethods(updatedMethods);
       }
-      setDetailsModalVisible(false);
+      setModalVisible(false);
     } catch (error) {
-      console.log(error);
+      console.error("Failed to save the payment method: ", error);
+      Alert.alert("Error", "Failed to save the payment method.");
     }
   };
 
-  if (loading) {
-    return <Loading />;
-  }
-
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Mis métodos de pago:</Text>
-      {paymentMethods.length > 0 ? (
-        paymentMethods.map((method, index) => (
-          <View key={index}>
-            <TouchableOpacity onPress={() => handleEditMethod(method)}>
-              <View style={styles.methodContainer}>
-                <Text style={styles.methodText}>{method.type}</Text>
-                <Text style={styles.methodText}>{method.cardNumber}</Text>
-                <Text style={styles.methodText}>{method.ExpirationDate}</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleDeleteMethod(method)}>
-              <View style={styles.deleteButton}>
-                <Text style={styles.deleteButtonText}>Eliminar</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        ))
-      ) : (
-        <Text style={styles.noMethodText}>No tienes métodos de pago guardados.</Text>
+      <Text style={styles.heading}>My Payment Methods:</Text>
+      {paymentMethods.map((method, index) => (
+        <View key={index} style={styles.methodEntry}>
+          <TouchableOpacity onPress={() => handleEditMethod(method)}>
+            <IconEntypo name="edit" size={20} color="#000" />
+          </TouchableOpacity>
+          <Text style={styles.methodText}>
+            {`${method.type} - Ends with *${method.cardNumber.slice(-4)} - Exp: ${method.expirationDate}`}
+          </Text>
+          <TouchableOpacity onPress={() => handleDeleteMethod(method.id)}>
+            <IconEntypo name="trash" size={20} color="red" />
+          </TouchableOpacity>
+        </View>
+      ))}
+      {paymentMethods.length === 0 && (
+        <Text style={styles.noMethodText}>You have no saved payment methods.</Text>
       )}
-      <Button title="Agregar nuevo método de pago" onPress={() => setMethodModalVisible(true)} />
-      
-      {/* Método de selección de método de pago */}
-      <PaymentMethodSelectionModal 
-        visible={methodModalVisible} 
-        onSelectMethod={handleMethodSelection} 
-        onClose={() => setMethodModalVisible(false)} 
-      />
-      
-      {/* Método de detalles de método de pago */}
-      <PaymentMethodDetailsModal 
-        visible={detailsModalVisible} 
-        method={methodFormData.type}
-        onChange={handleChange}
-        onSubmit={handleSubmit}
-        onClose={() => setDetailsModalVisible(false)} 
-      />
+      <Button title="Add New Payment Method" onPress={handleCreateMethod} />
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.modalView}>
+          <Text>{selectedMethod ? "Edit Payment Method:" : "Add New Payment Method:"}</Text>
+          {selectedMethod ? (
+            <Text style={styles.fixedTypeText}>{selectedMethod.type}</Text>
+          ) : (
+            <RNPickerSelect
+              onValueChange={(value) => handleChange('type', value)}
+              items={[
+                { label: 'Visa', value: 'Visa' },
+                { label: 'MasterCard', value: 'MasterCard' },
+                { label: 'American Express', value: 'AmericanExpress' }
+              ]}
+              style={styles.pickerSelectStyles}
+              placeholder={{ label: "Select a card type", value: null }}
+              useNativeAndroidPickerStyle={false}
+              Icon={() => {
+                return <IconEntypo name="chevron-down" size={20} color="gray" />;
+              }}
+            />
+          )}
+          <TextInput
+            style={styles.input}
+            onChangeText={(value) => handleChange('cardNumber', value)}
+            value={methodFormData.cardNumber}
+            placeholder="Card Number"
+          />
+          <TextInput
+            style={styles.input}
+            onChangeText={(value) => handleChange('expirationDate', value)}
+            value={methodFormData.expirationDate}
+            placeholder="Expiration Date (MM/YY)"
+          />
+          <TextInput
+            style={styles.input}
+            onChangeText={(value) => handleChange('cvv', value)}
+            value={methodFormData.cvv}
+            placeholder="CVV"
+          />
+          <Button title="Save" onPress={handleSubmit} />
+          <Button title="Cancel" onPress={() => setModalVisible(false)} color="red" />
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -156,32 +215,85 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 20,
-    marginBottom: 10,
     fontWeight: 'bold',
   },
-  methodContainer: {
-    backgroundColor: theme.colors.cardBackground,
+  methodEntry: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: 10,
+    backgroundColor: theme.colors.cardBackground,
     marginBottom: 10,
-    borderRadius: 5,
   },
   methodText: {
     fontSize: 16,
+    flex: 1,
+    paddingHorizontal: 10, // Added padding for text separation
   },
-  noMethodText: {
+  fixedTypeText: {
     fontSize: 16,
-    fontStyle: 'italic',
+    color: '#666', // Make it slightly dim to indicate it's not editable
     marginBottom: 10,
   },
-  deleteButton: {
-    backgroundColor: 'red',
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginTop: 5,
+  noMethodText: {
+    fontStyle: 'italic',
   },
-  deleteButtonText: {
-    color: 'white',
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    padding: 10,
+    marginBottom: 10,
+    width: '100%',
+  },
+  modalView: {
+    margin: 20,
+    marginTop: 250, // Adjust modal position
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    width: '80%',
+    alignSelf: 'center'
+  },
+  pickerSelectStyles: {
+    inputIOS: {
+      fontSize: 16,
+      paddingVertical: 12,
+      paddingHorizontal: 10,
+      borderWidth: 1,
+      borderColor: 'gray',
+      borderRadius: 4,
+      color: 'black',
+      paddingRight: 30, // to ensure the text is never behind the icon
+      backgroundColor: 'white',
+      marginTop: 10,
+      marginBottom: 10,
+    },
+    inputAndroid: {
+      fontSize: 16,
+      paddingHorizontal: 10,
+      paddingVertical: 8,
+      borderWidth: 0.5,
+      borderColor: 'purple',
+      borderRadius: 8,
+      color: 'black',
+      paddingRight: 30, // to ensure the text is never behind the icon
+      backgroundColor: 'white',
+      marginTop: 10,
+      marginBottom: 10,
+    },
+    iconContainer: {
+      top: 20,
+      right: 15,
+    },
   },
 });
 
