@@ -4,8 +4,6 @@ import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
 import functions from "../../firebase/firebaseUtils.js";
 import Loading from "../components/Loading.jsx";
 import theme from "../theme.js";
-import { Link } from "react-router-native";
-import { set } from "firebase/database";
 
 const ProfileSettings = (props) => {
   const [user, setUser] = useState(null);
@@ -52,22 +50,21 @@ const ProfileSettings = (props) => {
     <View style={styles.container}>
       <View style={styles.Header}>
         <Text style={{ fontSize: 20 }}>
-          Hi !, {user ? user.Name : "Usuario"}, welcome to your profile
+          Hi {user ? <Text style={styles.boldText}>{user.Name}</Text> : "Usuario"}!, welcome to your profile info
         </Text>
       </View>
       <View style={styles.profileInfo}>
-        <Text style={styles.infoText}> Your data is: </Text>
         <Text style={styles.infoText}>
-          Name: {user ? user.Name : "Not available yet"}
+          Name: {user ? <Text style={styles.boldText}>{user.Name}</Text> : "Not available yet"}
         </Text>
         <Text style={styles.infoText}>
-          Last name: {user ? user.LastName : "Not available yet"}
+          Last name: {user ? <Text style={styles.boldText}>{user.LastName}</Text> : "Not available yet"}
         </Text>
         <Text style={styles.infoText}>
-          Email:{user ? user.Email : "Email not available yet"}
+          Email: {user ? <Text style={styles.boldText}>{user.Email}</Text> : "Email not available yet"}
         </Text>
         <Text style={styles.infoText}>
-          Telephone Number: {user ? user.TelephoneNumber : "Not available yet"}
+          Phone Number: {user ? <Text style={styles.boldText}>{user.TelephoneNumber}</Text> : "Not available yet"}
         </Text>
         <View style={styles.buttonsContainer}>
           <TouchableOpacity
@@ -137,6 +134,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
   },
+  boldText: {
+    fontWeight: 'bold',
+  },
+  
   profileInfo: {
     alignItems: "center",
     backgroundColor: theme.colors.backgroundColor,
@@ -150,16 +151,15 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
-    height: "40%",
+    height: "33%",
   },
   infoText: {
     marginBottom: 10,
-    fontSize: theme.fontSizes.body,
+    fontSize: 20,
   },
   buttonsContainer: {
     flexDirection: "row",
-    marginTop: 3,
+    justifyContent: "center",
     alignItems: "center",
     flex: 1,
   },
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.secondary,
     padding: 8,
     borderRadius: 5,
-    margin: 6,
+    margin: 3,
   },
   buttonText: {
     color: "white",
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     height: 100, // Ajusta este valor según tus necesidades
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: theme.colors.terciary,
+    backgroundColor: theme.colors.primary,
   },
   modalContainer: {
     flex: 1,
