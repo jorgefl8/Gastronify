@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Modal, TextInput, Button } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Modal, TextInput, Button,Platform  } from "react-native";
 import { FirebaseAuth } from "../../firebase/firebaseconfig.js";
 import functions from "../../firebase/firebaseUtils.js";
 import Loading from "../components/Loading.jsx";
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    height: "33%",
+    height: Platform.OS === "ios" ? "37%" : "40%" ,
   },
   infoText: {
     marginBottom: 10,
