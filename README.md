@@ -1,6 +1,7 @@
-# Project for CM 2023-2024
+# Gastronify
 - This project is based on a RestaurantApp, trying to be usable on multiple platforms (Android, iOS, Web).
-- Developed using React-Native
+- Developed using React-Native & Exgo Go
+- Project for CM 2023-2024
 
 - **CONTENTS**:
     - The icon lib is [react-native-vector-icons](https://ionic.io/ionicons)
