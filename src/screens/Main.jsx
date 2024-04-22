@@ -21,6 +21,7 @@ import ShopCart from "../components/shopping_cart.jsx"
 import Delivery from "./deliveryAddress.jsx";
 import Books from "./Books.jsx";
 import Orders from "./Orders.jsx";
+import MapScreen from "./MapScreen.jsx";
 
 
 const Main = () => {
@@ -107,6 +108,7 @@ const Main = () => {
         <Route path='/PaymentMethod' element={<PaymentMethod back={() => navigate(-1)}/>}/>
         <Route path='/deliveryAddress' element={<Delivery back={() => navigate(-1)}/>} />
         <Route path='/books' element={<Books back={() => navigate(-1)}/>} />
+        <Route path='/mapscreen' element={<MapScreen back={() => navigate(-1)}/>} />
         <Route path='/orders' element={<Orders back={() => navigate(-1)}/>} />
         <Route path='/shopping' element={<ShoppingScreen updateCart={() => loadCartItems()} userData={userData} />} />
         <Route path='*' element={<Navigate to='/' />} />

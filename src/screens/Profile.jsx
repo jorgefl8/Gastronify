@@ -51,12 +51,13 @@ const Profile = (props) => {
       </View>
       <View style={styles.subHeader}>
         <ScrollView style={styles.menu}>
-
           <MenuItem key="personalData" iconName="user" text="Personal Data" to="ProfileSettings" />
           <MenuItem key="deliveryAddress" iconName="map-marker" text="Delivery addresses" to="deliveryAddress" />
           <MenuItem key="orders" iconName="list-alt" text="My orders" to="orders" />
           <MenuItem key="books" iconName="list-alt" text="My books" to="books" />
+          <MenuItem key="mapscreen" iconName="map" text="Locations" to="mapscreen" />
           <MenuItem key="paymentMethods" iconName="credit-card" text="Payment methods" to="PaymentMethod" />
+  
           <View style={styles.button}>
             <TouchableOpacity onPress={props.handleLogout}>
               <Text style={styles.buttonText}>Log out</Text>
