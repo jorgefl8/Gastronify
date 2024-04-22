@@ -102,7 +102,7 @@ const Main = () => {
         <Route path='/' element={<Home />} />
         <Route path="/menu" element={<Menu onCartUpdate={() => loadCartItems()} />} />
         <Route path='/profile' element={<Profile handleLogout={handleLogout} saveUserData={setUserData} />} />
-        <Route path='/booksForm' element={<BooksForm />} />
+        <Route path='/booksForm' element={<BooksForm onSuccess={() => navigate('/')} />} />
         <Route path='/ProfileSettings' element={<ProfileSettings />} saveUserData={setUserData} />
         <Route path='/PaymentMethod' element={<PaymentMethod />} saveUserData={setUserData} />
         <Route path='/deliveryAddress' element={<Delivery/>} />

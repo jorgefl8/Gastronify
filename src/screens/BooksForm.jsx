@@ -14,7 +14,7 @@ import theme from "../theme.js";
 import { FirebaseAuth, FirestoreDB } from "../../firebase/firebaseconfig.js";
 import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
 
-const BooksForm = () => {
+const BooksForm = ({onSuccess}) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -56,7 +56,6 @@ const BooksForm = () => {
       Hour: time,
       People: people,
     };
-    console.log(DataBooking);
     checkGlobalBooking(DataBooking).then((exists) => {
       if (exists) {
         Alert.alert("Booking Error", "A booking with the same date, hour and number of people already exists.");
@@ -84,7 +83,7 @@ const BooksForm = () => {
       .then(() => {
         console.log("Reservation successfully written!");
         Alert.alert("Reservation Completed", "We are waiting for you!", [
-          { text: "OK", onPress: () => console.log("OK Pressed") },
+          { text: "OK", onPress: onSuccess }, // <-- Llama a la función onSuccess
         ]);
       })
       .catch((error) => {
@@ -92,6 +91,7 @@ const BooksForm = () => {
         Alert.alert("Error", "Failed to complete the reservation.");
       });
   }
+  
 
   return (
     <View style={styles.container}>
