@@ -13,7 +13,7 @@ import theme from "../theme.js";
 import { collection, doc, deleteDoc, getDocs } from "firebase/firestore";
 import moment from "moment";
 
-const Orders = () => {
+const Orders = ({back}) => {
   const [orderList, setOrderList] = useState([]);
 
   useEffect(() => {
@@ -76,6 +76,7 @@ const Orders = () => {
 
   const renderOrder = ({ item: order }) => (
     <View style={styles.orderContainer}>
+
       <Text style={styles.orderText}>
         <Text style={styles.label}>Date Order:</Text> {moment.unix(order.Date.seconds).format("MMMM Do YYYY, h:mm:ss a")}
       </Text>
@@ -99,6 +100,14 @@ const Orders = () => {
   );
 
   return (
+    <View style={styles.containerView}>
+    <TouchableOpacity
+    onPress={() => back()}
+    style={styles.backButton}
+  >
+    <Text style={styles.backText}>Back</Text>
+  </TouchableOpacity>
+  
     <FlatList
       data={orderList}
       keyExtractor={item => item.id}
@@ -106,6 +115,7 @@ const Orders = () => {
       ListHeaderComponent={() => <Text style={styles.heading}>My Orders:</Text>}
       contentContainerStyle={styles.container}
     />
+    </View>
   );
 };
 
@@ -113,6 +123,9 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     backgroundColor: theme.colors.background,
+  },
+  containerView: {
+    flex: 1,
   },
   heading: {
     fontSize: 20,
@@ -140,6 +153,12 @@ const styles = StyleSheet.create({
   trashIcon: {
     marginTop: 10,
   },
+  backButton: {
+    position: 'absolute',
+    right: 20,
+    top: 25,
+    zIndex: 1,
+  }
 });
 
 export default Orders;

@@ -15,7 +15,7 @@ import functions from "../../firebase/firebaseUtils.js";
 import Loading from "../components/Loading.jsx";
 import theme from "../theme.js";
 
-const Delivery = () => {
+const Delivery = ({back}) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [addressList, setAddressList] = useState([]);
@@ -77,7 +77,7 @@ const Delivery = () => {
 
   const validateForm = () => {
     const { street, city, zip } = addressFormData;
-    return street.trim() != '' && city.trim() !='' && zip.trim() != '';
+    return street.trim() != '' && city.trim() != '' && zip.trim() != '';
   };
 
   const handleSubmit = async () => {
@@ -124,20 +124,26 @@ const Delivery = () => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity
+        onPress={() => back()}
+        style={styles.backButton}
+      >
+        <Text style={styles.backText}>Back</Text>
+      </TouchableOpacity>
       <Text style={styles.heading}>My Addresses:</Text>
       {addressList.length > 0 ? (
         addressList.map((address, index) => (
           <View key={index} style={styles.addressContainer}>
             <TouchableOpacity onPress={() => handleEditAddress(address)}>
-              <Icon name="edit" size={20} color="black" />   
+              <Icon name="edit" size={20} color="black" />
             </TouchableOpacity>
             <Text style={styles.addressText}>
-                {address.street}, {address.city}, {address.zip}
-              </Text>
+              {address.street}, {address.city}, {address.zip}
+            </Text>
             <TouchableOpacity onPress={() => handleDeleteAddress(address.id)}>
               <Icon name="trash" size={20} color="red" />
             </TouchableOpacity>
-           
+
           </View>
         ))
       ) : (
@@ -231,12 +237,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   centeredView: {
-  flex: 1,
-  justifyContent: "center",
-  alignItems: "center",
-  marginTop: 22,
-  paddingHorizontal: '5%', 
-},
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+    paddingHorizontal: '5%',
+  },
 
   button: {
     backgroundColor: theme.colors.secondary,
@@ -259,6 +265,11 @@ const styles = StyleSheet.create({
     elevation: 5,
     width: '80%', // Ajusta este valor según tus necesidades
   },
-  
+  backButton: {
+    position: 'absolute',
+    right: 20,
+    top: 25,
+    zIndex: 1,
+  }
 });
 export default Delivery;

@@ -8,7 +8,7 @@ import functions from "../../firebase/firebaseUtils.js";
 import theme from "../theme.js";
 import IconEntypo from 'react-native-vector-icons/Entypo'; // Asegúrate de tener esta librería instalada
 
-const PaymentMethod = () => {
+const PaymentMethod = ({back}) => {
   const [user, setUser] = useState(null);
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [selectedMethod, setSelectedMethod] = useState(null);
@@ -136,6 +136,12 @@ const PaymentMethod = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>My Payment Methods:</Text>
+      <TouchableOpacity
+        onPress={() => back()}
+        style={styles.backButton}
+      >
+        <Text style={styles.backText}>Back</Text>
+      </TouchableOpacity>
       {paymentMethods.map((method, index) => (
         <View key={index} style={styles.methodEntry}>
           <TouchableOpacity onPress={() => handleEditMethod(method)}>
@@ -212,6 +218,12 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: theme.colors.background,
+  },
+  backButton: {
+    position: 'absolute',
+    right: 20,
+    top: 25,
+    zIndex: 1,
   },
   heading: {
     fontSize: 20,
