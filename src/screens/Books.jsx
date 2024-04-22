@@ -13,7 +13,7 @@ import theme from "../theme.js";
 import { collection, doc, deleteDoc, getDocs } from "firebase/firestore";
 import moment from "moment";
 
-const Books = () => {
+const Books = ({back}) => {
   const [bookList, setBookList] = useState([]);
 
   useEffect(() => {
@@ -82,13 +82,22 @@ const Books = () => {
   );
 
   return (
+    <View style={styles.containerView}>
+    <TouchableOpacity
+        onPress={() => back()}
+        style={styles.backButton}
+      >
+        <Text style={styles.backText}>Back</Text>
+      </TouchableOpacity>
     <FlatList
       data={bookList}
       keyExtractor={item => item.id.toString()}
       renderItem={renderBook}
-      ListHeaderComponent={() => <Text style={styles.heading}>My Bookings:</Text>}
+      ListHeaderComponent={() => <Text style={styles.heading}>My Bookings:</Text>
+      }
       contentContainerStyle={styles.container}
     />
+    </View>
   );
 };
 
@@ -96,6 +105,9 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     backgroundColor: theme.colors.background,
+  },
+  containerView: {
+    flex: 1,
   },
   heading: {
     fontSize: 20,
@@ -118,6 +130,12 @@ const styles = StyleSheet.create({
   trashIcon: {
     marginTop: 10,
   },
+  backButton: {
+    position: 'absolute',
+    right: 20,
+    top: 25,
+    zIndex: 1,
+  }
 });
 
 export default Books;

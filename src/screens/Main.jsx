@@ -103,11 +103,11 @@ const Main = () => {
         <Route path="/menu" element={<Menu onCartUpdate={() => loadCartItems()} />} />
         <Route path='/profile' element={<Profile handleLogout={handleLogout} saveUserData={setUserData} />} />
         <Route path='/booksForm' element={<BooksForm onSuccess={() => navigate('/')} />} />
-        <Route path='/ProfileSettings' element={<ProfileSettings />} saveUserData={setUserData} />
-        <Route path='/PaymentMethod' element={<PaymentMethod />} saveUserData={setUserData} />
-        <Route path='/deliveryAddress' element={<Delivery/>} />
-        <Route path='/books' element={<Books />} />
-        <Route path='/orders' element={<Orders />} />
+        <Route path='/ProfileSettings' element={<ProfileSettings back={() => navigate(-1)}/>}/>
+        <Route path='/PaymentMethod' element={<PaymentMethod back={() => navigate(-1)}/>}/>
+        <Route path='/deliveryAddress' element={<Delivery back={() => navigate(-1)}/>} />
+        <Route path='/books' element={<Books back={() => navigate(-1)}/>} />
+        <Route path='/orders' element={<Orders back={() => navigate(-1)}/>} />
         <Route path='/shopping' element={<ShoppingScreen updateCart={() => loadCartItems()} userData={userData} />} />
         <Route path='*' element={<Navigate to='/' />} />
       </Routes>
