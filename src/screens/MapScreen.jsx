@@ -7,22 +7,22 @@ const MapScreen = () => {
     {
       title: 'Gastronify Reina Mercedes',
       coordinates: {
-        latitude: 40.7128,
-        longitude: -74.0060,
+        latitude: 37.357762,
+        longitude:  -5.986322,
       },
     },
     {
       title: 'Gastronify Casco Antiguo',
       coordinates: {
-        latitude: 40.7120,
-        longitude: -74.0010,
+        latitude: 37.388928,
+        longitude:  -5.995247,
       },
     },
     {
       title: 'Gastronify Nervion',
       coordinates: {
-        latitude: 40.7130,
-        longitude: -74.0050,
+        latitude: 37.382184,
+        longitude: -5.975838,
       },
     },
   ];
