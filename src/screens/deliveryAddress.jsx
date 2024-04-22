@@ -15,7 +15,7 @@ import functions from "../../firebase/firebaseUtils.js";
 import Loading from "../components/Loading.jsx";
 import theme from "../theme.js";
 
-const Delivery = ({back}) => {
+const Delivery = ({ back }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [addressList, setAddressList] = useState([]);
@@ -134,17 +134,19 @@ const Delivery = ({back}) => {
       {addressList.length > 0 ? (
         addressList.map((address, index) => (
           <View key={index} style={styles.addressContainer}>
-            <TouchableOpacity onPress={() => handleEditAddress(address)}>
-              <Icon name="edit" size={20} color="black" />
-            </TouchableOpacity>
-            <Text style={styles.addressText}>
-              {address.street}, {address.city}, {address.zip}
-            </Text>
-            <TouchableOpacity onPress={() => handleDeleteAddress(address.id)}>
-              <Icon name="trash" size={20} color="red" />
-            </TouchableOpacity>
-
+            <View style={styles.addressRow}>
+              <TouchableOpacity onPress={() => handleEditAddress(address)}>
+                <Icon name="edit" size={20} color="black" />
+              </TouchableOpacity>
+              <Text style={styles.addressText}>
+                {address.street}, {address.city}, {address.zip}
+              </Text>
+              <TouchableOpacity onPress={() => handleDeleteAddress(address.id)} style={styles.trashIcon}>
+                <Icon name="trash" size={20} color="red" />
+              </TouchableOpacity>
+            </View>
           </View>
+
         ))
       ) : (
         <Text style={styles.noAddressText}>You have no saved addresses.</Text>
@@ -207,11 +209,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   addressContainer: {
-    backgroundColor: theme.colors.primary,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: 10,
+    backgroundColor: theme.colors.primary,
     marginBottom: 10,
-    borderRadius: 5,
-    flexDirection: "row",
   },
   addressText: {
     fontSize: 16,
@@ -243,6 +246,15 @@ const styles = StyleSheet.create({
     marginTop: 22,
     paddingHorizontal: '5%',
   },
+  addressRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  backText: {
+    fontSize: 16,
+    color: 'black',
+  },
 
   button: {
     backgroundColor: theme.colors.secondary,
@@ -270,6 +282,10 @@ const styles = StyleSheet.create({
     right: 20,
     top: 25,
     zIndex: 1,
-  }
+  },
+  trashIcon: {
+    marginLeft: 'auto', // Esto empujará el ícono de "trash" al extremo derecho
+  },
+  
 });
 export default Delivery;

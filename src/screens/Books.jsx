@@ -130,6 +130,10 @@ const styles = StyleSheet.create({
   trashIcon: {
     marginTop: 10,
   },
+  backText: {
+    fontSize: 16,
+    color: 'black',
+  },  
   backButton: {
     position: 'absolute',
     right: 20,

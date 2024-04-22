@@ -302,6 +302,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     marginBottom: 15,
   },
+  backText: {
+    fontSize: 16,
+    color: 'black',
+  },  
   backButton: {
     position: 'absolute',
     right: 20,

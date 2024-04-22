@@ -277,6 +277,10 @@ const styles = StyleSheet.create({
     width: '80%',
     alignSelf: 'center'
   },
+  backText: {
+    fontSize: 16,
+    color: 'black',
+  },  
   pickerSelectStyles: {
     inputIOS: {
       fontSize: 16,
