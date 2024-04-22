@@ -15,13 +15,11 @@ const Menu = ({ onCartUpdate }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const scrollViewRef = useRef(null);
 
   useEffect(() => {
     const fetchMenu = async () => {
       const menuData = await functions.getCollection("Menu");
       setLoading(false);
-      //console.log(menuData);
       setMenuItems(menuData);
     };
 
