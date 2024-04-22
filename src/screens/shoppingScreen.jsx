@@ -245,8 +245,9 @@ const ShoppingScreen = ({ updateCart, userData }) => {
       }}
     >
       <View style={styles.modalContainer}>
-        <Text style={styles.modalText}>Realizando el pedido...</Text>
-        <Text style={styles.modalText}>Entrega estimada en 30 minutos</Text>
+        <Text style={styles.modalText}>Placing the order...</Text>
+        <Text style={styles.modalText}>Estimated delivery in 30 minutes</Text>
+
         <Animated.View
           style={[
             styles.progressBar,
