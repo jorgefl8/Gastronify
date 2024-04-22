@@ -68,6 +68,12 @@ const ProfileSettings = (props) => {
 
   return (
     <View style={styles.container}>
+        <TouchableOpacity
+        onPress={() => props.back()}
+        style={styles.backButton}
+      >
+        <Text style={styles.backText}>Back</Text>
+      </TouchableOpacity>
       <View style={styles.profileInfo}>
         <Text style={styles.headerText}>Personal Data</Text>
 
@@ -227,7 +233,6 @@ const styles = StyleSheet.create({
   profileInfo: {
     backgroundColor: theme.colors.backgroundColor,
     borderRadius: 10,
-    padding: 10,
   },
   infoContainer: {
     flexDirection: "row",
@@ -297,6 +302,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     marginBottom: 15,
   },
+  backButton: {
+    position: 'absolute',
+    right: 20,
+    top: 25,
+    zIndex: 1,
+  }
 });
 
 export default ProfileSettings;

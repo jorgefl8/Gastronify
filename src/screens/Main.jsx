@@ -103,7 +103,7 @@ const Main = () => {
         <Route path="/menu" element={<Menu onCartUpdate={() => loadCartItems()} />} />
         <Route path='/profile' element={<Profile handleLogout={handleLogout} saveUserData={setUserData} />} />
         <Route path='/booksForm' element={<BooksForm onSuccess={() => navigate('/')} />} />
-        <Route path='/ProfileSettings' element={<ProfileSettings back={() => navigate(-1)}/>}/>
+        <Route path='/ProfileSettings' element={<ProfileSettings back={() => navigate(-1)} handleLogout={handleLogout}/>}/>
         <Route path='/PaymentMethod' element={<PaymentMethod back={() => navigate(-1)}/>}/>
         <Route path='/deliveryAddress' element={<Delivery back={() => navigate(-1)}/>} />
         <Route path='/books' element={<Books back={() => navigate(-1)}/>} />
